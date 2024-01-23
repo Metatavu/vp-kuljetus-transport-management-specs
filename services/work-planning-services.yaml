@@ -1,0 +1,247 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: VP-Kuljetus Work Planning Services
+
+security:
+  - bearerAuth: []
+
+x-tyk-api-gateway:
+  info:
+    id: work-planning-services
+    orgId: vp
+    name: Work Planning Services
+    state:
+      active: true
+  upstream:
+    url: http://work-planning
+  server:
+    listenPath:
+      value: /work-planning/
+      strip: true
+
+paths:
+  /v1/system/ping:
+    get:
+      operationId: ping
+      summary: Replies with pong
+      description: Replies ping with pong
+      tags:
+        - System
+        - SpecExternal
+      responses:
+        "200":
+          description: Pong
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /v1/routes:
+    get:
+      operationId: listRoutes
+      summary: List Routes.
+      description: Lists Routes.
+      tags:
+        - Routes
+        - SpecManagementUI
+        - SpecApp
+        - SpecExternal
+      parameters:
+        - name: vehicleId
+          in: query
+          description: Filter results by vehicle id
+          schema:
+            type: string
+            format: uuid
+        - name: driverId
+          in: query
+          description: Filter results by driver id
+          schema:
+            type: string
+            format: uuid
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of routes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Route"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createRoute
+      summary: Create route
+      description: Create new route
+      tags:
+        - Routes
+        - SpecManagementUI
+        - SpecExternal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Route"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created route
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Route"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  "/v1/routes/{routeId}":
+    get:
+      operationId: findRoute
+      summary: Find a route.
+      description: Finds a route by id.
+      tags:
+        - Routes
+        - SpecApp
+        - SpecManagementUI
+        - SpecExternal
+      parameters:
+        - name: routeId
+          required: true
+          in: path
+          description: routes id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found route
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Route"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateRoute
+      summary: Updates routes
+      description: Updates single route
+      tags:
+        - Routes
+        - SpecManagementUI
+        - SpecExternal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Route"
+        description: Payload
+        required: true
+      parameters:
+        - name: routeId
+          required: true
+          in: path
+          description: route id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated route
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Route"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      operationId: deleteRoute
+      summary: Deletes route
+      description: Deletes route
+      tags:
+        - Routes
+        - SpecManagementUI
+        - SpecExternal
+      parameters:
+        - name: routeId
+          required: true
+          in: path
+          description: route id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Error:
+      type: object
+      description: Error object
+      required:
+        - code
+        - message
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+
+    Route:
+      type: object
+      description: Represent single planned route for single truck driver
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        vehicleId:
+          type: string
+          format: uuid
+          description: Vehicle id
+        driverId:
+          type: string
+          format: uuid
+          description: Driver id
