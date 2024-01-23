@@ -41,7 +41,7 @@ export const SPEC_VERSIONS = [
   {
     "name": "management",
     "description": "Management",
-    "tags": ["Management"]
+    "tags": ["ManagementUI"]
   }
 ];
 
