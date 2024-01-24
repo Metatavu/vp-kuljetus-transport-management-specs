@@ -8,7 +8,7 @@ export interface OpenAPISpec {
     description: string;
     version: string;
   };
-  "x-tyk-api-gateway"?: {
+  "x-tyk-api-gateway": {
     info: {
       id: string;
       name: string;
@@ -25,11 +25,21 @@ export interface OpenAPISpec {
         value: string;
         strip: boolean;
       }
+    },
+    middleware?: {
+      operations: {
+        [operationId: string]: {
+          validateRequest?: {
+            enabled?: boolean;
+          }
+        }
+      }
     }
   },
   paths: {
     [path: string]: {
       [method: string]: {
+        operationId: string;
         tags?: string[];
         responses: {
           [responseCode: string]: {

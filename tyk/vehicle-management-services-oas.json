@@ -26,6 +26,20 @@
         "value": "/vehicle-management/",
         "strip": true
       }
+    },
+    "middleware": {
+      "operations": {
+        "createTruck": {
+          "validateRequest": {
+            "enabled": true
+          }
+        },
+        "updateTruck": {
+          "validateRequest": {
+            "enabled": true
+          }
+        }
+      }
     }
   },
   "paths": {

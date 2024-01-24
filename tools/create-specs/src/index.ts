@@ -74,6 +74,34 @@ const createTykDefinition = async (options: { tykOasSpecFile: string, tykSpecFil
 };
 
 /**
+ * Adds Tyk OAS validation to the given OpenAPI spec. Validation is added to all POST, PUT and PATCH operations.
+ * 
+ * @param spec original OpenAPI spec
+ * @returns OpenAPI spec with Tyk OAS validation
+ */
+const addTykOasValidation = (spec: OpenAPISpec): OpenAPISpec => {
+  const result = JSON.parse(JSON.stringify(spec)) as OpenAPISpec;
+
+  result["x-tyk-api-gateway"].middleware = result["x-tyk-api-gateway"].middleware || {
+    operations: {}
+  };
+
+  Object.entries(spec.paths).forEach(([path, pathContent]) => {
+    Object.entries(pathContent).forEach(([method, methodContent]) => {
+      if (method === "post" || method === "put" || method === "patch") {
+        result["x-tyk-api-gateway"].middleware.operations[methodContent.operationId] = {
+          validateRequest: {
+            enabled: true
+          }
+        };
+      }
+    });
+  });
+
+  return result;
+};
+
+/**
  * Main function
  */
 const main = async () => {
@@ -84,9 +112,13 @@ const main = async () => {
 
   for (const specFile of SPEC_FILES) {
     const spec = parseOpenApiDocument(specFile);
+    const oasSpec = addTykOasValidation(spec);
     const tykSpecFile = path.resolve(ROOT_DIR, "tyk", `${specFile.split(".")[0]}.json`);
     const tykOasSpecFile = path.resolve(ROOT_DIR, "tyk", `${specFile.split(".")[0]}-oas.json`);
-    fs.writeFileSync(tykOasSpecFile, JSON.stringify(spec, null, 2));
+
+    // console.log(oasSpec['x-tyk-api-gateway']);
+
+    fs.writeFileSync(tykOasSpecFile, JSON.stringify(oasSpec, null, 2));
 
     await createTykDefinition({
       tykOasSpecFile: tykOasSpecFile, 

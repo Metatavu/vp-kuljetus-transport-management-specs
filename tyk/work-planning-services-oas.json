@@ -26,6 +26,20 @@
         "value": "/work-planning/",
         "strip": true
       }
+    },
+    "middleware": {
+      "operations": {
+        "createRoute": {
+          "validateRequest": {
+            "enabled": true
+          }
+        },
+        "updateRoute": {
+          "validateRequest": {
+            "enabled": true
+          }
+        }
+      }
     }
   },
   "paths": {
