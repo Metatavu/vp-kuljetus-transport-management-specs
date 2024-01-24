@@ -10,6 +10,7 @@ export interface OpenAPISpec {
   };
   "x-tyk-api-gateway"?: {
     info: {
+      id: string;
       name: string;
       orgId: string;
       state: {

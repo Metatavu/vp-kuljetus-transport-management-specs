@@ -36,8 +36,9 @@ const validateSpec = async (specFile: string) => {
 const createTykDefinition = async (options: { tykOasSpecFile: string, tykSpecFile: string, spec: OpenAPISpec }) => {
   const { tykOasSpecFile, tykSpecFile, spec } = options;
 
-  const info = spec['x-tyk-api-gateway'].info;
-  const upstream = spec['x-tyk-api-gateway'].upstream;
+  const tykApiGateway = spec['x-tyk-api-gateway'];
+  const { info, upstream, server } = tykApiGateway;
+
   const docker = new Docker({});
   const stdout = fs.createWriteStream(tykSpecFile);
 
@@ -55,6 +56,21 @@ const createTykDefinition = async (options: { tykOasSpecFile: string, tykSpecFil
   );
 
   container.remove();
+
+  const tykSpec = JSON.parse(fs.readFileSync(tykSpecFile, "utf8"));
+
+  if (server.listenPath.value) {
+    tykSpec.proxy.listen_path = server.listenPath.value;
+  }
+
+  if (info.id) {
+    tykSpec.api_id = info.id;
+  }
+
+  tykSpec.version_data.not_versioned = true;
+  tykSpec.is_oas = true;
+
+  fs.writeFileSync(tykSpecFile, JSON.stringify(tykSpec, null, 2));
 };
 
 /**
@@ -72,7 +88,7 @@ const main = async () => {
     const tykOasSpecFile = path.resolve(ROOT_DIR, "tyk", `${specFile.split(".")[0]}-oas.json`);
     fs.writeFileSync(tykOasSpecFile, JSON.stringify(spec, null, 2));
 
-    const tykDefinition = await createTykDefinition({
+    await createTykDefinition({
       tykOasSpecFile: tykOasSpecFile, 
       tykSpecFile: tykSpecFile,
       spec: spec
