@@ -234,3 +234,5 @@ components:
           readOnly: true
         plateNumber:
           type: string
+        name: 
+          type: string
