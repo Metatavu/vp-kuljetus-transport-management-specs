@@ -18,7 +18,7 @@ jobs:
         working-directory: ./tools/create-specs
         run: |
           npm install
-          npm start --skip-tyk
+          npm start -- --skip-tyk
       - name: Check changes made by generator
         run: |
           if [ -n "$(git status --porcelain)" ]; then
