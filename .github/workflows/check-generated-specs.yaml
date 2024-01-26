@@ -1,0 +1,29 @@
+name: Check Generated Specs
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  check-generated-specs:
+    name: Check Generated Specs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Run generator
+        working-directory: ./tools/create-specs
+        run: |
+          npm install
+          npm start -- --skip-tyk
+      - name: Check changes made by generator
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "Generated specs are out of date. Please run 'npm run generate' locally and commit the changes."
+            exit 1
+          else
+            echo "Generated specs are up to date."
+          fi

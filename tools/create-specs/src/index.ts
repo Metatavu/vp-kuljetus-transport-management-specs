@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { parse as yamlParse, stringify as yamlStringify } from 'yaml';
 import SwaggerParser from "@apidevtools/swagger-parser";
-import { OpenAPISpec } from './types';
+import { OpenAPISpec, TykTrackEndpoint } from './types';
 import { SPEC_FILES, SPEC_TEMPLATE, SPEC_VERSIONS, TYK_IMAGE } from './consts';
 import Docker from 'dockerode';
 
@@ -70,6 +70,16 @@ const createTykDefinition = async (options: { tykOasSpecFile: string, tykSpecFil
   tykSpec.version_data.not_versioned = true;
   tykSpec.is_oas = true;
 
+  Object.entries(tykSpec.version_data.versions).forEach(([_, versionData]) => {
+    ((versionData as any).extended_paths.track_endpoints as TykTrackEndpoint[])
+      .sort((a, b) => {
+        return a.method.localeCompare(b.method);
+      })
+      .sort((a, b) => {
+        return a.path.localeCompare(b.path);
+      }); 
+  });
+
   fs.writeFileSync(tykSpecFile, JSON.stringify(tykSpec, null, 2));
 };
 
@@ -115,25 +125,29 @@ const stripTrailingSlash = (str: string): string => {
  * Main function
  */
 const main = async () => {
+  const skipTyk = process.argv.includes("--skip-tyk");
+  
   for (const specFile of SPEC_FILES) {
     const absoluteSpecFile = path.resolve(ROOT_DIR, "services", specFile);
     await validateSpec(absoluteSpecFile);
   }
 
-  for (const specFile of SPEC_FILES) {
-    const spec = parseOpenApiDocument(specFile);
-    const oasSpec = addTykOasValidation(spec);
-    const tykSpecFile = path.resolve(ROOT_DIR, "tyk", `${specFile.split(".")[0]}.json`);
-    const tykOasSpecFile = path.resolve(ROOT_DIR, "tyk", `${specFile.split(".")[0]}-oas.json`);
+  if (!skipTyk) {
+    for (const specFile of SPEC_FILES) {
+      const spec = parseOpenApiDocument(specFile);
+      const oasSpec = addTykOasValidation(spec);
+      const tykSpecFile = path.resolve(ROOT_DIR, "tyk", `${specFile.split(".")[0]}.json`);
+      const tykOasSpecFile = path.resolve(ROOT_DIR, "tyk", `${specFile.split(".")[0]}-oas.json`);
 
-    fs.writeFileSync(tykOasSpecFile, JSON.stringify(oasSpec, null, 2));
+      fs.writeFileSync(tykOasSpecFile, JSON.stringify(oasSpec, null, 2));
 
-    await createTykDefinition({
-      tykOasSpecFile: tykOasSpecFile, 
-      tykSpecFile: tykSpecFile,
-      spec: spec
-    });
-  }  
+      await createTykDefinition({
+        tykOasSpecFile: tykOasSpecFile, 
+        tykSpecFile: tykSpecFile,
+        spec: spec
+      });
+    }  
+  }
   
   for (const specVersion of SPEC_VERSIONS) {
     const specVersionName = specVersion.name;
