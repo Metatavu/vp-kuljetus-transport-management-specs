@@ -102,6 +102,16 @@ const addTykOasValidation = (spec: OpenAPISpec): OpenAPISpec => {
 };
 
 /**
+ * Strips trailing slash from the given string
+ * 
+ * @param str string to strip trailing slash from
+ * @returns string without trailing slash
+ */
+const stripTrailingSlash = (str: string): string => {
+  return str.endsWith("/") ? str.slice(0, -1) : str;
+}
+
+/**
  * Main function
  */
 const main = async () => {
@@ -115,8 +125,6 @@ const main = async () => {
     const oasSpec = addTykOasValidation(spec);
     const tykSpecFile = path.resolve(ROOT_DIR, "tyk", `${specFile.split(".")[0]}.json`);
     const tykOasSpecFile = path.resolve(ROOT_DIR, "tyk", `${specFile.split(".")[0]}-oas.json`);
-
-    // console.log(oasSpec['x-tyk-api-gateway']);
 
     fs.writeFileSync(tykOasSpecFile, JSON.stringify(oasSpec, null, 2));
 
@@ -137,15 +145,19 @@ const main = async () => {
   
     for (const specFile of SPEC_FILES) {
       const spec = parseOpenApiDocument(specFile);
+      const tykApiGateway = spec['x-tyk-api-gateway'];    
+      const prefix = stripTrailingSlash(tykApiGateway.server.listenPath.value || "");
       
       specVersionFileContent.info.title = `${SPEC_TEMPLATE.info.title} (${specVersionName})`;
       specVersionFileContent.info.description = `${SPEC_TEMPLATE.info.description} (${specVersionName})`;
   
       for (const [path, pathContent] of Object.entries(spec.paths)) {
+        const prefixedPath = `${prefix}${path}`;
+
         for (const [method, methodContent] of Object.entries(pathContent)) {
           if (methodContent.tags && methodContent.tags.some(tag => specVersionTags.includes(tag))) {
-            specVersionFileContent.paths[path] = specVersionFileContent.paths[path] || {};
-            specVersionFileContent.paths[path][method] = JSON.parse(JSON.stringify(methodContent));
+            specVersionFileContent.paths[prefixedPath] = specVersionFileContent.paths[prefixedPath] || {};
+            specVersionFileContent.paths[prefixedPath][method] = JSON.parse(JSON.stringify(methodContent));
             Object.entries(methodContent.responses).forEach(([_responseCode, responseContent]) => {
               responseContent.content && Object.entries(responseContent.content).forEach(([_contentType, contentTypeContent]) => {
                 if (contentTypeContent.schema && contentTypeContent.schema.$ref) {

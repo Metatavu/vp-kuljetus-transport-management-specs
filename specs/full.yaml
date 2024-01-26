@@ -4,7 +4,7 @@ info:
   description: Vehicle Management Services (full)
   version: 1.0.0
 paths:
-  /v1/trucks:
+  /vehicle-management/v1/trucks:
     get:
       operationId: listTrucks
       summary: List Trucks.
@@ -45,7 +45,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /v1/trucks/{truckId}:
+  /vehicle-management/v1/trucks/{truckId}:
     get:
       operationId: findTruck
       summary: Find a truck.
@@ -76,7 +76,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /v1/routes:
+  /work-planning/v1/routes:
     get:
       operationId: listRoutes
       summary: List Routes.
@@ -124,7 +124,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /v1/routes/{routeId}:
+  /work-planning/v1/routes/{routeId}:
     get:
       operationId: findRoute
       summary: Find a route.
