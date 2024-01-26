@@ -64,3 +64,11 @@ export interface OpenAPISpec {
   };
 
 }
+
+/**
+ * Tyk version track endpoint interface
+ */
+export interface TykTrackEndpoint {
+  path: string;
+  method: string;
+};

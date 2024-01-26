@@ -182,16 +182,16 @@
           ],
           "track_endpoints": [
             {
-              "path": "/v1/system/ping",
-              "method": "GET"
-            },
-            {
               "path": "/v1/routes",
               "method": "GET"
             },
             {
               "path": "/v1/routes",
               "method": "POST"
+            },
+            {
+              "path": "/v1/routes/{routeId}",
+              "method": "DELETE"
             },
             {
               "path": "/v1/routes/{routeId}",
@@ -202,8 +202,8 @@
               "method": "PUT"
             },
             {
-              "path": "/v1/routes/{routeId}",
-              "method": "DELETE"
+              "path": "/v1/system/ping",
+              "method": "GET"
             }
           ],
           "persist_graphql": null
