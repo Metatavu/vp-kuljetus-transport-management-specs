@@ -148,6 +148,79 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/vehicles:
+    get:
+      operationId: listVehicles
+      summary: List Vehicles.
+      description: Lists Vehicles.
+      tags:
+        - Vehicles
+        - SpecApp
+        - SpecManagementUI
+        - SpecExternal
+      parameters:
+        - name: truckId
+          in: query
+          description: Filter results by truck id
+          schema:
+            type: string
+            format: uuid
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of vehicles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Vehicle"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/vehicles/{vehicleId}:
+    get:
+      operationId: findVehicle
+      summary: Find a vehicle.
+      description: Finds a vehicle by id.
+      tags:
+        - Vehicles
+        - SpecApp
+        - SpecManagementUI
+        - SpecExternal
+      parameters:
+        - name: vehicleId
+          required: true
+          in: path
+          description: vehicles id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found vehicle
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /work-planning/v1/routes:
     get:
       operationId: listRoutes
@@ -265,6 +338,32 @@ components:
           readOnly: true
         plateNumber:
           type: string
+    Vehicle:
+      type: object
+      description: Represent single vehicle
+      required:
+        - truckId
+        - trailerIds
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        truckId:
+          type: string
+          description: Truck that towing the vehicle
+          format: uuid
+        trailerIds:
+          type: array
+          description: >
+            List of attached trailers to vehicle. Order of trailers should
+            reflect the order of trailers in the vehicle where first trailer is
+            the closest to the truck. 
+          minItems: 0
+          maxItems: 2
+          items:
+            type: string
+            format: uuid
     Route:
       type: object
       description: Represent single planned route for single truck driver
