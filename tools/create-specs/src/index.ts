@@ -125,25 +125,29 @@ const stripTrailingSlash = (str: string): string => {
  * Main function
  */
 const main = async () => {
+  const skipTyk = process.argv.includes("--skip-tyk");
+  
   for (const specFile of SPEC_FILES) {
     const absoluteSpecFile = path.resolve(ROOT_DIR, "services", specFile);
     await validateSpec(absoluteSpecFile);
   }
 
-  for (const specFile of SPEC_FILES) {
-    const spec = parseOpenApiDocument(specFile);
-    const oasSpec = addTykOasValidation(spec);
-    const tykSpecFile = path.resolve(ROOT_DIR, "tyk", `${specFile.split(".")[0]}.json`);
-    const tykOasSpecFile = path.resolve(ROOT_DIR, "tyk", `${specFile.split(".")[0]}-oas.json`);
+  if (!skipTyk) {
+    for (const specFile of SPEC_FILES) {
+      const spec = parseOpenApiDocument(specFile);
+      const oasSpec = addTykOasValidation(spec);
+      const tykSpecFile = path.resolve(ROOT_DIR, "tyk", `${specFile.split(".")[0]}.json`);
+      const tykOasSpecFile = path.resolve(ROOT_DIR, "tyk", `${specFile.split(".")[0]}-oas.json`);
 
-    fs.writeFileSync(tykOasSpecFile, JSON.stringify(oasSpec, null, 2));
+      fs.writeFileSync(tykOasSpecFile, JSON.stringify(oasSpec, null, 2));
 
-    await createTykDefinition({
-      tykOasSpecFile: tykOasSpecFile, 
-      tykSpecFile: tykSpecFile,
-      spec: spec
-    });
-  }  
+      await createTykDefinition({
+        tykOasSpecFile: tykOasSpecFile, 
+        tykSpecFile: tykSpecFile,
+        spec: spec
+      });
+    }  
+  }
   
   for (const specVersion of SPEC_VERSIONS) {
     const specVersionName = specVersion.name;
