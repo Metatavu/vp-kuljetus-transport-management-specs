@@ -121,26 +121,6 @@
           "white_list": [
             {
               "disabled": false,
-              "path": "/v1/vehicles",
-              "method": "",
-              "ignore_case": false,
-              "method_actions": {
-                "GET": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                },
-                "POST": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                }
-              }
-            },
-            {
-              "disabled": false,
               "path": "/v1/vehicles/{vehicleId}",
               "method": "",
               "ignore_case": false,
@@ -277,6 +257,26 @@
               "method": "",
               "ignore_case": false,
               "method_actions": {
+                "POST": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/vehicles",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
                 "POST": {
                   "action": "no_action",
                   "code": 200,
