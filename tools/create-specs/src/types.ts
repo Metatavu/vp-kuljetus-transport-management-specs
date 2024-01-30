@@ -81,3 +81,10 @@ export interface TykTrackEndpoint {
   path: string;
   method: string;
 };
+
+/**
+ * Tyk version white list entry interface
+ */
+export interface TykWhitelistEntry {
+  path: string;
+}
