@@ -18,11 +18,11 @@ jobs:
         working-directory: ./tools/create-specs
         run: |
           npm install
-          npm start -- --skip-tyk
+          npm start
       - name: Check changes made by generator
         run: |
           if [ -n "$(git status --porcelain)" ]; then
-            echo "Generated specs are out of date. Please run 'npm run generate' locally and commit the changes."
+            echo "Generated specs are out of date. Please run 'npm start' locally inside '/tools/create-specs' and commit the changes."
             exit 1
           else
             echo "Generated specs are up to date."

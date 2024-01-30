@@ -1,17 +1,17 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import { parse as yamlParse, stringify as yamlStringify } from 'yaml';
+import * as fs from "fs";
+import * as path from "path";
+import { parse as yamlParse, stringify as yamlStringify } from "yaml";
 import SwaggerParser from "@apidevtools/swagger-parser";
-import { OpenAPISpec, TykTrackEndpoint } from './types';
-import { SPEC_FILES, SPEC_TEMPLATE, SPEC_VERSIONS, TYK_IMAGE } from './consts';
-import Docker from 'dockerode';
+import { OpenAPISpec, TykTrackEndpoint } from "./types";
+import { SPEC_FILES, SPEC_TEMPLATE, SPEC_VERSIONS, TYK_IMAGE } from "./consts";
+import Docker from "dockerode";
 
 // Root directory of the project
 const ROOT_DIR = path.resolve(process.cwd(), "../../");
 
 /**
  * Parses input OpenAPI spec file
- * 
+ *
  * @param specFile parses the OpenAPI spec file
  * @returns parsed OpenAPI spec
  */
@@ -21,7 +21,7 @@ const parseOpenApiDocument = (specFile: string): OpenAPISpec => {
 
 /**
  * Validates the OpenAPI spec file. If the spec file is invalid, an exception is thrown.
- * 
+ *
  * @param specFile absolute path to the OpenAPI spec file
  */
 const validateSpec = async (specFile: string) => {
@@ -30,21 +30,24 @@ const validateSpec = async (specFile: string) => {
 
 /**
  * Creates the Tyk definition for the given OpenAPI spec file
- * 
+ *
  * @param options contains the options for creating the Tyk definition
  */
 const createTykDefinition = async (options: { tykOasSpecFile: string, tykSpecFile: string, spec: OpenAPISpec }) => {
   const { tykOasSpecFile, tykSpecFile, spec } = options;
 
-  const tykApiGateway = spec['x-tyk-api-gateway'];
+  const tykApiGateway = spec["x-tyk-api-gateway"];
   const { info, upstream, server } = tykApiGateway;
 
   const docker = new Docker({});
+  const pullStream = await docker.pull(TYK_IMAGE);
+  await new Promise(res => docker.modem.followProgress(pullStream, res));
+
   const stdout = fs.createWriteStream(tykSpecFile);
 
   const [ _, container ] = await docker.run(
-    TYK_IMAGE, 
-    ["import", "--create-api", `--org-id=${info.orgId}`, `--upstream-target=${upstream.url}`, "--swagger", "/tmp/swagger.json"], 
+    TYK_IMAGE,
+    ["import", "--create-api", `--org-id=${info.orgId}`, `--upstream-target=${upstream.url}`, "--swagger", "/tmp/swagger.json"],
     stdout,
     {
       HostConfig: {
@@ -77,7 +80,7 @@ const createTykDefinition = async (options: { tykOasSpecFile: string, tykSpecFil
       })
       .sort((a, b) => {
         return a.path.localeCompare(b.path);
-      }); 
+      });
   });
 
   fs.writeFileSync(tykSpecFile, JSON.stringify(tykSpec, null, 2));
@@ -85,7 +88,7 @@ const createTykDefinition = async (options: { tykOasSpecFile: string, tykSpecFil
 
 /**
  * Adds Tyk OAS validation to the given OpenAPI spec. Validation is added to all POST, PUT and PATCH operations.
- * 
+ *
  * @param spec original OpenAPI spec
  * @returns OpenAPI spec with Tyk OAS validation
  */
@@ -113,7 +116,7 @@ const addTykOasValidation = (spec: OpenAPISpec): OpenAPISpec => {
 
 /**
  * Strips trailing slash from the given string
- * 
+ *
  * @param str string to strip trailing slash from
  * @returns string without trailing slash
  */
@@ -126,7 +129,7 @@ const stripTrailingSlash = (str: string): string => {
  */
 const main = async () => {
   const skipTyk = process.argv.includes("--skip-tyk");
-  
+
   for (const specFile of SPEC_FILES) {
     const absoluteSpecFile = path.resolve(ROOT_DIR, "services", specFile);
     await validateSpec(absoluteSpecFile);
@@ -142,29 +145,29 @@ const main = async () => {
       fs.writeFileSync(tykOasSpecFile, JSON.stringify(oasSpec, null, 2));
 
       await createTykDefinition({
-        tykOasSpecFile: tykOasSpecFile, 
+        tykOasSpecFile: tykOasSpecFile,
         tykSpecFile: tykSpecFile,
         spec: spec
       });
-    }  
+    }
   }
-  
+
   for (const specVersion of SPEC_VERSIONS) {
     const specVersionName = specVersion.name;
     const specVersionTags = specVersion.tags.map(tag => `Spec${tag}`);
     const includedSchemas: string[] = [];
-  
+
     const specVersionFile = path.resolve(ROOT_DIR, "specs", `${specVersion.name}.yaml`);
     const specVersionFileContent = JSON.parse(JSON.stringify(SPEC_TEMPLATE));
-  
+
     for (const specFile of SPEC_FILES) {
       const spec = parseOpenApiDocument(specFile);
-      const tykApiGateway = spec['x-tyk-api-gateway'];    
+      const tykApiGateway = spec["x-tyk-api-gateway"];
       const prefix = stripTrailingSlash(tykApiGateway.server.listenPath.value || "");
-      
+
       specVersionFileContent.info.title = `${SPEC_TEMPLATE.info.title} (${specVersionName})`;
       specVersionFileContent.info.description = `${SPEC_TEMPLATE.info.description} (${specVersionName})`;
-  
+
       for (const [path, pathContent] of Object.entries(spec.paths)) {
         const prefixedPath = `${prefix}${path}`;
 
@@ -172,10 +175,12 @@ const main = async () => {
           if (methodContent.tags && methodContent.tags.some(tag => specVersionTags.includes(tag))) {
             specVersionFileContent.paths[prefixedPath] = specVersionFileContent.paths[prefixedPath] || {};
             specVersionFileContent.paths[prefixedPath][method] = JSON.parse(JSON.stringify(methodContent));
+
             Object.entries(methodContent.responses).forEach(([_responseCode, responseContent]) => {
               responseContent.content && Object.entries(responseContent.content).forEach(([_contentType, contentTypeContent]) => {
                 if (contentTypeContent.schema && contentTypeContent.schema.$ref) {
                   const schemaName = contentTypeContent.schema.$ref.split("/").pop();
+
                   if (!includedSchemas.includes(schemaName)) {
                     includedSchemas.push(schemaName);
                     specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(spec.components.schemas[schemaName]));
@@ -183,19 +188,29 @@ const main = async () => {
                 }
               });
             });
+
+            methodContent.requestBody?.content && Object.entries(methodContent.requestBody.content).forEach(([_contentType, contentTypeContent]) => {
+              if (contentTypeContent.schema && contentTypeContent.schema.$ref) {
+                const schemaName = contentTypeContent.schema.$ref.split("/").pop();
+                if (!includedSchemas.includes(schemaName)) {
+                  includedSchemas.push(schemaName);
+                  specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(spec.components.schemas[schemaName]));
+                }
+              }
+            });
           }
         }
       }
-  
+
       for (const [schemaName, schemaContent] of Object.entries(spec.components.schemas)) {
         if (includedSchemas.includes(schemaName)) {
           specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(schemaContent));
         }
       }
     }
-  
+
     console.log(`Writing ${specVersionFile}`);
-  
+
     fs.writeFileSync(specVersionFile, yamlStringify(specVersionFileContent));
 
     await validateSpec(specVersionFile);

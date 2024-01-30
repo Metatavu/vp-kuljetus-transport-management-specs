@@ -41,6 +41,15 @@ export interface OpenAPISpec {
       [method: string]: {
         operationId: string;
         tags?: string[];
+        requestBody?: {
+          content?: {
+            [contentType: string]: {
+              schema: {
+                $ref?: string;
+              };
+            };
+          };
+        };
         responses: {
           [responseCode: string]: {
             description: string;
