@@ -70,13 +70,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /vehicle-management/v1/trailers:
+  /vehicle-management/v1/towables:
     get:
-      operationId: listTrailers
-      summary: List Trailers.
-      description: Lists Trailers.
+      operationId: listTowables
+      summary: List Towables.
+      description: Lists Towables.
       tags:
-        - Trailers
+        - Towables
       parameters:
         - name: plateNumber
           in: query
@@ -95,41 +95,41 @@ paths:
             type: integer
       responses:
         "200":
-          description: List of trailers
+          description: List of towables
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Trailer"
+                  $ref: "#/components/schemas/Towable"
         default:
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /vehicle-management/v1/trailers/{trailerId}:
+  /vehicle-management/v1/towables/{towableId}:
     get:
-      operationId: findTrailer
-      summary: Find a trailer.
-      description: Finds a trailer by id.
+      operationId: findTowable
+      summary: Find a towable.
+      description: Finds a towable by id.
       tags:
-        - Trailers
+        - Towables
       parameters:
-        - name: trailerId
+        - name: towableId
           required: true
           in: path
-          description: trailers id
+          description: towables id
           schema:
             type: string
             format: uuid
       responses:
         "200":
-          description: Found trailer
+          description: Found towable
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Trailer"
+                $ref: "#/components/schemas/Towable"
         default:
           description: Invalid request was sent to the server
           content:
@@ -295,6 +295,7 @@ components:
       description: Represent single truck
       required:
         - plateNumber
+        - type
       properties:
         id:
           type: string
@@ -302,15 +303,21 @@ components:
           readOnly: true
         plateNumber:
           type: string
+        type:
+          type: string
+          enum:
+            - TRUCK
+            - SEMI_TRUCK
         vin:
           type: string
           description: Truck identification number. This is unique for each truck and
             should be used as a hardware identifier for this specific truck
-    Trailer:
+    Towable:
       type: object
-      description: Represent single trailer
+      description: Represent single towable
       required:
         - plateNumber
+        - type
       properties:
         id:
           type: string
@@ -318,16 +325,22 @@ components:
           readOnly: true
         plateNumber:
           type: string
+        type:
+          type: string
+          enum:
+            - TRAILER
+            - SEMI_TRAILER
+            - DOLLY
         vin:
           type: string
-          description: Trailer identification number. This is unique for each trailer and
-            should be used as a hardware identifier for this specific trailer
+          description: Towable identification number. This is unique for each towable and
+            should be used as a hardware identifier for this specific towable
     Vehicle:
       type: object
       description: Represent single vehicle
       required:
         - truckId
-        - trailerIds
+        - towableIds
       properties:
         id:
           type: string
@@ -337,14 +350,12 @@ components:
           type: string
           description: Truck that towing the vehicle
           format: uuid
-        trailerIds:
+        towableIds:
           type: array
           description: >
-            List of attached trailers to vehicle. Order of trailers should
-            reflect the order of trailers in the vehicle where first trailer is
+            List of attached towables to vehicle. Order of towables should
+            reflect the order of towables in the vehicle where first towable is
             the closest to the truck.
-          minItems: 0
-          maxItems: 2
           items:
             type: string
             format: uuid

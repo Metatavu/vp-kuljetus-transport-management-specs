@@ -121,6 +121,46 @@
           "white_list": [
             {
               "disabled": false,
+              "path": "/v1/towables/{towableId}",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "DELETE": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "PUT": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/telematics/{vin}",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "POST": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
               "path": "/v1/vehicles",
               "method": "",
               "ignore_case": false,
@@ -227,7 +267,7 @@
             },
             {
               "disabled": false,
-              "path": "/v1/trailers",
+              "path": "/v1/towables",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -237,46 +277,6 @@
                   "data": "",
                   "headers": null
                 },
-                "POST": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                }
-              }
-            },
-            {
-              "disabled": false,
-              "path": "/v1/trailers/{trailerId}",
-              "method": "",
-              "ignore_case": false,
-              "method_actions": {
-                "DELETE": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                },
-                "GET": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                },
-                "PUT": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                }
-              }
-            },
-            {
-              "disabled": false,
-              "path": "/v1/telematics/{vin}",
-              "method": "",
-              "ignore_case": false,
-              "method_actions": {
                 "POST": {
                   "action": "no_action",
                   "code": 200,
@@ -296,23 +296,23 @@
               "method": "POST"
             },
             {
-              "path": "/v1/trailers",
+              "path": "/v1/towables",
               "method": "GET"
             },
             {
-              "path": "/v1/trailers",
+              "path": "/v1/towables",
               "method": "POST"
             },
             {
-              "path": "/v1/trailers/{trailerId}",
+              "path": "/v1/towables/{towableId}",
               "method": "DELETE"
             },
             {
-              "path": "/v1/trailers/{trailerId}",
+              "path": "/v1/towables/{towableId}",
               "method": "GET"
             },
             {
-              "path": "/v1/trailers/{trailerId}",
+              "path": "/v1/towables/{towableId}",
               "method": "PUT"
             },
             {
