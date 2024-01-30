@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { parse as yamlParse, stringify as yamlStringify } from "yaml";
 import SwaggerParser from "@apidevtools/swagger-parser";
-import { OpenAPISpec, TykTrackEndpoint } from "./types";
+import { OpenAPISpec, TykTrackEndpoint, TykWhitelistEntry } from "./types";
 import { SPEC_FILES, SPEC_TEMPLATE, SPEC_VERSIONS, TYK_IMAGE } from "./consts";
 import Docker from "dockerode";
 
@@ -74,6 +74,11 @@ const createTykDefinition = async (options: { tykOasSpecFile: string, tykSpecFil
   tykSpec.is_oas = true;
 
   Object.entries(tykSpec.version_data.versions).forEach(([_, versionData]) => {
+    ((versionData as any).extended_paths.white_list as TykWhitelistEntry[])
+      .sort((a, b) => {
+        return a.path.localeCompare(b.path);
+      });
+
     ((versionData as any).extended_paths.track_endpoints as TykTrackEndpoint[])
       .sort((a, b) => {
         return a.method.localeCompare(b.method);
