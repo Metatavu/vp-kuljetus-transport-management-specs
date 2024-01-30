@@ -174,7 +174,10 @@ const main = async () => {
         for (const [method, methodContent] of Object.entries(pathContent)) {
           if (methodContent.tags && methodContent.tags.some(tag => specVersionTags.includes(tag))) {
             specVersionFileContent.paths[prefixedPath] = specVersionFileContent.paths[prefixedPath] || {};
-            specVersionFileContent.paths[prefixedPath][method] = JSON.parse(JSON.stringify(methodContent));
+            specVersionFileContent.paths[prefixedPath][method] = JSON.parse(JSON.stringify({
+              ...methodContent,
+              tags: methodContent.tags.filter(tag => !tag.toLowerCase().startsWith("spec"))
+            }));
 
             Object.entries(methodContent.responses).forEach(([_responseCode, responseContent]) => {
               responseContent.content && Object.entries(responseContent.content).forEach(([_contentType, contentTypeContent]) => {

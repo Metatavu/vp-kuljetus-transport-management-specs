@@ -365,13 +365,14 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/telematicData/{vin}:
+  /v1/telematics/{vin}:
     post:
       operationId: receiveTelematicData
       summary: Receives telematic data entry
       description: Receives telematic data entry
       tags:
-        - TelematicData
+        - Telematics
+        - SpecVehicleDataReceiver
       requestBody:
         content:
           application/json:
@@ -662,4 +663,3 @@ components:
         longitude:
           type: number
           format: double
-
