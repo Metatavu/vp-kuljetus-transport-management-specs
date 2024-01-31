@@ -74,8 +74,7 @@
         "summary": "Replies with pong",
         "description": "Replies ping with pong",
         "tags": [
-          "System",
-          "SpecExternal"
+          "System"
         ],
         "responses": {
           "200": {
@@ -99,8 +98,7 @@
         "tags": [
           "Trucks",
           "SpecApp",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "parameters": [
           {
@@ -160,8 +158,7 @@
         "description": "Create new truck",
         "tags": [
           "Trucks",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "requestBody": {
           "content": {
@@ -206,8 +203,7 @@
         "tags": [
           "Trucks",
           "SpecApp",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "parameters": [
           {
@@ -250,8 +246,7 @@
         "description": "Updates single truck",
         "tags": [
           "Trucks",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "requestBody": {
           "content": {
@@ -305,8 +300,7 @@
         "description": "Deletes truck",
         "tags": [
           "Trucks",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "parameters": [
           {
@@ -345,8 +339,7 @@
         "tags": [
           "Towables",
           "SpecApp",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "parameters": [
           {
@@ -406,8 +399,7 @@
         "description": "Create new towable",
         "tags": [
           "Towables",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "requestBody": {
           "content": {
@@ -452,8 +444,7 @@
         "tags": [
           "Towables",
           "SpecApp",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "parameters": [
           {
@@ -496,8 +487,7 @@
         "description": "Updates single towable",
         "tags": [
           "Towables",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "requestBody": {
           "content": {
@@ -551,8 +541,7 @@
         "description": "Deletes towable",
         "tags": [
           "Towables",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "parameters": [
           {
@@ -639,8 +628,7 @@
         "tags": [
           "Vehicles",
           "SpecApp",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "parameters": [
           {
@@ -701,8 +689,7 @@
         "description": "Create new vehicle",
         "tags": [
           "Vehicles",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "requestBody": {
           "content": {
@@ -747,8 +734,7 @@
         "tags": [
           "Vehicles",
           "SpecApp",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "parameters": [
           {
@@ -791,8 +777,7 @@
         "description": "Updates single vehicle",
         "tags": [
           "Vehicles",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "requestBody": {
           "content": {
@@ -846,8 +831,7 @@
         "description": "Deletes vehicle",
         "tags": [
           "Vehicles",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "parameters": [
           {

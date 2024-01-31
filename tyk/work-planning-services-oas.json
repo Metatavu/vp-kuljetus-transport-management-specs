@@ -49,8 +49,7 @@
         "summary": "Replies with pong",
         "description": "Replies ping with pong",
         "tags": [
-          "System",
-          "SpecExternal"
+          "System"
         ],
         "responses": {
           "200": {
@@ -74,8 +73,7 @@
         "tags": [
           "Routes",
           "SpecManagementUI",
-          "SpecApp",
-          "SpecExternal"
+          "SpecApp"
         ],
         "parameters": [
           {
@@ -145,8 +143,7 @@
         "description": "Create new route",
         "tags": [
           "Routes",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "requestBody": {
           "content": {
@@ -191,8 +188,7 @@
         "tags": [
           "Routes",
           "SpecApp",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "parameters": [
           {
@@ -235,8 +231,7 @@
         "description": "Updates single route",
         "tags": [
           "Routes",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "requestBody": {
           "content": {
@@ -290,8 +285,7 @@
         "description": "Deletes route",
         "tags": [
           "Routes",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "parameters": [
           {
