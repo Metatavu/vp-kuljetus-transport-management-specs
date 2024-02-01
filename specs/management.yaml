@@ -627,6 +627,7 @@ components:
       description: Represent single truck
       required:
         - plateNumber
+        - vin
       properties:
         id:
           type: string
@@ -643,6 +644,7 @@ components:
       description: Represent single trailer
       required:
         - plateNumber
+        - vin
       properties:
         id:
           type: string
