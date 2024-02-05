@@ -910,7 +910,8 @@
         "description": "Represent single truck",
         "required": [
           "plateNumber",
-          "type"
+          "type",
+          "vin"
         ],
         "properties": {
           "id": {
@@ -939,7 +940,8 @@
         "description": "Represent single towable",
         "required": [
           "plateNumber",
-          "type"
+          "type",
+          "vin"
         ],
         "properties": {
           "id": {

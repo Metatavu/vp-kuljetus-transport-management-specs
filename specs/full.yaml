@@ -658,6 +658,7 @@ components:
       required:
         - plateNumber
         - type
+        - vin
       properties:
         id:
           type: string
@@ -680,6 +681,7 @@ components:
       required:
         - plateNumber
         - type
+        - vin
       properties:
         id:
           type: string
