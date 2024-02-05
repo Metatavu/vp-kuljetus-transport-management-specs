@@ -699,6 +699,150 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /delivery-info/v1/sites:
+    get:
+      operationId: listSites
+      summary: List Sites.
+      description: Lists Sites.
+      tags:
+        - Sites
+      parameters:
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of sites
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Site"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createSite
+      summary: Create site
+      description: Create new site
+      tags:
+        - Sites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Site"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created site
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Site"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /delivery-info/v1/sites/{siteId}:
+    get:
+      operationId: findSite
+      summary: Find a site.
+      description: Finds a site by id.
+      tags:
+        - Sites
+      parameters:
+        - name: siteId
+          required: true
+          in: path
+          description: site id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found site
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Site"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateSite
+      summary: Updates site
+      description: Updates single site
+      tags:
+        - Sites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Site"
+        description: Payload
+        required: true
+      parameters:
+        - name: siteId
+          required: true
+          in: path
+          description: site id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated site
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Site"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteSite
+      summary: Deletes site
+      description: Deletes site
+      tags:
+        - Sites
+      parameters:
+        - name: siteId
+          required: true
+          in: path
+          description: site id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     Error:
@@ -834,3 +978,18 @@ components:
         displayName:
           type: string
           description: Driver display name
+    Site:
+      type: object
+      description: Represents a single customer site
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          description: Site name
+        location:
+          type: string
+          format: wkt
+          description: Site location as well-known text Point
