@@ -28,7 +28,6 @@ paths:
       description: Replies ping with pong
       tags:
         - System
-        - SpecExternal
       responses:
         "200":
           description: Pong
@@ -46,7 +45,6 @@ paths:
         - Trucks
         - SpecApp
         - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: plateNumber
           in: query
@@ -85,7 +83,6 @@ paths:
       tags:
         - Trucks
         - SpecManagementUI
-        - SpecExternal
       requestBody:
         content:
           application/json:
@@ -116,7 +113,6 @@ paths:
         - Trucks
         - SpecApp
         - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: truckId
           required: true
@@ -145,7 +141,6 @@ paths:
       tags:
         - Trucks
         - SpecManagementUI
-        - SpecExternal
       requestBody:
         content:
           application/json:
@@ -182,7 +177,6 @@ paths:
       tags:
         - Trucks
         - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: truckId
           required: true
@@ -210,7 +204,6 @@ paths:
         - Towables
         - SpecApp
         - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: plateNumber
           in: query
@@ -249,7 +242,6 @@ paths:
       tags:
         - Towables
         - SpecManagementUI
-        - SpecExternal
       requestBody:
         content:
           application/json:
@@ -280,7 +272,6 @@ paths:
         - Towables
         - SpecApp
         - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: towableId
           required: true
@@ -309,7 +300,6 @@ paths:
       tags:
         - Towables
         - SpecManagementUI
-        - SpecExternal
       requestBody:
         content:
           application/json:
@@ -346,7 +336,6 @@ paths:
       tags:
         - Towables
         - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: towableId
           required: true
@@ -406,7 +395,6 @@ paths:
         - Vehicles
         - SpecApp
         - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: truckId
           in: query
@@ -446,7 +434,6 @@ paths:
       tags:
         - Vehicles
         - SpecManagementUI
-        - SpecExternal
       requestBody:
         content:
           application/json:
@@ -477,7 +464,6 @@ paths:
         - Vehicles
         - SpecApp
         - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: vehicleId
           required: true
@@ -506,7 +492,6 @@ paths:
       tags:
         - Vehicles
         - SpecManagementUI
-        - SpecExternal
       requestBody:
         content:
           application/json:
@@ -543,7 +528,6 @@ paths:
       tags:
         - Vehicles
         - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: vehicleId
           required: true
