@@ -51,4 +51,8 @@ export const SPEC_VERSIONS = [
 ];
 
 // List of spec files to include
-export const SPEC_FILES = ["vehicle-management-services.yaml", "work-planning-services.yaml"];
+export const SPEC_FILES = [
+  "vehicle-management-services.yaml",
+  "work-planning-services.yaml",
+  "user-management-services.yaml"
+];
