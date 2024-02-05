@@ -11,9 +11,6 @@ paths:
       description: Lists Trucks.
       tags:
         - Trucks
-        - SpecApp
-        - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: plateNumber
           in: query
@@ -45,6 +42,32 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    post:
+      operationId: createTruck
+      summary: Create truck
+      description: Create new truck
+      tags:
+        - Trucks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Truck"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created truck
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Truck"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /vehicle-management/v1/trucks/{truckId}:
     get:
       operationId: findTruck
@@ -52,9 +75,6 @@ paths:
       description: Finds a truck by id.
       tags:
         - Trucks
-        - SpecApp
-        - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: truckId
           required: true
@@ -76,6 +96,63 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateTruck
+      summary: Updates trucks
+      description: Updates single truck
+      tags:
+        - Trucks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Truck"
+        description: Payload
+        required: true
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated truck
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Truck"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteTruck
+      summary: Deletes truck
+      description: Deletes truck
+      tags:
+        - Trucks
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /vehicle-management/v1/trailers:
     get:
       operationId: listTrailers
@@ -83,9 +160,6 @@ paths:
       description: Lists Trailers.
       tags:
         - Trailers
-        - SpecApp
-        - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: plateNumber
           in: query
@@ -117,6 +191,32 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    post:
+      operationId: createTrailer
+      summary: Create trailer
+      description: Create new trailer
+      tags:
+        - Trailers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Trailer"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created trailer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Trailer"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /vehicle-management/v1/trailers/{trailerId}:
     get:
       operationId: findTrailer
@@ -124,9 +224,6 @@ paths:
       description: Finds a trailer by id.
       tags:
         - Trailers
-        - SpecApp
-        - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: trailerId
           required: true
@@ -148,6 +245,93 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateTrailer
+      summary: Updates trailers
+      description: Updates single trailer
+      tags:
+        - Trailers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Trailer"
+        description: Payload
+        required: true
+      parameters:
+        - name: trailerId
+          required: true
+          in: path
+          description: trailer id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated trailer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Trailer"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteTrailer
+      summary: Deletes trailer
+      description: Deletes trailer
+      tags:
+        - Trailers
+      parameters:
+        - name: trailerId
+          required: true
+          in: path
+          description: trailer id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/telematics/{vin}:
+    post:
+      operationId: receiveTelematicData
+      summary: Receives telematic data entry
+      description: Receives telematic data entry
+      tags:
+        - Telematics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TelematicData"
+        description: Payload
+        required: true
+      parameters:
+        - name: vin
+          required: true
+          in: path
+          description: Truck or trailer vehicle identification number
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Success
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /vehicle-management/v1/vehicles:
     get:
       operationId: listVehicles
@@ -155,9 +339,6 @@ paths:
       description: Lists Vehicles.
       tags:
         - Vehicles
-        - SpecApp
-        - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: truckId
           in: query
@@ -190,6 +371,32 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    post:
+      operationId: createVehicle
+      summary: Create vehicle
+      description: Create new vehicle
+      tags:
+        - Vehicles
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Vehicle"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created vehicle
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /vehicle-management/v1/vehicles/{vehicleId}:
     get:
       operationId: findVehicle
@@ -197,9 +404,6 @@ paths:
       description: Finds a vehicle by id.
       tags:
         - Vehicles
-        - SpecApp
-        - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: vehicleId
           required: true
@@ -221,6 +425,63 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateVehicle
+      summary: Updates vehicles
+      description: Updates single vehicle
+      tags:
+        - Vehicles
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Vehicle"
+        description: Payload
+        required: true
+      parameters:
+        - name: vehicleId
+          required: true
+          in: path
+          description: vehicle id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated vehicle
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteVehicle
+      summary: Deletes vehicle
+      description: Deletes vehicle
+      tags:
+        - Vehicles
+      parameters:
+        - name: vehicleId
+          required: true
+          in: path
+          description: vehicle id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /work-planning/v1/routes:
     get:
       operationId: listRoutes
@@ -228,9 +489,6 @@ paths:
       description: Lists Routes.
       tags:
         - Routes
-        - SpecManagementUI
-        - SpecApp
-        - SpecExternal
       parameters:
         - name: vehicleId
           in: query
@@ -269,6 +527,32 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    post:
+      operationId: createRoute
+      summary: Create route
+      description: Create new route
+      tags:
+        - Routes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Route"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created route
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Route"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /work-planning/v1/routes/{routeId}:
     get:
       operationId: findRoute
@@ -276,9 +560,6 @@ paths:
       description: Finds a route by id.
       tags:
         - Routes
-        - SpecApp
-        - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: routeId
           required: true
@@ -294,6 +575,63 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Route"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateRoute
+      summary: Updates routes
+      description: Updates single route
+      tags:
+        - Routes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Route"
+        description: Payload
+        required: true
+      parameters:
+        - name: routeId
+          required: true
+          in: path
+          description: route id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated route
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Route"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteRoute
+      summary: Deletes route
+      description: Deletes route
+      tags:
+        - Routes
+      parameters:
+        - name: routeId
+          required: true
+          in: path
+          description: route id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
         default:
           description: Invalid request was sent to the server
           content:
@@ -319,6 +657,7 @@ components:
       description: Represent single truck
       required:
         - plateNumber
+        - vin
       properties:
         id:
           type: string
@@ -326,11 +665,16 @@ components:
           readOnly: true
         plateNumber:
           type: string
+        vin:
+          type: string
+          description: Truck identification number. This is unique for each truck and
+            should be used as a hardware identifier for this specific truck
     Trailer:
       type: object
       description: Represent single trailer
       required:
         - plateNumber
+        - vin
       properties:
         id:
           type: string
@@ -338,6 +682,33 @@ components:
           readOnly: true
         plateNumber:
           type: string
+        vin:
+          type: string
+          description: Trailer identification number. This is unique for each trailer and
+            should be used as a hardware identifier for this specific trailer
+    TelematicData:
+      type: object
+      required:
+        - timestamp
+        - imei
+        - speed
+        - latitude
+        - longitude
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        imei:
+          type: string
+        speed:
+          type: number
+          format: float
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
     Vehicle:
       type: object
       description: Represent single vehicle
@@ -358,7 +729,7 @@ components:
           description: >
             List of attached trailers to vehicle. Order of trailers should
             reflect the order of trailers in the vehicle where first trailer is
-            the closest to the truck. 
+            the closest to the truck.
           minItems: 0
           maxItems: 2
           items:

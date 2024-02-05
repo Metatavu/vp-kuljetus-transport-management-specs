@@ -11,9 +11,6 @@ paths:
       description: Lists Trucks.
       tags:
         - Trucks
-        - SpecApp
-        - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: plateNumber
           in: query
@@ -52,9 +49,6 @@ paths:
       description: Finds a truck by id.
       tags:
         - Trucks
-        - SpecApp
-        - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: truckId
           required: true
@@ -83,9 +77,6 @@ paths:
       description: Lists Trailers.
       tags:
         - Trailers
-        - SpecApp
-        - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: plateNumber
           in: query
@@ -124,9 +115,6 @@ paths:
       description: Finds a trailer by id.
       tags:
         - Trailers
-        - SpecApp
-        - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: trailerId
           required: true
@@ -155,9 +143,6 @@ paths:
       description: Lists Vehicles.
       tags:
         - Vehicles
-        - SpecApp
-        - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: truckId
           in: query
@@ -197,9 +182,6 @@ paths:
       description: Finds a vehicle by id.
       tags:
         - Vehicles
-        - SpecApp
-        - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: vehicleId
           required: true
@@ -228,9 +210,6 @@ paths:
       description: Lists Routes.
       tags:
         - Routes
-        - SpecManagementUI
-        - SpecApp
-        - SpecExternal
       parameters:
         - name: vehicleId
           in: query
@@ -276,9 +255,6 @@ paths:
       description: Finds a route by id.
       tags:
         - Routes
-        - SpecApp
-        - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: routeId
           required: true
@@ -319,6 +295,7 @@ components:
       description: Represent single truck
       required:
         - plateNumber
+        - vin
       properties:
         id:
           type: string
@@ -326,11 +303,16 @@ components:
           readOnly: true
         plateNumber:
           type: string
+        vin:
+          type: string
+          description: Truck identification number. This is unique for each truck and
+            should be used as a hardware identifier for this specific truck
     Trailer:
       type: object
       description: Represent single trailer
       required:
         - plateNumber
+        - vin
       properties:
         id:
           type: string
@@ -338,6 +320,10 @@ components:
           readOnly: true
         plateNumber:
           type: string
+        vin:
+          type: string
+          description: Trailer identification number. This is unique for each trailer and
+            should be used as a hardware identifier for this specific trailer
     Vehicle:
       type: object
       description: Represent single vehicle
@@ -358,7 +344,7 @@ components:
           description: >
             List of attached trailers to vehicle. Order of trailers should
             reflect the order of trailers in the vehicle where first trailer is
-            the closest to the truck. 
+            the closest to the truck.
           minItems: 0
           maxItems: 2
           items:

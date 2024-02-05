@@ -365,6 +365,38 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/telematics/{vin}:
+    post:
+      operationId: receiveTelematicData
+      summary: Receives telematic data entry
+      description: Receives telematic data entry
+      tags:
+        - Telematics
+        - SpecVehicleDataReceiver
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TelematicData"
+        description: Payload
+        required: true
+      parameters:
+        - name: vin
+          required: true
+          in: path
+          description: Truck or trailer vehicle identification number
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   /v1/vehicles:
     get:
       operationId: listVehicles
@@ -556,6 +588,7 @@ components:
       description: Represent single truck
       required:
         - plateNumber
+        - vin
       properties:
         id:
           type: string
@@ -563,12 +596,16 @@ components:
           readOnly: true
         plateNumber:
           type: string
-          
+        vin:
+          type: string
+          description: Truck identification number. This is unique for each truck and should be used as a hardware identifier for this specific truck
+
     Trailer:
       type: object
       description: Represent single trailer
       required:
         - plateNumber
+        - vin
       properties:
         id:
           type: string
@@ -576,7 +613,10 @@ components:
           readOnly: true
         plateNumber:
           type: string
-          
+        vin:
+          type: string
+          description: Trailer identification number. This is unique for each trailer and should be used as a hardware identifier for this specific trailer
+
     Vehicle:
       type: object
       description: Represent single vehicle
@@ -595,9 +635,33 @@ components:
         trailerIds:
           type: array
           description: |
-            List of attached trailers to vehicle. Order of trailers should reflect the order of trailers in the vehicle where first trailer is the closest to the truck. 
+            List of attached trailers to vehicle. Order of trailers should reflect the order of trailers in the vehicle where first trailer is the closest to the truck.
           minItems: 0
           maxItems: 2
           items:
             type: string
             format: uuid
+
+    TelematicData:
+      type: object
+      required:
+        - timestamp
+        - imei
+        - speed
+        - latitude
+        - longitude
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        imei:
+          type: string
+        speed:
+          type: number
+          format: float
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double

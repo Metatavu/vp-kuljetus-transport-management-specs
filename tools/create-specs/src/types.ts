@@ -41,6 +41,15 @@ export interface OpenAPISpec {
       [method: string]: {
         operationId: string;
         tags?: string[];
+        requestBody?: {
+          content?: {
+            [contentType: string]: {
+              schema: {
+                $ref?: string;
+              };
+            };
+          };
+        };
         responses: {
           [responseCode: string]: {
             description: string;
@@ -72,3 +81,10 @@ export interface TykTrackEndpoint {
   path: string;
   method: string;
 };
+
+/**
+ * Tyk version white list entry interface
+ */
+export interface TykWhitelistEntry {
+  path: string;
+}

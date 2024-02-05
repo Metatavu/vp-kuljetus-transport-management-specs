@@ -121,7 +121,35 @@
           "white_list": [
             {
               "disabled": false,
-              "path": "/v1/vehicles",
+              "path": "/v1/system/ping",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/telematics/{vin}",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "POST": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/trailers",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -141,7 +169,7 @@
             },
             {
               "disabled": false,
-              "path": "/v1/vehicles/{vehicleId}",
+              "path": "/v1/trailers/{trailerId}",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -158,20 +186,6 @@
                   "headers": null
                 },
                 "PUT": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                }
-              }
-            },
-            {
-              "disabled": false,
-              "path": "/v1/system/ping",
-              "method": "",
-              "ignore_case": false,
-              "method_actions": {
-                "GET": {
                   "action": "no_action",
                   "code": 200,
                   "data": "",
@@ -227,7 +241,7 @@
             },
             {
               "disabled": false,
-              "path": "/v1/trailers",
+              "path": "/v1/vehicles",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -247,7 +261,7 @@
             },
             {
               "disabled": false,
-              "path": "/v1/trailers/{trailerId}",
+              "path": "/v1/vehicles/{vehicleId}",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -276,6 +290,10 @@
             {
               "path": "/v1/system/ping",
               "method": "GET"
+            },
+            {
+              "path": "/v1/telematics/{vin}",
+              "method": "POST"
             },
             {
               "path": "/v1/trailers",
