@@ -39,12 +39,12 @@
             "enabled": true
           }
         },
-        "createTrailer": {
+        "createTowable": {
           "validateRequest": {
             "enabled": true
           }
         },
-        "updateTrailer": {
+        "updateTowable": {
           "validateRequest": {
             "enabled": true
           }
@@ -337,13 +337,13 @@
         }
       }
     },
-    "/v1/trailers": {
+    "/v1/towables": {
       "get": {
-        "operationId": "listTrailers",
-        "summary": "List Trailers.",
-        "description": "Lists Trailers.",
+        "operationId": "listTowables",
+        "summary": "List Towables.",
+        "description": "Lists Towables.",
         "tags": [
-          "Trailers",
+          "Towables",
           "SpecApp",
           "SpecManagementUI",
           "SpecExternal"
@@ -376,13 +376,13 @@
         ],
         "responses": {
           "200": {
-            "description": "List of trailers",
+            "description": "List of towables",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Trailer"
+                    "$ref": "#/components/schemas/Towable"
                   }
                 }
               }
@@ -401,11 +401,11 @@
         }
       },
       "post": {
-        "operationId": "createTrailer",
-        "summary": "Create trailer",
-        "description": "Create new trailer",
+        "operationId": "createTowable",
+        "summary": "Create towable",
+        "description": "Create new towable",
         "tags": [
-          "Trailers",
+          "Towables",
           "SpecManagementUI",
           "SpecExternal"
         ],
@@ -413,7 +413,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Trailer"
+                "$ref": "#/components/schemas/Towable"
               }
             }
           },
@@ -422,11 +422,11 @@
         },
         "responses": {
           "200": {
-            "description": "Created trailer",
+            "description": "Created towable",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Trailer"
+                  "$ref": "#/components/schemas/Towable"
                 }
               }
             }
@@ -444,23 +444,23 @@
         }
       }
     },
-    "/v1/trailers/{trailerId}": {
+    "/v1/towables/{towableId}": {
       "get": {
-        "operationId": "findTrailer",
-        "summary": "Find a trailer.",
-        "description": "Finds a trailer by id.",
+        "operationId": "findTowable",
+        "summary": "Find a towable.",
+        "description": "Finds a towable by id.",
         "tags": [
-          "Trailers",
+          "Towables",
           "SpecApp",
           "SpecManagementUI",
           "SpecExternal"
         ],
         "parameters": [
           {
-            "name": "trailerId",
+            "name": "towableId",
             "required": true,
             "in": "path",
-            "description": "trailers id",
+            "description": "towables id",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -469,11 +469,11 @@
         ],
         "responses": {
           "200": {
-            "description": "Found trailer",
+            "description": "Found towable",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Trailer"
+                  "$ref": "#/components/schemas/Towable"
                 }
               }
             }
@@ -491,11 +491,11 @@
         }
       },
       "put": {
-        "operationId": "updateTrailer",
-        "summary": "Updates trailers",
-        "description": "Updates single trailer",
+        "operationId": "updateTowable",
+        "summary": "Updates towables",
+        "description": "Updates single towable",
         "tags": [
-          "Trailers",
+          "Towables",
           "SpecManagementUI",
           "SpecExternal"
         ],
@@ -503,7 +503,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Trailer"
+                "$ref": "#/components/schemas/Towable"
               }
             }
           },
@@ -512,10 +512,10 @@
         },
         "parameters": [
           {
-            "name": "trailerId",
+            "name": "towableId",
             "required": true,
             "in": "path",
-            "description": "trailer id",
+            "description": "towable id",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -524,11 +524,11 @@
         ],
         "responses": {
           "200": {
-            "description": "Updated trailer",
+            "description": "Updated towable",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Trailer"
+                  "$ref": "#/components/schemas/Towable"
                 }
               }
             }
@@ -546,20 +546,20 @@
         }
       },
       "delete": {
-        "operationId": "deleteTrailer",
-        "summary": "Deletes trailer",
-        "description": "Deletes trailer",
+        "operationId": "deleteTowable",
+        "summary": "Deletes towable",
+        "description": "Deletes towable",
         "tags": [
-          "Trailers",
+          "Towables",
           "SpecManagementUI",
           "SpecExternal"
         ],
         "parameters": [
           {
-            "name": "trailerId",
+            "name": "towableId",
             "required": true,
             "in": "path",
-            "description": "trailer id",
+            "description": "towable id",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -608,7 +608,7 @@
             "name": "vin",
             "required": true,
             "in": "path",
-            "description": "Truck or trailer vehicle identification number",
+            "description": "Truck or towable vehicle identification number",
             "schema": {
               "type": "string"
             }
@@ -910,6 +910,7 @@
         "description": "Represent single truck",
         "required": [
           "plateNumber",
+          "type",
           "vin"
         ],
         "properties": {
@@ -920,6 +921,13 @@
           },
           "plateNumber": {
             "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "TRUCK",
+              "SEMI_TRUCK"
+            ]
           },
           "vin": {
             "type": "string",
@@ -927,11 +935,12 @@
           }
         }
       },
-      "Trailer": {
+      "Towable": {
         "type": "object",
-        "description": "Represent single trailer",
+        "description": "Represent single towable",
         "required": [
           "plateNumber",
+          "type",
           "vin"
         ],
         "properties": {
@@ -943,9 +952,17 @@
           "plateNumber": {
             "type": "string"
           },
+          "type": {
+            "type": "string",
+            "enum": [
+              "TRAILER",
+              "SEMI_TRAILER",
+              "DOLLY"
+            ]
+          },
           "vin": {
             "type": "string",
-            "description": "Trailer identification number. This is unique for each trailer and should be used as a hardware identifier for this specific trailer"
+            "description": "Towable identification number. This is unique for each towable and should be used as a hardware identifier for this specific towable"
           }
         }
       },
@@ -954,7 +971,7 @@
         "description": "Represent single vehicle",
         "required": [
           "truckId",
-          "trailerIds"
+          "towableIds"
         ],
         "properties": {
           "id": {
@@ -967,11 +984,9 @@
             "description": "Truck that towing the vehicle",
             "format": "uuid"
           },
-          "trailerIds": {
+          "towableIds": {
             "type": "array",
-            "description": "List of attached trailers to vehicle. Order of trailers should reflect the order of trailers in the vehicle where first trailer is the closest to the truck.\n",
-            "minItems": 0,
-            "maxItems": 2,
+            "description": "List of attached towables to vehicle. Order of towables should reflect the order of towables in the vehicle where first towable is the closest to the truck.\n",
             "items": {
               "type": "string",
               "format": "uuid"

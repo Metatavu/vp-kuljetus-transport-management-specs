@@ -22,7 +22,7 @@ paths:
         - name: vin
           required: true
           in: path
-          description: Truck or trailer vehicle identification number
+          description: Truck or towable vehicle identification number
           schema:
             type: string
       responses:

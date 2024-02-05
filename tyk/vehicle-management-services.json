@@ -149,7 +149,7 @@
             },
             {
               "disabled": false,
-              "path": "/v1/trailers",
+              "path": "/v1/towables",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -169,7 +169,7 @@
             },
             {
               "disabled": false,
-              "path": "/v1/trailers/{trailerId}",
+              "path": "/v1/towables/{towableId}",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -296,23 +296,23 @@
               "method": "POST"
             },
             {
-              "path": "/v1/trailers",
+              "path": "/v1/towables",
               "method": "GET"
             },
             {
-              "path": "/v1/trailers",
+              "path": "/v1/towables",
               "method": "POST"
             },
             {
-              "path": "/v1/trailers/{trailerId}",
+              "path": "/v1/towables/{towableId}",
               "method": "DELETE"
             },
             {
-              "path": "/v1/trailers/{trailerId}",
+              "path": "/v1/towables/{towableId}",
               "method": "GET"
             },
             {
-              "path": "/v1/trailers/{trailerId}",
+              "path": "/v1/towables/{towableId}",
               "method": "PUT"
             },
             {
