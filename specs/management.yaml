@@ -1199,6 +1199,9 @@ components:
     Site:
       type: object
       description: Represents a single customer site
+      required:
+        - name
+        - location
       properties:
         id:
           type: string
