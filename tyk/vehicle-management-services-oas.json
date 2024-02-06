@@ -1044,6 +1044,26 @@
           "vin": {
             "type": "string",
             "description": "Truck identification number. This is unique for each truck and should be used as a hardware identifier for this specific truck"
+          },
+          "creatorId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "lastModifierId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "modifiedAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
           }
         }
       },
@@ -1075,6 +1095,26 @@
           "vin": {
             "type": "string",
             "description": "Towable identification number. This is unique for each towable and should be used as a hardware identifier for this specific towable"
+          },
+          "creatorId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "lastModifierId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "modifiedAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
           }
         }
       },
@@ -1103,6 +1143,26 @@
               "type": "string",
               "format": "uuid"
             }
+          },
+          "creatorId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "lastModifierId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "modifiedAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
           }
         }
       },
