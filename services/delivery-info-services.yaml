@@ -165,18 +165,147 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-    delete:
-      operationId: deleteSite
-      summary: Deletes site
-      description: Deletes site
+  /v1/freights:
+    get:
+      operationId: listFreights
+      summary: List Freights.
+      description: Lists Freights.
       tags:
-        - Sites
+        - Freights
+        - SpecManagementUI
+        - SpecApp
+      parameters:
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of freights
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Freight"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createFreight
+      summary: Create freight
+      description: Create new freight
+      tags:
+        - Freights
+        - SpecManagementUI
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Freight"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created freight
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Freight"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  "/v1/freights/{freightId}":
+    get:
+      operationId: findFreight
+      summary: Find a freight.
+      description: Finds a freight by id.
+      tags:
+        - Freights
+        - SpecApp
         - SpecManagementUI
       parameters:
-        - name: siteId
+        - name: freightId
           required: true
           in: path
-          description: site id
+          description: freight id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found freight
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Freight"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateFreight
+      summary: Updates freight
+      description: Updates single freight
+      tags:
+        - Freights
+        - SpecManagementUI
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Freight"
+        description: Payload
+        required: true
+      parameters:
+        - name: freightId
+          required: true
+          in: path
+          description: freight id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated freight
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Freight"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      operationId: deleteFreight
+      summary: Deletes freight
+      description: Deletes freight
+      tags:
+        - Freights
+        - SpecManagementUI
+      parameters:
+        - name: freightId
+          required: true
+          in: path
+          description: freight id
           schema:
             type: string
             format: uuid
@@ -226,3 +355,41 @@ components:
           type: string
           format: wkt
           description: Site location as well-known text Point
+
+    Freight:
+      type: object
+      description: Represents a single freight shipment, aka. waybill.
+      required:
+        - pointOfDeparture
+        - destination
+        - sender
+        - recipient
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        sender:
+          type: string
+          description: Sender of the shipment
+        recipient:
+          type: string
+          description: Receiver of the shipment
+        payer:
+          type: string
+          description: Payer of the shipment
+        pointOfDeparture:
+          type: string
+          description: Point of departure
+        destination:
+          type: string
+          description: Point of arrival
+        shipmentInfo:
+          type: string
+          description: Shipment info
+        temperature:
+          type: string
+          description: Temperature of the shipment
+        reservations:
+          type: string
+          description: Reservations for the shipment
