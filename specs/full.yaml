@@ -3,12 +3,21 @@ info:
   title: Vehicle Management Services (full)
   description: Vehicle Management Services (full)
   version: 1.0.0
+security:
+  - ApiKeyAuth: []
+  - BearerAuth:
+      - driver
+      - manager
 paths:
   /vehicle-management/v1/trucks:
     get:
       operationId: listTrucks
       summary: List Trucks.
       description: Lists Trucks.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Trucks
       parameters:
@@ -46,6 +55,9 @@ paths:
       operationId: createTruck
       summary: Create truck
       description: Create new truck
+      security:
+        - BearerAuth:
+            - manager
       tags:
         - Trucks
       requestBody:
@@ -73,6 +85,10 @@ paths:
       operationId: findTruck
       summary: Find a truck.
       description: Finds a truck by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Trucks
       parameters:
@@ -100,6 +116,9 @@ paths:
       operationId: updateTruck
       summary: Updates trucks
       description: Updates single truck
+      security:
+        - BearerAuth:
+            - manager
       tags:
         - Trucks
       requestBody:
@@ -134,6 +153,9 @@ paths:
       operationId: deleteTruck
       summary: Deletes truck
       description: Deletes truck
+      security:
+        - BearerAuth:
+            - manager
       tags:
         - Trucks
       parameters:
@@ -158,6 +180,10 @@ paths:
       operationId: listTowables
       summary: List Towables.
       description: Lists Towables.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Towables
       parameters:
@@ -195,6 +221,9 @@ paths:
       operationId: createTowable
       summary: Create towable
       description: Create new towable
+      security:
+        - BearerAuth:
+            - manager
       tags:
         - Towables
       requestBody:
@@ -222,6 +251,10 @@ paths:
       operationId: findTowable
       summary: Find a towable.
       description: Finds a towable by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Towables
       parameters:
@@ -249,6 +282,9 @@ paths:
       operationId: updateTowable
       summary: Updates towables
       description: Updates single towable
+      security:
+        - BearerAuth:
+            - manager
       tags:
         - Towables
       requestBody:
@@ -283,6 +319,9 @@ paths:
       operationId: deleteTowable
       summary: Deletes towable
       description: Deletes towable
+      security:
+        - BearerAuth:
+            - manager
       tags:
         - Towables
       parameters:
@@ -307,6 +346,8 @@ paths:
       operationId: receiveTelematicData
       summary: Receives telematic data entry
       description: Receives telematic data entry
+      security:
+        - ApiKeyAuth: []
       tags:
         - Telematics
       requestBody:
@@ -337,6 +378,10 @@ paths:
       operationId: listVehicles
       summary: List Vehicles.
       description: Lists Vehicles.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Vehicles
       parameters:
@@ -375,6 +420,9 @@ paths:
       operationId: createVehicle
       summary: Create vehicle
       description: Create new vehicle
+      security:
+        - BearerAuth:
+            - manager
       tags:
         - Vehicles
       requestBody:
@@ -402,6 +450,10 @@ paths:
       operationId: findVehicle
       summary: Find a vehicle.
       description: Finds a vehicle by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Vehicles
       parameters:
@@ -429,6 +481,9 @@ paths:
       operationId: updateVehicle
       summary: Updates vehicles
       description: Updates single vehicle
+      security:
+        - BearerAuth:
+            - manager
       tags:
         - Vehicles
       requestBody:
@@ -463,6 +518,9 @@ paths:
       operationId: deleteVehicle
       summary: Deletes vehicle
       description: Deletes vehicle
+      security:
+        - BearerAuth:
+            - manager
       tags:
         - Vehicles
       parameters:
@@ -487,6 +545,10 @@ paths:
       operationId: listRoutes
       summary: List Routes.
       description: Lists Routes.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Routes
       parameters:
@@ -531,6 +593,9 @@ paths:
       operationId: createRoute
       summary: Create route
       description: Create new route
+      security:
+        - BearerAuth:
+            - manager
       tags:
         - Routes
       requestBody:
@@ -558,6 +623,10 @@ paths:
       operationId: findRoute
       summary: Find a route.
       description: Finds a route by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Routes
       parameters:
@@ -585,6 +654,9 @@ paths:
       operationId: updateRoute
       summary: Updates routes
       description: Updates single route
+      security:
+        - BearerAuth:
+            - manager
       tags:
         - Routes
       requestBody:
@@ -619,6 +691,9 @@ paths:
       operationId: deleteRoute
       summary: Deletes route
       description: Deletes route
+      security:
+        - BearerAuth:
+            - manager
       tags:
         - Routes
       parameters:
@@ -643,6 +718,9 @@ paths:
       operationId: listDrivers
       summary: List Drivers.
       description: Lists Drivers.
+      security:
+        - BearerAuth:
+            - manager
       tags:
         - Drivers
       parameters:
@@ -676,6 +754,10 @@ paths:
       operationId: findDriver
       summary: Find a driver.
       description: Finds a driver by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Drivers
       parameters:
@@ -704,6 +786,10 @@ paths:
       operationId: listSites
       summary: List Sites.
       description: Lists Sites.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Sites
       parameters:
@@ -736,6 +822,9 @@ paths:
       operationId: createSite
       summary: Create site
       description: Create new site
+      security:
+        - BearerAuth:
+            - manager
       tags:
         - Sites
       requestBody:
@@ -763,6 +852,10 @@ paths:
       operationId: findSite
       summary: Find a site.
       description: Finds a site by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Sites
       parameters:
@@ -790,6 +883,9 @@ paths:
       operationId: updateSite
       summary: Updates site
       description: Updates single site
+      security:
+        - BearerAuth:
+            - manager
       tags:
         - Sites
       requestBody:
@@ -825,6 +921,10 @@ paths:
       operationId: listFreights
       summary: List Freights.
       description: Lists Freights.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Freights
       parameters:
@@ -857,6 +957,9 @@ paths:
       operationId: createFreight
       summary: Create freight
       description: Create new freight
+      security:
+        - BearerAuth:
+            - manager
       tags:
         - Freights
       requestBody:
@@ -884,6 +987,10 @@ paths:
       operationId: findFreight
       summary: Find a freight.
       description: Finds a freight by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Freights
       parameters:
@@ -911,6 +1018,9 @@ paths:
       operationId: updateFreight
       summary: Updates freight
       description: Updates single freight
+      security:
+        - BearerAuth:
+            - manager
       tags:
         - Freights
       requestBody:
@@ -945,6 +1055,9 @@ paths:
       operationId: deleteFreight
       summary: Deletes freight
       description: Deletes freight
+      security:
+        - BearerAuth:
+            - manager
       tags:
         - Freights
       parameters:
@@ -969,6 +1082,10 @@ paths:
       operationId: listFreightUnits
       summary: List FreightUnits.
       description: Lists FreightUnits.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - FreightUnits
       parameters:
@@ -1007,6 +1124,10 @@ paths:
       operationId: createFreightUnit
       summary: Create freight unit
       description: Create new freight unit
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - FreightUnits
       requestBody:
@@ -1034,6 +1155,10 @@ paths:
       operationId: findFreightUnit
       summary: Find a freight unit.
       description: Finds a freight unit by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - FreightUnits
       parameters:
@@ -1061,6 +1186,10 @@ paths:
       operationId: updateFreightUnit
       summary: Updates freight unit
       description: Updates single freight unit
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - FreightUnits
       requestBody:
@@ -1095,6 +1224,9 @@ paths:
       operationId: deleteFreightUnit
       summary: Deletes freight unit
       description: Deletes freight unit
+      security:
+        - BearerAuth:
+            - manager
       tags:
         - FreightUnits
       parameters:
@@ -1115,6 +1247,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     Error:
       type: object

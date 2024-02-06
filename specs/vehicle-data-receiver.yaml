@@ -3,12 +3,16 @@ info:
   title: Vehicle Management Services (vehicle-data-receiver)
   description: Vehicle Management Services (vehicle-data-receiver)
   version: 1.0.0
+security:
+  - ApiKeyAuth: []
 paths:
   /vehicle-management/v1/telematics/{vin}:
     post:
       operationId: receiveTelematicData
       summary: Receives telematic data entry
       description: Receives telematic data entry
+      security:
+        - ApiKeyAuth: []
       tags:
         - Telematics
       requestBody:
@@ -35,6 +39,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
   schemas:
     Error:
       type: object

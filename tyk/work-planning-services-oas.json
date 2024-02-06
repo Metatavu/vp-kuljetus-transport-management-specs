@@ -6,7 +6,10 @@
   },
   "security": [
     {
-      "bearerAuth": []
+      "bearerAuth": [
+        "driver",
+        "manager"
+      ]
     }
   ],
   "x-tyk-api-gateway": {
@@ -48,6 +51,7 @@
         "operationId": "ping",
         "summary": "Replies with pong",
         "description": "Replies ping with pong",
+        "security": [],
         "tags": [
           "System"
         ],
@@ -70,6 +74,14 @@
         "operationId": "listRoutes",
         "summary": "List Routes.",
         "description": "Lists Routes.",
+        "security": [
+          {
+            "BearerAuth": [
+              "driver",
+              "manager"
+            ]
+          }
+        ],
         "tags": [
           "Routes",
           "SpecManagementUI",
@@ -141,6 +153,13 @@
         "operationId": "createRoute",
         "summary": "Create route",
         "description": "Create new route",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
         "tags": [
           "Routes",
           "SpecManagementUI"
@@ -185,6 +204,14 @@
         "operationId": "findRoute",
         "summary": "Find a route.",
         "description": "Finds a route by id.",
+        "security": [
+          {
+            "BearerAuth": [
+              "driver",
+              "manager"
+            ]
+          }
+        ],
         "tags": [
           "Routes",
           "SpecApp",
@@ -229,6 +256,13 @@
         "operationId": "updateRoute",
         "summary": "Updates routes",
         "description": "Updates single route",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
         "tags": [
           "Routes",
           "SpecManagementUI"
@@ -283,6 +317,13 @@
         "operationId": "deleteRoute",
         "summary": "Deletes route",
         "description": "Deletes route",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
         "tags": [
           "Routes",
           "SpecManagementUI"

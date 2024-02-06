@@ -4,7 +4,7 @@ info:
   title: VP-Kuljetus User Management Services
 
 security:
-  - bearerAuth: []
+  - BearerAuth: [driver, manager]
 
 x-tyk-api-gateway:
   info:
@@ -26,6 +26,7 @@ paths:
       operationId: ping
       summary: Replies with pong
       description: Replies ping with pong
+      security: []
       tags:
         - System
       responses:
@@ -41,6 +42,8 @@ paths:
       operationId: listDrivers
       summary: List Drivers.
       description: Lists Drivers.
+      security:
+        - BearerAuth: [manager]
       tags:
         - Drivers
         - SpecManagementUI
@@ -76,6 +79,8 @@ paths:
       operationId: findDriver
       summary: Find a driver.
       description: Finds a driver by id.
+      security:
+        - BearerAuth: [driver, manager]
       tags:
         - Drivers
         - SpecApp
@@ -104,7 +109,7 @@ paths:
 
 components:
   securitySchemes:
-    bearerAuth:
+    BearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT

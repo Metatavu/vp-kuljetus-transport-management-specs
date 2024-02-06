@@ -4,7 +4,7 @@ info:
   title: VP-Kuljetus Delivery Info Services
 
 security:
-  - bearerAuth: []
+  - BearerAuth: [driver, manager]
 
 x-tyk-api-gateway:
   info:
@@ -26,6 +26,7 @@ paths:
       operationId: ping
       summary: Replies with pong
       description: Replies ping with pong
+      security: []
       tags:
         - System
       responses:
@@ -41,6 +42,8 @@ paths:
       operationId: listSites
       summary: List Sites.
       description: Lists Sites.
+      security:
+        - BearerAuth: [driver, manager]
       tags:
         - Sites
         - SpecManagementUI
@@ -75,6 +78,8 @@ paths:
       operationId: createSite
       summary: Create site
       description: Create new site
+      security:
+        - BearerAuth: [manager]
       tags:
         - Sites
         - SpecManagementUI
@@ -104,6 +109,8 @@ paths:
       operationId: findSite
       summary: Find a site.
       description: Finds a site by id.
+      security:
+        - BearerAuth: [driver, manager]
       tags:
         - Sites
         - SpecApp
@@ -133,6 +140,8 @@ paths:
       operationId: updateSite
       summary: Updates site
       description: Updates single site
+      security:
+        - BearerAuth: [manager]
       tags:
         - Sites
         - SpecManagementUI
@@ -170,6 +179,8 @@ paths:
       operationId: listFreights
       summary: List Freights.
       description: Lists Freights.
+      security:
+        - BearerAuth: [driver, manager]
       tags:
         - Freights
         - SpecManagementUI
@@ -204,6 +215,8 @@ paths:
       operationId: createFreight
       summary: Create freight
       description: Create new freight
+      security:
+        - BearerAuth: [manager]
       tags:
         - Freights
         - SpecManagementUI
@@ -233,6 +246,8 @@ paths:
       operationId: findFreight
       summary: Find a freight.
       description: Finds a freight by id.
+      security:
+        - BearerAuth: [driver, manager]
       tags:
         - Freights
         - SpecApp
@@ -262,6 +277,8 @@ paths:
       operationId: updateFreight
       summary: Updates freight
       description: Updates single freight
+      security:
+        - BearerAuth: [manager]
       tags:
         - Freights
         - SpecManagementUI
@@ -298,6 +315,8 @@ paths:
       operationId: deleteFreight
       summary: Deletes freight
       description: Deletes freight
+      security:
+        - BearerAuth: [manager]
       tags:
         - Freights
         - SpecManagementUI
@@ -324,6 +343,8 @@ paths:
       operationId: listFreightUnits
       summary: List FreightUnits.
       description: Lists FreightUnits.
+      security:
+        - BearerAuth: [driver, manager]
       tags:
         - FreightUnits
         - SpecManagementUI
@@ -364,6 +385,8 @@ paths:
       operationId: createFreightUnit
       summary: Create freight unit
       description: Create new freight unit
+      security:
+        - BearerAuth: [driver, manager]
       tags:
         - FreightUnits
         - SpecManagementUI
@@ -394,6 +417,8 @@ paths:
       operationId: findFreightUnit
       summary: Find a freight unit.
       description: Finds a freight unit by id.
+      security:
+        - BearerAuth: [driver, manager]
       tags:
         - FreightUnits
         - SpecApp
@@ -423,6 +448,8 @@ paths:
       operationId: updateFreightUnit
       summary: Updates freight unit
       description: Updates single freight unit
+      security:
+        - BearerAuth: [driver, manager]
       tags:
         - FreightUnits
         - SpecManagementUI
@@ -460,6 +487,8 @@ paths:
       operationId: deleteFreightUnit
       summary: Deletes freight unit
       description: Deletes freight unit
+      security:
+        - BearerAuth: [manager]
       tags:
         - FreightUnits
         - SpecManagementUI
@@ -483,7 +512,7 @@ paths:
 
 components:
   securitySchemes:
-    bearerAuth:
+    BearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
