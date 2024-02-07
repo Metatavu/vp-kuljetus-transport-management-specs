@@ -177,6 +177,8 @@ paths:
       operationId: deleteSite
       summary: Deletes site
       description: Deletes site
+      security:
+        - BearerAuth: [ manager ]
       tags:
         - Sites
         - SpecManagementUI
