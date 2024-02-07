@@ -237,6 +237,12 @@
               "method": "",
               "ignore_case": false,
               "method_actions": {
+                "DELETE": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
                 "GET": {
                   "action": "no_action",
                   "code": 200,
@@ -314,6 +320,10 @@
             {
               "path": "/v1/sites",
               "method": "POST"
+            },
+            {
+              "path": "/v1/sites/{siteId}",
+              "method": "DELETE"
             },
             {
               "path": "/v1/sites/{siteId}",
