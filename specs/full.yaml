@@ -820,6 +820,29 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteSite
+      summary: Deletes site
+      description: Deletes site
+      tags:
+        - Sites
+      parameters:
+        - name: siteId
+          required: true
+          in: path
+          description: site id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /delivery-info/v1/freights:
     get:
       operationId: listFreights
