@@ -42,6 +42,16 @@
             "enabled": true
           }
         },
+        "createTask": {
+          "validateRequest": {
+            "enabled": true
+          }
+        },
+        "updateTask": {
+          "validateRequest": {
+            "enabled": true
+          }
+        },
         "createFreight": {
           "validateRequest": {
             "enabled": true
@@ -336,6 +346,319 @@
             "required": true,
             "in": "path",
             "description": "site id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Empty response indicating successful removal"
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks": {
+      "get": {
+        "operationId": "listTasks",
+        "summary": "List Tasks.",
+        "description": "Lists Tasks.",
+        "security": [
+          {
+            "BearerAuth": [
+              "driver",
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Tasks",
+          "SpecManagementUI",
+          "SpecApp"
+        ],
+        "parameters": [
+          {
+            "name": "routeId",
+            "in": "query",
+            "description": "Route id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "assignedToRoute",
+            "in": "query",
+            "description": "Has been assigned to a route. Should not be used together with routeId.",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "freightId",
+            "in": "query",
+            "description": "Freight id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "customerSiteId",
+            "in": "query",
+            "description": "Customer site id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Task type",
+            "schema": {
+              "$ref": "#/components/schemas/TaskType"
+            }
+          },
+          {
+            "name": "first",
+            "in": "query",
+            "description": "First result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "max",
+            "in": "query",
+            "description": "Max results.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of tasks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Task"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createTask",
+        "summary": "Create task",
+        "description": "Create new task",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Tasks",
+          "SpecManagementUI"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Task"
+              }
+            }
+          },
+          "description": "Payload",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Created task",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks/{taskId}": {
+      "get": {
+        "operationId": "findTask",
+        "summary": "Find a task.",
+        "description": "Finds a task by id.",
+        "security": [
+          {
+            "BearerAuth": [
+              "driver",
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Tasks",
+          "SpecApp",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "taskId",
+            "required": true,
+            "in": "path",
+            "description": "task id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found task",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "updateTask",
+        "summary": "Updates task",
+        "description": "Updates single task",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Tasks",
+          "SpecManagementUI"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Task"
+              }
+            }
+          },
+          "description": "Payload",
+          "required": true
+        },
+        "parameters": [
+          {
+            "name": "taskId",
+            "required": true,
+            "in": "path",
+            "description": "task id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated task",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteTask",
+        "summary": "Deletes task",
+        "description": "Deletes task",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Tasks",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "taskId",
+            "required": true,
+            "in": "path",
+            "description": "task id",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1002,6 +1325,72 @@
             "readOnly": true
           }
         }
+      },
+      "Task": {
+        "type": "object",
+        "description": "Represent single task for freight",
+        "required": [
+          "freightId",
+          "customerSiteId",
+          "type"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "freightId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Freight id"
+          },
+          "customerSiteId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Customer site id"
+          },
+          "type": {
+            "$ref": "#/components/schemas/TaskType"
+          },
+          "remarks": {
+            "type": "string",
+            "description": "Task remarks"
+          },
+          "routeId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Route id"
+          },
+          "creatorId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "lastModifierId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "modifiedAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
+      "TaskType": {
+        "type": "string",
+        "description": "Type of the task",
+        "enum": [
+          "UNLOAD",
+          "LOAD"
+        ]
       },
       "Freight": {
         "type": "object",
