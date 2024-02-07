@@ -55,6 +55,11 @@ paths:
           description: Filter results by plate number
           schema:
             type: string
+        - name: includeArchived
+          in: query
+          description: Include archived trucks
+          schema:
+            type: boolean
         - name: first
           in: query
           description: First result.
@@ -183,12 +188,11 @@ paths:
     delete:
       operationId: deleteTruck
       summary: Deletes truck
-      description: Deletes truck
+      description: Deletes truck. For non-production use. Returns forbidden in production environment.
       security:
         - BearerAuth: [manager]
       tags:
         - Trucks
-        - SpecManagementUI
       parameters:
         - name: truckId
           required: true
@@ -224,6 +228,11 @@ paths:
           description: Filter results by plate number
           schema:
             type: string
+        - name: includeArchived
+          in: query
+          description: Include archived towables
+          schema:
+            type: boolean
         - name: first
           in: query
           description: First result.
@@ -352,12 +361,11 @@ paths:
     delete:
       operationId: deleteTowable
       summary: Deletes towable
-      description: Deletes towable
+      description: Deletes towable. For non-production use. Returns forbidden response in production environment.
       security:
         - BearerAuth: [manager]
       tags:
         - Towables
-        - SpecManagementUI
       parameters:
         - name: towableId
           required: true
@@ -428,6 +436,11 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: includeArchived
+          in: query
+          description: Include archived vehicles
+          schema:
+            type: boolean
         - name: first
           in: query
           description: First result.
@@ -556,12 +569,11 @@ paths:
     delete:
       operationId: deleteVehicle
       summary: Deletes vehicle
-      description: Deletes vehicle
+      description: Deletes vehicle. For non-production use. Returns forbidden response in production environment.
       security:
         - BearerAuth: [manager]
       tags:
         - Vehicles
-        - SpecManagementUI
       parameters:
         - name: vehicleId
           required: true
@@ -642,6 +654,10 @@ components:
           format: date-time
           type: string
           readOnly: true
+        archivedAt:
+          format: date-time
+          type: string
+          readOnly: true
 
     Towable:
       type: object
@@ -676,6 +692,10 @@ components:
           readOnly: true
           format: uuid
         modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
+        archivedAt:
           format: date-time
           type: string
           readOnly: true
@@ -715,6 +735,10 @@ components:
           readOnly: true
           format: uuid
         modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
+        archivedAt:
           format: date-time
           type: string
           readOnly: true

@@ -49,6 +49,11 @@ paths:
         - SpecManagementUI
         - SpecApp
       parameters:
+        - name: includeArchived
+          in: query
+          description: Include archived sites
+          schema:
+            type: boolean
         - name: first
           in: query
           description: First result.
@@ -176,12 +181,11 @@ paths:
     delete:
       operationId: deleteSite
       summary: Deletes site
-      description: Deletes site
+      description: Deletes site. For non-production use. Returns forbidden in production environment.
       security:
         - BearerAuth: [manager]
       tags:
         - Sites
-        - SpecManagementUI
       parameters:
         - name: siteId
           required: true
@@ -795,6 +799,10 @@ components:
           readOnly: true
           format: uuid
         modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
+        archivedAt:
           format: date-time
           type: string
           readOnly: true

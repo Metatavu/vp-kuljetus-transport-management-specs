@@ -26,6 +26,11 @@ paths:
           description: Filter results by plate number
           schema:
             type: string
+        - name: includeArchived
+          in: query
+          description: Include archived trucks
+          schema:
+            type: boolean
         - name: first
           in: query
           description: First result.
@@ -149,32 +154,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-    delete:
-      operationId: deleteTruck
-      summary: Deletes truck
-      description: Deletes truck
-      security:
-        - BearerAuth:
-            - manager
-      tags:
-        - Trucks
-      parameters:
-        - name: truckId
-          required: true
-          in: path
-          description: truck id
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "204":
-          description: Empty response indicating successful removal
-        default:
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
   /vehicle-management/v1/towables:
     get:
       operationId: listTowables
@@ -192,6 +171,11 @@ paths:
           description: Filter results by plate number
           schema:
             type: string
+        - name: includeArchived
+          in: query
+          description: Include archived towables
+          schema:
+            type: boolean
         - name: first
           in: query
           description: First result.
@@ -315,32 +299,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-    delete:
-      operationId: deleteTowable
-      summary: Deletes towable
-      description: Deletes towable
-      security:
-        - BearerAuth:
-            - manager
-      tags:
-        - Towables
-      parameters:
-        - name: towableId
-          required: true
-          in: path
-          description: towable id
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "204":
-          description: Empty response indicating successful removal
-        default:
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
   /vehicle-management/v1/telematics/{vin}:
     post:
       operationId: receiveTelematicData
@@ -391,6 +349,11 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: includeArchived
+          in: query
+          description: Include archived vehicles
+          schema:
+            type: boolean
         - name: first
           in: query
           description: First result.
@@ -508,32 +471,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Vehicle"
-        default:
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    delete:
-      operationId: deleteVehicle
-      summary: Deletes vehicle
-      description: Deletes vehicle
-      security:
-        - BearerAuth:
-            - manager
-      tags:
-        - Vehicles
-      parameters:
-        - name: vehicleId
-          required: true
-          in: path
-          description: vehicle id
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "204":
-          description: Empty response indicating successful removal
         default:
           description: Invalid request was sent to the server
           content:
@@ -805,6 +742,11 @@ paths:
       tags:
         - Sites
       parameters:
+        - name: includeArchived
+          in: query
+          description: Include archived sites
+          schema:
+            type: boolean
         - name: first
           in: query
           description: First result.
@@ -922,32 +864,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Site"
-        default:
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    delete:
-      operationId: deleteSite
-      summary: Deletes site
-      description: Deletes site
-      security:
-        - BearerAuth:
-            - manager
-      tags:
-        - Sites
-      parameters:
-        - name: siteId
-          required: true
-          in: path
-          description: site id
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "204":
-          description: Empty response indicating successful removal
         default:
           description: Invalid request was sent to the server
           content:
@@ -1552,6 +1468,10 @@ components:
           format: date-time
           type: string
           readOnly: true
+        archivedAt:
+          format: date-time
+          type: string
+          readOnly: true
     Towable:
       type: object
       description: Represent single towable
@@ -1589,6 +1509,10 @@ components:
           readOnly: true
           format: uuid
         modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
+        archivedAt:
           format: date-time
           type: string
           readOnly: true
@@ -1652,6 +1576,10 @@ components:
           readOnly: true
           format: uuid
         modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
+        archivedAt:
           format: date-time
           type: string
           readOnly: true
@@ -1739,6 +1667,10 @@ components:
           readOnly: true
           format: uuid
         modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
+        archivedAt:
           format: date-time
           type: string
           readOnly: true

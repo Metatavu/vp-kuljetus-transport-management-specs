@@ -25,6 +25,11 @@ paths:
           description: Filter results by plate number
           schema:
             type: string
+        - name: includeArchived
+          in: query
+          description: Include archived trucks
+          schema:
+            type: boolean
         - name: first
           in: query
           description: First result.
@@ -99,6 +104,11 @@ paths:
           description: Filter results by plate number
           schema:
             type: string
+        - name: includeArchived
+          in: query
+          description: Include archived towables
+          schema:
+            type: boolean
         - name: first
           in: query
           description: First result.
@@ -174,6 +184,11 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: includeArchived
+          in: query
+          description: Include archived vehicles
+          schema:
+            type: boolean
         - name: first
           in: query
           description: First result.
@@ -368,6 +383,11 @@ paths:
       tags:
         - Sites
       parameters:
+        - name: includeArchived
+          in: query
+          description: Include archived sites
+          schema:
+            type: boolean
         - name: first
           in: query
           description: First result.
@@ -809,6 +829,10 @@ components:
           format: date-time
           type: string
           readOnly: true
+        archivedAt:
+          format: date-time
+          type: string
+          readOnly: true
     Towable:
       type: object
       description: Represent single towable
@@ -849,6 +873,10 @@ components:
           format: date-time
           type: string
           readOnly: true
+        archivedAt:
+          format: date-time
+          type: string
+          readOnly: true
     Vehicle:
       type: object
       description: Represent single vehicle
@@ -886,6 +914,10 @@ components:
           readOnly: true
           format: uuid
         modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
+        archivedAt:
           format: date-time
           type: string
           readOnly: true
@@ -973,6 +1005,10 @@ components:
           readOnly: true
           format: uuid
         modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
+        archivedAt:
           format: date-time
           type: string
           readOnly: true

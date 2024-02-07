@@ -119,6 +119,14 @@
         ],
         "parameters": [
           {
+            "name": "includeArchived",
+            "in": "query",
+            "description": "Include archived sites",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
             "name": "first",
             "in": "query",
             "description": "First result.",
@@ -328,7 +336,7 @@
       "delete": {
         "operationId": "deleteSite",
         "summary": "Deletes site",
-        "description": "Deletes site",
+        "description": "Deletes site. For non-production use. Returns forbidden in production environment.",
         "security": [
           {
             "BearerAuth": [
@@ -337,8 +345,7 @@
           }
         ],
         "tags": [
-          "Sites",
-          "SpecManagementUI"
+          "Sites"
         ],
         "parameters": [
           {
@@ -1320,6 +1327,11 @@
             "format": "uuid"
           },
           "modifiedAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "archivedAt": {
             "format": "date-time",
             "type": "string",
             "readOnly": true
