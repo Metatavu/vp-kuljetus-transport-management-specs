@@ -125,9 +125,9 @@
             }
           },
           {
-            "name": "includeArchived",
+            "name": "archived",
             "in": "query",
-            "description": "Include archived trucks",
+            "description": "Filter results by archived status",
             "schema": {
               "type": "boolean"
             }
@@ -410,9 +410,9 @@
             }
           },
           {
-            "name": "includeArchived",
+            "name": "archived",
             "in": "query",
-            "description": "Include archived towables",
+            "description": "Filter results by archived status",
             "schema": {
               "type": "boolean"
             }
@@ -749,9 +749,9 @@
             }
           },
           {
-            "name": "includeArchived",
+            "name": "archived",
             "in": "query",
-            "description": "Include archived vehicles",
+            "description": "Filter results by archived status",
             "schema": {
               "type": "boolean"
             }
@@ -1087,9 +1087,9 @@
             "readOnly": true
           },
           "archivedAt": {
-            "format": "date-time",
             "type": "string",
-            "readOnly": true
+            "format": "date-time",
+            "description": "Setting the archivedAt time marks the truck as archived. Trucks marked as archived will not appear in list requests unless archived filter is set to true. Archived truck cannot be updated, unless archivedAt is first set to null.\n"
           }
         }
       },
@@ -1143,9 +1143,9 @@
             "readOnly": true
           },
           "archivedAt": {
-            "format": "date-time",
             "type": "string",
-            "readOnly": true
+            "format": "date-time",
+            "description": "Setting the archivedAt time marks the towable as archived. Towables marked as archived will not appear in list requests unless archived filter is set to true. Archived towable cannot be updated, unless archivedAt is first set to null.\n"
           }
         }
       },
@@ -1196,9 +1196,9 @@
             "readOnly": true
           },
           "archivedAt": {
-            "format": "date-time",
             "type": "string",
-            "readOnly": true
+            "format": "date-time",
+            "description": "Setting the archivedAt time marks the vehicle as archived. Vehicles marked as archived will not appear in list requests unless archived filter is set to true. Archived vehicle cannot be updated, unless archivedAt is first set to null.\n"
           }
         }
       },

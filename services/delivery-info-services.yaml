@@ -49,9 +49,9 @@ paths:
         - SpecManagementUI
         - SpecApp
       parameters:
-        - name: includeArchived
+        - name: archived
           in: query
-          description: Include archived sites
+          description: Filter sites by archived status
           schema:
             type: boolean
         - name: first
@@ -531,7 +531,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
     delete:
       operationId: deleteFreight
       summary: Deletes freight
@@ -703,7 +702,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
     delete:
       operationId: deleteFreightUnit
       summary: Deletes freight unit
@@ -803,9 +801,12 @@ components:
           type: string
           readOnly: true
         archivedAt:
-          format: date-time
           type: string
-          readOnly: true
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the site as archived.
+            Sites marked as archived will not appear in list requests unless archived filter is set to true.
+            Archived site cannot be updated, unless archivedAt is first set to null.
 
     Task:
       type: object

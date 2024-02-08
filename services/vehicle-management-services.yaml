@@ -55,9 +55,9 @@ paths:
           description: Filter results by plate number
           schema:
             type: string
-        - name: includeArchived
+        - name: archived
           in: query
-          description: Include archived trucks
+          description: Filter results by archived status
           schema:
             type: boolean
         - name: first
@@ -228,9 +228,9 @@ paths:
           description: Filter results by plate number
           schema:
             type: string
-        - name: includeArchived
+        - name: archived
           in: query
-          description: Include archived towables
+          description: Filter results by archived status
           schema:
             type: boolean
         - name: first
@@ -436,9 +436,9 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: includeArchived
+        - name: archived
           in: query
-          description: Include archived vehicles
+          description: Filter results by archived status
           schema:
             type: boolean
         - name: first
@@ -655,9 +655,12 @@ components:
           type: string
           readOnly: true
         archivedAt:
-          format: date-time
           type: string
-          readOnly: true
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the truck as archived.
+            Trucks marked as archived will not appear in list requests unless archived filter is set to true.
+            Archived truck cannot be updated, unless archivedAt is first set to null.
 
     Towable:
       type: object
@@ -696,9 +699,12 @@ components:
           type: string
           readOnly: true
         archivedAt:
-          format: date-time
           type: string
-          readOnly: true
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the towable as archived.
+            Towables marked as archived will not appear in list requests unless archived filter is set to true.
+            Archived towable cannot be updated, unless archivedAt is first set to null.
 
     Vehicle:
       type: object
@@ -739,9 +745,12 @@ components:
           type: string
           readOnly: true
         archivedAt:
-          format: date-time
           type: string
-          readOnly: true
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the vehicle as archived.
+            Vehicles marked as archived will not appear in list requests unless archived filter is set to true.
+            Archived vehicle cannot be updated, unless archivedAt is first set to null.
 
     TelematicData:
       type: object
