@@ -426,6 +426,133 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /delivery-info/v1/freightUnits:
+    get:
+      operationId: listFreightUnits
+      summary: List FreightUnits.
+      description: Lists FreightUnits.
+      tags:
+        - FreightUnits
+      parameters:
+        - name: freightId
+          in: query
+          description: Freight id
+          schema:
+            type: string
+            format: uuid
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of freight units
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FreightUnit"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createFreightUnit
+      summary: Create freight unit
+      description: Create new freight unit
+      tags:
+        - FreightUnits
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FreightUnit"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created freight unit
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FreightUnit"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /delivery-info/v1/freightUnits/{freightUnitId}:
+    get:
+      operationId: findFreightUnit
+      summary: Find a freight unit.
+      description: Finds a freight unit by id.
+      tags:
+        - FreightUnits
+      parameters:
+        - name: freightUnitId
+          required: true
+          in: path
+          description: freight unit id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found freight unit
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FreightUnit"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateFreightUnit
+      summary: Updates freight unit
+      description: Updates single freight unit
+      tags:
+        - FreightUnits
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FreightUnit"
+        description: Payload
+        required: true
+      parameters:
+        - name: freightUnitId
+          required: true
+          in: path
+          description: freight unit id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated freight unit
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FreightUnit"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     Error:
@@ -598,3 +725,32 @@ components:
         reservations:
           type: string
           description: Reservations for the shipment
+    FreightUnit:
+      type: object
+      description: Represents a single freight unit in a freight shipment.
+      required:
+        - freightId
+        - type
+        - quantity
+        - quantityUnit
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        freightId:
+          type: string
+          format: uuid
+          description: Id of the freight shipment
+        type:
+          type: string
+          description: Type of the unit
+        quantity:
+          type: string
+          description: Quantity of the unit
+        quantityUnit:
+          type: string
+          description: Quantity unit of the unit
+        reservations:
+          type: string
+          description: Reservations for the unit
