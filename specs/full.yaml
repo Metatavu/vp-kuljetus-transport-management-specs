@@ -382,9 +382,14 @@ paths:
     post:
       operationId: createVehicle
       summary: Create vehicle
-      description: Create new vehicle
+      description: >
+        Create new vehicle. Vehicles are the history of the combinations of
+        towables behind a truck. When a vehicle structure needs to be updated, a
+        new vehicle with updated structure should be created. This updates the
+        active vehicle for the truck and archives the previous one.
       security:
         - BearerAuth:
+            - driver
             - manager
       tags:
         - Vehicles
@@ -440,43 +445,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-    put:
-      operationId: updateVehicle
-      summary: Updates vehicles
-      description: Updates single vehicle
-      security:
-        - BearerAuth:
-            - manager
-      tags:
-        - Vehicles
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Vehicle"
-        description: Payload
-        required: true
-      parameters:
-        - name: vehicleId
-          required: true
-          in: path
-          description: vehicle id
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "200":
-          description: Updated vehicle
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Vehicle"
-        default:
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
   /work-planning/v1/routes:
     get:
       operationId: listRoutes
@@ -489,9 +457,9 @@ paths:
       tags:
         - Routes
       parameters:
-        - name: vehicleId
+        - name: truckId
           in: query
-          description: Filter results by vehicle id
+          description: Filter results by truck id
           schema:
             type: string
             format: uuid
@@ -1441,6 +1409,7 @@ components:
         - plateNumber
         - type
         - vin
+        - activeVehicleId
       properties:
         id:
           type: string
@@ -1455,8 +1424,16 @@ components:
             - SEMI_TRUCK
         vin:
           type: string
-          description: Truck identification number. This is unique for each truck and
-            should be used as a hardware identifier for this specific truck
+          description: >
+            Truck identification number. This is unique for each truck and
+            should be used as a hardware identifier for this specific truck.
+        activeVehicleId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: >
+            Active vehicle id. This is the current vehicle that the truck is
+            part of. It updates whenever the vehicle structure is updated.
         creatorId:
           type: string
           readOnly: true
@@ -1503,8 +1480,9 @@ components:
             - DOLLY
         vin:
           type: string
-          description: Towable identification number. This is unique for each towable and
-            should be used as a hardware identifier for this specific towable
+          description: >
+            Towable identification number. This is unique for each towable and
+            should be used as a hardware identifier for this specific towable.
         creatorId:
           type: string
           readOnly: true
@@ -1611,10 +1589,10 @@ components:
           type: string
           format: uuid
           readOnly: true
-        vehicleId:
+        truckId:
           type: string
           format: uuid
-          description: Vehicle id
+          description: Truck id
         driverId:
           type: string
           format: uuid

@@ -276,12 +276,6 @@
                   "code": 200,
                   "data": "",
                   "headers": null
-                },
-                "PUT": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
                 }
               }
             }
@@ -350,10 +344,6 @@
             {
               "path": "/v1/vehicles/{vehicleId}",
               "method": "GET"
-            },
-            {
-              "path": "/v1/vehicles/{vehicleId}",
-              "method": "PUT"
             }
           ],
           "persist_graphql": null

@@ -64,11 +64,6 @@
           "validateRequest": {
             "enabled": true
           }
-        },
-        "updateVehicle": {
-          "validateRequest": {
-            "enabled": true
-          }
         }
       }
     }
@@ -802,16 +797,18 @@
       "post": {
         "operationId": "createVehicle",
         "summary": "Create vehicle",
-        "description": "Create new vehicle",
+        "description": "Create new vehicle. Vehicles are the history of the combinations of towables behind a truck. When a vehicle structure needs to be updated, a new vehicle with updated structure should be created. This updates the active vehicle for the truck and archives the previous one.\n",
         "security": [
           {
             "BearerAuth": [
+              "driver",
               "manager"
             ]
           }
         ],
         "tags": [
           "Vehicles",
+          "SpecApp",
           "SpecManagementUI"
         ],
         "requestBody": {
@@ -882,67 +879,6 @@
         "responses": {
           "200": {
             "description": "Found vehicle",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Vehicle"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Invalid request was sent to the server",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "operationId": "updateVehicle",
-        "summary": "Updates vehicles",
-        "description": "Updates single vehicle",
-        "security": [
-          {
-            "BearerAuth": [
-              "manager"
-            ]
-          }
-        ],
-        "tags": [
-          "Vehicles",
-          "SpecManagementUI"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Vehicle"
-              }
-            }
-          },
-          "description": "Payload",
-          "required": true
-        },
-        "parameters": [
-          {
-            "name": "vehicleId",
-            "required": true,
-            "in": "path",
-            "description": "vehicle id",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Updated vehicle",
             "content": {
               "application/json": {
                 "schema": {
@@ -1044,7 +980,8 @@
         "required": [
           "plateNumber",
           "type",
-          "vin"
+          "vin",
+          "activeVehicleId"
         ],
         "properties": {
           "id": {
@@ -1064,7 +1001,13 @@
           },
           "vin": {
             "type": "string",
-            "description": "Truck identification number. This is unique for each truck and should be used as a hardware identifier for this specific truck"
+            "description": "Truck identification number. This is unique for each truck and should be used as a hardware identifier for this specific truck.\n"
+          },
+          "activeVehicleId": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true,
+            "description": "Active vehicle id. This is the current vehicle that the truck is part of. It updates whenever the vehicle structure is updated.\n"
           },
           "creatorId": {
             "type": "string",
@@ -1120,7 +1063,7 @@
           },
           "vin": {
             "type": "string",
-            "description": "Towable identification number. This is unique for each towable and should be used as a hardware identifier for this specific towable"
+            "description": "Towable identification number. This is unique for each towable and should be used as a hardware identifier for this specific towable.\n"
           },
           "creatorId": {
             "type": "string",
