@@ -173,11 +173,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
     delete:
       operationId: deleteSite
       summary: Deletes site
       description: Deletes site
+      security:
+        - BearerAuth: [manager]
       tags:
         - Sites
         - SpecManagementUI
@@ -555,6 +556,22 @@ components:
           format: int32
         message:
           type: string
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
 
     Site:
       type: object
@@ -574,6 +591,22 @@ components:
           type: string
           format: wkt
           description: Site location as well-known text Point
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
 
     Freight:
       type: object
@@ -617,6 +650,22 @@ components:
         reservations:
           type: string
           description: Reservations for the shipment
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
 
     FreightUnit:
       type: object
@@ -647,3 +696,19 @@ components:
         reservations:
           type: string
           description: Reservations for the unit
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true

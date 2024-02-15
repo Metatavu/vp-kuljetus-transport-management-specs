@@ -402,6 +402,26 @@
             "type": "string",
             "format": "uuid",
             "description": "Driver id"
+          },
+          "creatorId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "lastModifierId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "modifiedAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
           }
         }
       }

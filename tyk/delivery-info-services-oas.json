@@ -319,6 +319,13 @@
         "operationId": "deleteSite",
         "summary": "Deletes site",
         "description": "Deletes site",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
         "tags": [
           "Sites",
           "SpecManagementUI"
@@ -929,6 +936,26 @@
           },
           "message": {
             "type": "string"
+          },
+          "creatorId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "lastModifierId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "modifiedAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
           }
         }
       },
@@ -953,6 +980,26 @@
             "type": "string",
             "format": "wkt",
             "description": "Site location as well-known text Point"
+          },
+          "creatorId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "lastModifierId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "modifiedAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
           }
         }
       },
@@ -1008,6 +1055,26 @@
           "reservations": {
             "type": "string",
             "description": "Reservations for the shipment"
+          },
+          "creatorId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "lastModifierId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "modifiedAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
           }
         }
       },
@@ -1046,6 +1113,26 @@
           "reservations": {
             "type": "string",
             "description": "Reservations for the unit"
+          },
+          "creatorId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "lastModifierId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "modifiedAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
           }
         }
       }

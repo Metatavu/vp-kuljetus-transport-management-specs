@@ -920,6 +920,9 @@ paths:
       operationId: deleteSite
       summary: Deletes site
       description: Deletes site
+      security:
+        - BearerAuth:
+            - manager
       tags:
         - Sites
       parameters:
@@ -1292,6 +1295,22 @@ components:
           format: int32
         message:
           type: string
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
     Truck:
       type: object
       description: Represent single truck
@@ -1315,6 +1334,22 @@ components:
           type: string
           description: Truck identification number. This is unique for each truck and
             should be used as a hardware identifier for this specific truck
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
     Towable:
       type: object
       description: Represent single towable
@@ -1339,6 +1374,22 @@ components:
           type: string
           description: Towable identification number. This is unique for each towable and
             should be used as a hardware identifier for this specific towable
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
     TelematicData:
       type: object
       required:
@@ -1386,6 +1437,22 @@ components:
           items:
             type: string
             format: uuid
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
     Route:
       type: object
       description: Represent single planned route for single truck driver
@@ -1402,6 +1469,22 @@ components:
           type: string
           format: uuid
           description: Driver id
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
     Driver:
       type: object
       description: Represents single truck driver
@@ -1431,6 +1514,22 @@ components:
           type: string
           format: wkt
           description: Site location as well-known text Point
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
     Freight:
       type: object
       description: Represents a single freight shipment, aka. waybill.
@@ -1473,6 +1572,22 @@ components:
         reservations:
           type: string
           description: Reservations for the shipment
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
     FreightUnit:
       type: object
       description: Represents a single freight unit in a freight shipment.
@@ -1502,3 +1617,19 @@ components:
         reservations:
           type: string
           description: Reservations for the unit
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
