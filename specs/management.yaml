@@ -975,6 +975,7 @@ paths:
       description: Updates single task
       security:
         - BearerAuth:
+            - driver
             - manager
       tags:
         - Tasks
@@ -1650,6 +1651,7 @@ components:
         - freightId
         - customerSiteId
         - type
+        - status
       properties:
         id:
           type: string
@@ -1665,6 +1667,8 @@ components:
           description: Customer site id
         type:
           $ref: "#/components/schemas/TaskType"
+        status:
+          $ref: "#/components/schemas/TaskStatus"
         remarks:
           type: string
           description: Task remarks
@@ -1797,3 +1801,10 @@ components:
       enum:
         - UNLOAD
         - LOAD
+    TaskStatus:
+      type: string
+      description: Status of the task
+      enum:
+        - TODO
+        - IN_PROGRESS
+        - DONE

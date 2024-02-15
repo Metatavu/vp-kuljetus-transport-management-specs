@@ -591,12 +591,14 @@
         "security": [
           {
             "BearerAuth": [
+              "driver",
               "manager"
             ]
           }
         ],
         "tags": [
           "Tasks",
+          "SpecApp",
           "SpecManagementUI"
         ],
         "requestBody": {
@@ -1344,7 +1346,8 @@
         "required": [
           "freightId",
           "customerSiteId",
-          "type"
+          "type",
+          "status"
         ],
         "properties": {
           "id": {
@@ -1364,6 +1367,9 @@
           },
           "type": {
             "$ref": "#/components/schemas/TaskType"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TaskStatus"
           },
           "remarks": {
             "type": "string",
@@ -1402,6 +1408,15 @@
         "enum": [
           "UNLOAD",
           "LOAD"
+        ]
+      },
+      "TaskStatus": {
+        "type": "string",
+        "description": "Status of the task",
+        "enum": [
+          "TODO",
+          "IN_PROGRESS",
+          "DONE"
         ]
       },
       "Freight": {
