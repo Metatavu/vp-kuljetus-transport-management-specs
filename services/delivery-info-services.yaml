@@ -886,6 +886,10 @@ components:
           type: string
           format: uuid
           readOnly: true
+        freightNumber:
+          type: integer
+          readOnly: true
+          description: Freight number. Unique and auto-incremented.
         sender:
           type: string
           description: Sender of the shipment
