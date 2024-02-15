@@ -29,6 +29,32 @@ const validateSpec = async (specFile: string) => {
 }
 
 /**
+ * Adds security schemes to the given OpenAPI spec version file content by given security schemes
+ *
+ * @param specVersionFileContent spec version file content
+ * @param securitySchemes security schemes from spec version configuration
+ */
+const addSecuritySchemesToSpecVersionFileContent = (specVersionFileContent: any, securitySchemes: string[]) => {
+  if (securitySchemes.includes("apiKeyAuth")) {
+    specVersionFileContent.security.push({ ApiKeyAuth: [] });
+    specVersionFileContent.components.securitySchemes.ApiKeyAuth = {
+      type: "apiKey",
+      in: "header",
+      name: "X-API-Key"
+    }
+  }
+
+  if (securitySchemes.includes("bearerAuth")) {
+    specVersionFileContent.security.push({ BearerAuth: ["driver", "manager"] });
+    specVersionFileContent.components.securitySchemes.BearerAuth = {
+      type: "http",
+      scheme: "bearer",
+      bearerFormat: "JWT"
+    };
+  }
+};
+
+/**
  * Creates the Tyk definition for the given OpenAPI spec file
  *
  * @param options contains the options for creating the Tyk definition
@@ -164,6 +190,8 @@ const main = async () => {
 
     const specVersionFile = path.resolve(ROOT_DIR, "specs", `${specVersion.name}.yaml`);
     const specVersionFileContent = JSON.parse(JSON.stringify(SPEC_TEMPLATE));
+
+    addSecuritySchemesToSpecVersionFileContent(specVersionFileContent, specVersion.securitySchemes);
 
     for (const specFile of SPEC_FILES) {
       const spec = parseOpenApiDocument(specFile);

@@ -8,6 +8,9 @@ export interface OpenAPISpec {
     description: string;
     version: string;
   };
+  security: {
+    [schemeName: string]: string[]
+  }[],
   "x-tyk-api-gateway": {
     info: {
       id: string;
@@ -41,6 +44,9 @@ export interface OpenAPISpec {
       [method: string]: {
         operationId: string;
         tags?: string[];
+        security?: {
+          [scheme: string]: string[]
+        }[];
         requestBody?: {
           content?: {
             [contentType: string]: {
@@ -66,9 +72,11 @@ export interface OpenAPISpec {
     };
   };
   components: {
+    securitySchemes?: {
+      [schemeName: string]: Record<string, string>;
+    },
     schemas: {
-      [schemaName: string]: {
-      };
+      [schemaName: string]: {};
     };
   };
 

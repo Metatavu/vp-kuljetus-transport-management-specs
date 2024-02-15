@@ -3,12 +3,20 @@ info:
   title: Vehicle Management Services (app)
   description: Vehicle Management Services (app)
   version: 1.0.0
+security:
+  - BearerAuth:
+      - driver
+      - manager
 paths:
   /vehicle-management/v1/trucks:
     get:
       operationId: listTrucks
       summary: List Trucks.
       description: Lists Trucks.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Trucks
       parameters:
@@ -47,6 +55,10 @@ paths:
       operationId: findTruck
       summary: Find a truck.
       description: Finds a truck by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Trucks
       parameters:
@@ -75,6 +87,10 @@ paths:
       operationId: listTowables
       summary: List Towables.
       description: Lists Towables.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Towables
       parameters:
@@ -113,6 +129,10 @@ paths:
       operationId: findTowable
       summary: Find a towable.
       description: Finds a towable by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Towables
       parameters:
@@ -141,6 +161,10 @@ paths:
       operationId: listVehicles
       summary: List Vehicles.
       description: Lists Vehicles.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Vehicles
       parameters:
@@ -180,6 +204,10 @@ paths:
       operationId: findVehicle
       summary: Find a vehicle.
       description: Finds a vehicle by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Vehicles
       parameters:
@@ -208,6 +236,10 @@ paths:
       operationId: listRoutes
       summary: List Routes.
       description: Lists Routes.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Routes
       parameters:
@@ -253,6 +285,10 @@ paths:
       operationId: findRoute
       summary: Find a route.
       description: Finds a route by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Routes
       parameters:
@@ -281,6 +317,10 @@ paths:
       operationId: findDriver
       summary: Find a driver.
       description: Finds a driver by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Drivers
       parameters:
@@ -309,6 +349,10 @@ paths:
       operationId: listSites
       summary: List Sites.
       description: Lists Sites.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Sites
       parameters:
@@ -342,6 +386,10 @@ paths:
       operationId: findSite
       summary: Find a site.
       description: Finds a site by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Sites
       parameters:
@@ -370,6 +418,10 @@ paths:
       operationId: listFreights
       summary: List Freights.
       description: Lists Freights.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Freights
       parameters:
@@ -403,6 +455,10 @@ paths:
       operationId: findFreight
       summary: Find a freight.
       description: Finds a freight by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Freights
       parameters:
@@ -431,6 +487,10 @@ paths:
       operationId: listFreightUnits
       summary: List FreightUnits.
       description: Lists FreightUnits.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - FreightUnits
       parameters:
@@ -469,6 +529,10 @@ paths:
       operationId: createFreightUnit
       summary: Create freight unit
       description: Create new freight unit
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - FreightUnits
       requestBody:
@@ -496,6 +560,10 @@ paths:
       operationId: findFreightUnit
       summary: Find a freight unit.
       description: Finds a freight unit by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - FreightUnits
       parameters:
@@ -523,6 +591,10 @@ paths:
       operationId: updateFreightUnit
       summary: Updates freight unit
       description: Updates single freight unit
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - FreightUnits
       requestBody:
@@ -554,6 +626,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     Error:
       type: object

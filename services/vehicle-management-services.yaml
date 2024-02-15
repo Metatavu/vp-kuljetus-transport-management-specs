@@ -4,7 +4,8 @@ info:
   title: VP-Kuljetus Vehicle Management Services
 
 security:
-  - bearerAuth: []
+  - BearerAuth: [driver, manager]
+  - ApiKeyAuth: []
 
 x-tyk-api-gateway:
   info:
@@ -26,6 +27,7 @@ paths:
       operationId: ping
       summary: Replies with pong
       description: Replies ping with pong
+      security: []
       tags:
         - System
       responses:
@@ -41,6 +43,8 @@ paths:
       operationId: listTrucks
       summary: List Trucks.
       description: Lists Trucks.
+      security:
+        - BearerAuth: [driver, manager]
       tags:
         - Trucks
         - SpecApp
@@ -80,6 +84,8 @@ paths:
       operationId: createTruck
       summary: Create truck
       description: Create new truck
+      security:
+        - BearerAuth: [manager]
       tags:
         - Trucks
         - SpecManagementUI
@@ -109,6 +115,8 @@ paths:
       operationId: findTruck
       summary: Find a truck.
       description: Finds a truck by id.
+      security:
+        - BearerAuth: [driver, manager]
       tags:
         - Trucks
         - SpecApp
@@ -138,6 +146,8 @@ paths:
       operationId: updateTruck
       summary: Updates trucks
       description: Updates single truck
+      security:
+        - BearerAuth: [manager]
       tags:
         - Trucks
         - SpecManagementUI
@@ -174,6 +184,8 @@ paths:
       operationId: deleteTruck
       summary: Deletes truck
       description: Deletes truck
+      security:
+        - BearerAuth: [manager]
       tags:
         - Trucks
         - SpecManagementUI
@@ -200,6 +212,8 @@ paths:
       operationId: listTowables
       summary: List Towables.
       description: Lists Towables.
+      security:
+        - BearerAuth: [driver, manager]
       tags:
         - Towables
         - SpecApp
@@ -239,6 +253,8 @@ paths:
       operationId: createTowable
       summary: Create towable
       description: Create new towable
+      security:
+        - BearerAuth: [manager]
       tags:
         - Towables
         - SpecManagementUI
@@ -268,6 +284,8 @@ paths:
       operationId: findTowable
       summary: Find a towable.
       description: Finds a towable by id.
+      security:
+        - BearerAuth: [driver, manager]
       tags:
         - Towables
         - SpecApp
@@ -297,6 +315,8 @@ paths:
       operationId: updateTowable
       summary: Updates towables
       description: Updates single towable
+      security:
+        - BearerAuth: [manager]
       tags:
         - Towables
         - SpecManagementUI
@@ -333,6 +353,8 @@ paths:
       operationId: deleteTowable
       summary: Deletes towable
       description: Deletes towable
+      security:
+        - BearerAuth: [manager]
       tags:
         - Towables
         - SpecManagementUI
@@ -359,6 +381,8 @@ paths:
       operationId: receiveTelematicData
       summary: Receives telematic data entry
       description: Receives telematic data entry
+      security:
+        - ApiKeyAuth: []
       tags:
         - Telematics
         - SpecVehicleDataReceiver
@@ -391,6 +415,8 @@ paths:
       operationId: listVehicles
       summary: List Vehicles.
       description: Lists Vehicles.
+      security:
+        - BearerAuth: [driver, manager]
       tags:
         - Vehicles
         - SpecApp
@@ -431,6 +457,8 @@ paths:
       operationId: createVehicle
       summary: Create vehicle
       description: Create new vehicle
+      security:
+        - BearerAuth: [manager]
       tags:
         - Vehicles
         - SpecManagementUI
@@ -460,6 +488,8 @@ paths:
       operationId: findVehicle
       summary: Find a vehicle.
       description: Finds a vehicle by id.
+      security:
+        - BearerAuth: [driver, manager]
       tags:
         - Vehicles
         - SpecApp
@@ -489,6 +519,8 @@ paths:
       operationId: updateVehicle
       summary: Updates vehicles
       description: Updates single vehicle
+      security:
+        - BearerAuth: [manager]
       tags:
         - Vehicles
         - SpecManagementUI
@@ -525,6 +557,8 @@ paths:
       operationId: deleteVehicle
       summary: Deletes vehicle
       description: Deletes vehicle
+      security:
+        - BearerAuth: [manager]
       tags:
         - Vehicles
         - SpecManagementUI
@@ -548,10 +582,15 @@ paths:
 
 components:
   securitySchemes:
-    bearerAuth:
+    BearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
 
   schemas:
     Error:

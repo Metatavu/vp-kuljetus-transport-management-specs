@@ -6,7 +6,10 @@
   },
   "security": [
     {
-      "bearerAuth": []
+      "BearerAuth": [
+        "driver",
+        "manager"
+      ]
     }
   ],
   "x-tyk-api-gateway": {
@@ -37,6 +40,7 @@
         "operationId": "ping",
         "summary": "Replies with pong",
         "description": "Replies ping with pong",
+        "security": [],
         "tags": [
           "System"
         ],
@@ -59,6 +63,13 @@
         "operationId": "listDrivers",
         "summary": "List Drivers.",
         "description": "Lists Drivers.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
         "tags": [
           "Drivers",
           "SpecManagementUI"
@@ -113,6 +124,14 @@
         "operationId": "findDriver",
         "summary": "Find a driver.",
         "description": "Finds a driver by id.",
+        "security": [
+          {
+            "BearerAuth": [
+              "driver",
+              "manager"
+            ]
+          }
+        ],
         "tags": [
           "Drivers",
           "SpecApp",
@@ -157,7 +176,7 @@
   },
   "components": {
     "securitySchemes": {
-      "bearerAuth": {
+      "BearerAuth": {
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT"
