@@ -25,6 +25,11 @@ paths:
           description: Filter results by plate number
           schema:
             type: string
+        - name: archived
+          in: query
+          description: Filter results by archived status
+          schema:
+            type: boolean
         - name: first
           in: query
           description: First result.
@@ -99,6 +104,11 @@ paths:
           description: Filter results by plate number
           schema:
             type: string
+        - name: archived
+          in: query
+          description: Filter results by archived status
+          schema:
+            type: boolean
         - name: first
           in: query
           description: First result.
@@ -174,6 +184,11 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: archived
+          in: query
+          description: Filter results by archived status
+          schema:
+            type: boolean
         - name: first
           in: query
           description: First result.
@@ -368,6 +383,11 @@ paths:
       tags:
         - Sites
       parameters:
+        - name: archived
+          in: query
+          description: Filter sites by archived status
+          schema:
+            type: boolean
         - name: first
           in: query
           description: First result.
@@ -847,6 +867,14 @@ components:
           format: date-time
           type: string
           readOnly: true
+        archivedAt:
+          type: string
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the truck as archived. Trucks
+            marked as archived will not appear in list requests unless archived
+            filter is set to true. Archived truck cannot be updated, unless
+            archivedAt is first set to null.
     Towable:
       type: object
       description: Represent single towable
@@ -887,6 +915,14 @@ components:
           format: date-time
           type: string
           readOnly: true
+        archivedAt:
+          type: string
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the towable as archived. Towables
+            marked as archived will not appear in list requests unless archived
+            filter is set to true. Archived towable cannot be updated, unless
+            archivedAt is first set to null.
     Vehicle:
       type: object
       description: Represent single vehicle
@@ -927,6 +963,14 @@ components:
           format: date-time
           type: string
           readOnly: true
+        archivedAt:
+          type: string
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the vehicle as archived. Vehicles
+            marked as archived will not appear in list requests unless archived
+            filter is set to true. Archived vehicle cannot be updated, unless
+            archivedAt is first set to null.
     Route:
       type: object
       description: Represent single planned route for single truck driver
@@ -980,6 +1024,14 @@ components:
         displayName:
           type: string
           description: Driver display name
+        archivedAt:
+          type: string
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the driver as archived. Drivers
+            marked as archived will not appear in list requests unless archived
+            filter is set to true. Archived driver cannot be updated, unless
+            archivedAt is first set to null.
     Site:
       type: object
       description: Represents a single customer site
@@ -1014,6 +1066,14 @@ components:
           format: date-time
           type: string
           readOnly: true
+        archivedAt:
+          type: string
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the site as archived. Sites marked
+            as archived will not appear in list requests unless archived filter
+            is set to true. Archived site cannot be updated, unless archivedAt
+            is first set to null.
     Task:
       type: object
       description: Represent single task for freight

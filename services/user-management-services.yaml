@@ -48,6 +48,11 @@ paths:
         - Drivers
         - SpecManagementUI
       parameters:
+        - name: archived
+          in: query
+          description: Filter drivers by archived status
+          schema:
+            type: boolean
         - name: first
           in: query
           description: First result.
@@ -139,3 +144,10 @@ components:
         displayName:
           type: string
           description: Driver display name
+        archivedAt:
+          type: string
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the driver as archived.
+            Drivers marked as archived will not appear in list requests unless archived filter is set to true.
+            Archived driver cannot be updated, unless archivedAt is first set to null.

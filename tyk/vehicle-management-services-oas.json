@@ -125,6 +125,14 @@
             }
           },
           {
+            "name": "archived",
+            "in": "query",
+            "description": "Filter results by archived status",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
             "name": "first",
             "in": "query",
             "description": "First result.",
@@ -334,7 +342,7 @@
       "delete": {
         "operationId": "deleteTruck",
         "summary": "Deletes truck",
-        "description": "Deletes truck",
+        "description": "Deletes truck. For non-production use. Returns forbidden in production environment.",
         "security": [
           {
             "BearerAuth": [
@@ -343,8 +351,7 @@
           }
         ],
         "tags": [
-          "Trucks",
-          "SpecManagementUI"
+          "Trucks"
         ],
         "parameters": [
           {
@@ -400,6 +407,14 @@
             "description": "Filter results by plate number",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "archived",
+            "in": "query",
+            "description": "Filter results by archived status",
+            "schema": {
+              "type": "boolean"
             }
           },
           {
@@ -612,7 +627,7 @@
       "delete": {
         "operationId": "deleteTowable",
         "summary": "Deletes towable",
-        "description": "Deletes towable",
+        "description": "Deletes towable. For non-production use. Returns forbidden response in production environment.",
         "security": [
           {
             "BearerAuth": [
@@ -621,8 +636,7 @@
           }
         ],
         "tags": [
-          "Towables",
-          "SpecManagementUI"
+          "Towables"
         ],
         "parameters": [
           {
@@ -732,6 +746,14 @@
             "schema": {
               "type": "string",
               "format": "uuid"
+            }
+          },
+          {
+            "name": "archived",
+            "in": "query",
+            "description": "Filter results by archived status",
+            "schema": {
+              "type": "boolean"
             }
           },
           {
@@ -944,7 +966,7 @@
       "delete": {
         "operationId": "deleteVehicle",
         "summary": "Deletes vehicle",
-        "description": "Deletes vehicle",
+        "description": "Deletes vehicle. For non-production use. Returns forbidden response in production environment.",
         "security": [
           {
             "BearerAuth": [
@@ -953,8 +975,7 @@
           }
         ],
         "tags": [
-          "Vehicles",
-          "SpecManagementUI"
+          "Vehicles"
         ],
         "parameters": [
           {
@@ -1064,6 +1085,11 @@
             "format": "date-time",
             "type": "string",
             "readOnly": true
+          },
+          "archivedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Setting the archivedAt time marks the truck as archived. Trucks marked as archived will not appear in list requests unless archived filter is set to true. Archived truck cannot be updated, unless archivedAt is first set to null.\n"
           }
         }
       },
@@ -1115,6 +1141,11 @@
             "format": "date-time",
             "type": "string",
             "readOnly": true
+          },
+          "archivedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Setting the archivedAt time marks the towable as archived. Towables marked as archived will not appear in list requests unless archived filter is set to true. Archived towable cannot be updated, unless archivedAt is first set to null.\n"
           }
         }
       },
@@ -1163,6 +1194,11 @@
             "format": "date-time",
             "type": "string",
             "readOnly": true
+          },
+          "archivedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Setting the archivedAt time marks the vehicle as archived. Vehicles marked as archived will not appear in list requests unless archived filter is set to true. Archived vehicle cannot be updated, unless archivedAt is first set to null.\n"
           }
         }
       },

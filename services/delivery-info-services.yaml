@@ -49,6 +49,11 @@ paths:
         - SpecManagementUI
         - SpecApp
       parameters:
+        - name: archived
+          in: query
+          description: Filter sites by archived status
+          schema:
+            type: boolean
         - name: first
           in: query
           description: First result.
@@ -176,12 +181,11 @@ paths:
     delete:
       operationId: deleteSite
       summary: Deletes site
-      description: Deletes site
+      description: Deletes site. For non-production use. Returns forbidden in production environment.
       security:
         - BearerAuth: [manager]
       tags:
         - Sites
-        - SpecManagementUI
       parameters:
         - name: siteId
           required: true
@@ -528,7 +532,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
     delete:
       operationId: deleteFreight
       summary: Deletes freight
@@ -700,7 +703,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
     delete:
       operationId: deleteFreightUnit
       summary: Deletes freight unit
@@ -799,6 +801,13 @@ components:
           format: date-time
           type: string
           readOnly: true
+        archivedAt:
+          type: string
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the site as archived.
+            Sites marked as archived will not appear in list requests unless archived filter is set to true.
+            Archived site cannot be updated, unless archivedAt is first set to null.
 
     Task:
       type: object
