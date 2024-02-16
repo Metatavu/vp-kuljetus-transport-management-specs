@@ -241,6 +241,15 @@ const main = async () => {
       for (const [schemaName, schemaContent] of Object.entries(spec.components.schemas)) {
         if (includedSchemas.includes(schemaName)) {
           specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(schemaContent));
+
+          if (schemaContent.properties) {
+            for (const propertyContent of Object.values(schemaContent.properties)) {
+              if (propertyContent.$ref) {
+                const refSchemaName = propertyContent.$ref.split("/").pop();
+                specVersionFileContent.components.schemas[refSchemaName] = JSON.parse(JSON.stringify(spec.components.schemas[refSchemaName]));
+              }
+            }
+          }
         }
       }
     }

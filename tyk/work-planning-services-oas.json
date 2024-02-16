@@ -107,6 +107,24 @@
             }
           },
           {
+            "name": "departureAfter",
+            "in": "query",
+            "description": "Filter results by departure time same or after this time",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "departureBefore",
+            "in": "query",
+            "description": "Filter results by departure time before this time",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
             "name": "first",
             "in": "query",
             "description": "First result.",
@@ -387,6 +405,10 @@
       "Route": {
         "type": "object",
         "description": "Represent single planned route for single truck driver",
+        "required": [
+          "name",
+          "departureTime"
+        ],
         "properties": {
           "id": {
             "type": "string",
@@ -402,6 +424,15 @@
             "type": "string",
             "format": "uuid",
             "description": "Driver id"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the route"
+          },
+          "departureTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Departure time of the route"
           },
           "creatorId": {
             "type": "string",
