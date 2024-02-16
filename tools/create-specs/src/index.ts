@@ -40,7 +40,7 @@ const addSecuritySchemesToSpecVersionFileContent = (specVersionFileContent: any,
     specVersionFileContent.components.securitySchemes.ApiKeyAuth = {
       type: "apiKey",
       in: "header",
-      name: "X-API-KEY"
+      name: "X-API-Key"
     }
   }
 
