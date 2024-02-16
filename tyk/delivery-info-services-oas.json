@@ -1296,7 +1296,10 @@
         "description": "Represents a single customer site",
         "required": [
           "name",
-          "location"
+          "location",
+          "address",
+          "postalCode",
+          "locality"
         ],
         "properties": {
           "id": {
@@ -1312,6 +1315,22 @@
             "type": "string",
             "format": "wkt",
             "description": "Site location as well-known text Point"
+          },
+          "address": {
+            "type": "string",
+            "description": "Address of the site"
+          },
+          "postalCode": {
+            "type": "string",
+            "description": "Postal code of the site"
+          },
+          "locality": {
+            "type": "string",
+            "description": "Locality of the site"
+          },
+          "additionalInfo": {
+            "type": "string",
+            "description": "additional information about the site, e.g. delivery instructions. This is shown in the task for the driver.\n"
           },
           "creatorId": {
             "type": "string",
