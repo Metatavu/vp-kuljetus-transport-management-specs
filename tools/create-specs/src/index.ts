@@ -96,6 +96,11 @@ const createTykDefinition = async (options: { tykOasSpecFile: string, tykSpecFil
     tykSpec.api_id = info.id;
   }
 
+  tykSpec.CORS = {
+    ...tykSpec.CORS,
+    options_passthrough: true
+  }
+
   tykSpec.version_data.not_versioned = true;
   tykSpec.is_oas = true;
 
