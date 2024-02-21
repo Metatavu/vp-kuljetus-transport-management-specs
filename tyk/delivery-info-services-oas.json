@@ -1501,9 +1501,7 @@
         "description": "Represents a single freight unit in a freight shipment.",
         "required": [
           "freightId",
-          "type",
-          "quantity",
-          "quantityUnit"
+          "type"
         ],
         "properties": {
           "id": {
@@ -1521,12 +1519,12 @@
             "description": "Type of the unit"
           },
           "quantity": {
-            "type": "string",
-            "description": "Quantity of the unit"
+            "type": "number",
+            "description": "Quantity of the unit, can be a decimal number"
           },
-          "quantityUnit": {
+          "contents": {
             "type": "string",
-            "description": "Quantity unit of the unit"
+            "description": "Description of contents of the unit"
           },
           "reservations": {
             "type": "string",

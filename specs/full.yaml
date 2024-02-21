@@ -1802,8 +1802,6 @@ components:
       required:
         - freightId
         - type
-        - quantity
-        - quantityUnit
       properties:
         id:
           type: string
@@ -1817,11 +1815,11 @@ components:
           type: string
           description: Type of the unit
         quantity:
+          type: number
+          description: Quantity of the unit, can be a decimal number
+        contents:
           type: string
-          description: Quantity of the unit
-        quantityUnit:
-          type: string
-          description: Quantity unit of the unit
+          description: Description of contents of the unit
         reservations:
           type: string
           description: Reservations for the unit
