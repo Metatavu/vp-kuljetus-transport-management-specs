@@ -894,10 +894,10 @@ components:
       type: object
       description: Represents a single freight shipment, aka. waybill.
       required:
-        - pointOfDeparture
-        - destination
         - sender
         - recipient
+        - pointOfDeparture
+        - destination
       properties:
         id:
           type: string
@@ -907,35 +907,18 @@ components:
           type: integer
           readOnly: true
           description: Freight number. Unique and auto-incremented.
-        sender:
+        senderSiteId:
           type: string
-          description: Sender of the shipment
-        recipient:
+          description: Shipment sender site
+        recipientSiteId:
           type: string
-          description: Receiver of the shipment
-        payer:
+          description: Shipment receiver site
+        pointOfDepartureSiteId:
           type: string
-          description: Payer of the shipment
-        pointOfDeparture:
+          description: Point of departure site
+        destinationSiteId:
           type: string
-          description: Point of departure
-        destination:
-          type: string
-          description: Point of arrival
-        shipmentInfo:
-          type: string
-          description: Shipment info
-        temperatureMin:
-          type: number
-          format: double
-          description: Minimum temperature of the shipment
-        temperatureMax:
-          type: number
-          format: double
-          description: Maximum temperature of the shipment
-        reservations:
-          type: string
-          description: Reservations for the shipment
+          description: Point of arrival site
         creatorId:
           type: string
           readOnly: true
