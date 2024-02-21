@@ -49,9 +49,9 @@ paths:
         - SpecManagementUI
         - SpecApp
       parameters:
-        - name: vehicleId
+        - name: truckId
           in: query
-          description: Filter results by vehicle id
+          description: Filter results by truck id
           schema:
             type: string
             format: uuid
@@ -257,10 +257,10 @@ components:
           type: string
           format: uuid
           readOnly: true
-        vehicleId:
+        truckId:
           type: string
           format: uuid
-          description: Vehicle id
+          description: Truck id
         driverId:
           type: string
           format: uuid

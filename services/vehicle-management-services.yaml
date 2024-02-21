@@ -469,11 +469,15 @@ paths:
     post:
       operationId: createVehicle
       summary: Create vehicle
-      description: Create new vehicle
+      description: >
+        Create new vehicle. Vehicles are the history of the combinations of towables behind a truck.
+        When a vehicle structure needs to be updated, a new vehicle with updated structure should be
+        created. This updates the active vehicle for the truck and archives the previous one.
       security:
-        - BearerAuth: [manager]
+        - BearerAuth: [driver, manager]
       tags:
         - Vehicles
+        - SpecApp
         - SpecManagementUI
       requestBody:
         content:
@@ -518,43 +522,6 @@ paths:
       responses:
         "200":
           description: Found vehicle
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Vehicle"
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    put:
-      operationId: updateVehicle
-      summary: Updates vehicles
-      description: Updates single vehicle
-      security:
-        - BearerAuth: [manager]
-      tags:
-        - Vehicles
-        - SpecManagementUI
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Vehicle"
-        description: Payload
-        required: true
-      parameters:
-        - name: vehicleId
-          required: true
-          in: path
-          description: vehicle id
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "200":
-          description: Updated vehicle
           content:
             application/json:
               schema:
@@ -625,6 +592,7 @@ components:
         - plateNumber
         - type
         - vin
+        - activeVehicleId
       properties:
         id:
           type: string
@@ -637,7 +605,16 @@ components:
           enum: [TRUCK, SEMI_TRUCK]
         vin:
           type: string
-          description: Truck identification number. This is unique for each truck and should be used as a hardware identifier for this specific truck
+          description: >
+            Truck identification number. This is unique for each truck and
+            should be used as a hardware identifier for this specific truck.
+        activeVehicleId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: >
+            Active vehicle id. This is the current vehicle that the truck
+            is part of. It updates whenever the vehicle structure is updated.
         creatorId:
           type: string
           readOnly: true
@@ -659,8 +636,9 @@ components:
           format: date-time
           description: >
             Setting the archivedAt time marks the truck as archived.
-            Trucks marked as archived will not appear in list requests unless archived filter is set to true.
-            Archived truck cannot be updated, unless archivedAt is first set to null.
+            Trucks marked as archived will not appear in list requests
+            unless archived filter is set to true. Archived truck cannot
+            be updated, unless archivedAt is first set to null.
 
     Towable:
       type: object
@@ -681,7 +659,9 @@ components:
           enum: [TRAILER, SEMI_TRAILER, DOLLY]
         vin:
           type: string
-          description: Towable identification number. This is unique for each towable and should be used as a hardware identifier for this specific towable
+          description: >
+            Towable identification number. This is unique for each towable and
+            should be used as a hardware identifier for this specific towable.
         creatorId:
           type: string
           readOnly: true
@@ -703,8 +683,9 @@ components:
           format: date-time
           description: >
             Setting the archivedAt time marks the towable as archived.
-            Towables marked as archived will not appear in list requests unless archived filter is set to true.
-            Archived towable cannot be updated, unless archivedAt is first set to null.
+            Towables marked as archived will not appear in list requests
+            unless archived filter is set to true. Archived towable cannot
+            be updated, unless archivedAt is first set to null.
 
     Vehicle:
       type: object
@@ -723,8 +704,10 @@ components:
           format: uuid
         towableIds:
           type: array
-          description: |
-            List of attached towables to vehicle. Order of towables should reflect the order of towables in the vehicle where first towable is the closest to the truck.
+          description: >
+            List of attached towables to vehicle. Order of towables should
+            reflect the order of towables in the vehicle where first towable
+            is the closest to the truck.
           items:
             type: string
             format: uuid
@@ -749,8 +732,9 @@ components:
           format: date-time
           description: >
             Setting the archivedAt time marks the vehicle as archived.
-            Vehicles marked as archived will not appear in list requests unless archived filter is set to true.
-            Archived vehicle cannot be updated, unless archivedAt is first set to null.
+            Vehicles marked as archived will not appear in list requests
+            unless archived filter is set to true. Archived vehicle cannot
+            be updated, unless archivedAt is first set to null.
 
     TelematicData:
       type: object
