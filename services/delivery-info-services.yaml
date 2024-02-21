@@ -894,10 +894,10 @@ components:
       type: object
       description: Represents a single freight shipment, aka. waybill.
       required:
-        - sender
-        - recipient
-        - pointOfDeparture
-        - destination
+        - senderSiteId
+        - recipientSiteId
+        - pointOfDepartureSiteId
+        - destinationSiteId
       properties:
         id:
           type: string
