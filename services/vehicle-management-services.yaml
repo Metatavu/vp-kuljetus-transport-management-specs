@@ -598,6 +598,8 @@ components:
           type: string
           format: uuid
           readOnly: true
+        name:
+          type: string
         plateNumber:
           type: string
         type:
@@ -652,6 +654,8 @@ components:
           type: string
           format: uuid
           readOnly: true
+        name:
+          type: string
         plateNumber:
           type: string
         type:
