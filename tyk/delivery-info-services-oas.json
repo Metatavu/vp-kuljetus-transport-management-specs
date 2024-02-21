@@ -1366,6 +1366,7 @@
           "freightId",
           "customerSiteId",
           "type",
+          "groupNumber",
           "status"
         ],
         "properties": {
@@ -1387,6 +1388,10 @@
           "type": {
             "$ref": "#/components/schemas/TaskType"
           },
+          "groupNumber": {
+            "type": "integer",
+            "description": "Group number of the task. Gets a value of 0 by default. Can be updated from the management UI. All tasks with the same freightId, customerSiteId, type and group number are shown as grouped together in the driver app.\n"
+          },
           "status": {
             "$ref": "#/components/schemas/TaskStatus"
           },
@@ -1398,6 +1403,18 @@
             "type": "string",
             "format": "uuid",
             "description": "Route id"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "description": "Time the task was started at. Filled when task status is changed from TODO to IN_PROGRESS.\n"
+          },
+          "finishedAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "description": "Time the task was finished at. Filled when task status is changed from IN_PROGRESS to DONE.\n"
           },
           "creatorId": {
             "type": "string",
