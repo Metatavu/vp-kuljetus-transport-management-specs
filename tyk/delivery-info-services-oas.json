@@ -1477,18 +1477,22 @@
           },
           "senderSiteId": {
             "type": "string",
+            "format": "uuid",
             "description": "Shipment sender site"
           },
           "recipientSiteId": {
             "type": "string",
+            "format": "uuid",
             "description": "Shipment receiver site"
           },
           "pointOfDepartureSiteId": {
             "type": "string",
+            "format": "uuid",
             "description": "Point of departure site"
           },
           "destinationSiteId": {
             "type": "string",
+            "format": "uuid",
             "description": "Point of arrival site"
           },
           "creatorId": {
@@ -1537,6 +1541,7 @@
           },
           "quantity": {
             "type": "number",
+            "format": "double",
             "description": "Quantity of the unit, can be a decimal number"
           },
           "contents": {
