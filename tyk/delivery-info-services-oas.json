@@ -1542,6 +1542,7 @@
           },
           "quantity": {
             "type": "number",
+            "format": "double",
             "description": "Quantity of the unit, can be a decimal number"
           },
           "contents": {
