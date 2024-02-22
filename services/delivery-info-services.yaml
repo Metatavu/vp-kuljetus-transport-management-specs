@@ -956,6 +956,7 @@ components:
           description: Type of the unit
         quantity:
           type: number
+          format: double
           description: Quantity of the unit, can be a decimal number
         contents:
           type: string
