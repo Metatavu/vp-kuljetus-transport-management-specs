@@ -869,7 +869,6 @@ components:
         - plateNumber
         - type
         - vin
-        - activeVehicleId
       properties:
         id:
           type: string
