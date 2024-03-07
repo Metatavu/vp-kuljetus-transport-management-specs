@@ -980,8 +980,7 @@
         "required": [
           "plateNumber",
           "type",
-          "vin",
-          "activeVehicleId"
+          "vin"
         ],
         "properties": {
           "id": {
