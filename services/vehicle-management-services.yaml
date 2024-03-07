@@ -38,6 +38,42 @@ paths:
               schema:
                 type: string
 
+  /v1/publicTrucks:
+    get:
+      operationId: listPublicTrucks
+      summary: List PublicTrucks.
+      description: Lists public info about each truck.
+      security: []
+      tags:
+        - PublicTrucks
+        - SpecApp
+      parameters:
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of trucks with only public info
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PublicTruck"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   /v1/trucks:
     get:
       operationId: listTrucks
@@ -576,7 +612,7 @@ components:
       type: object
       description: Error object
       required:
-        - code
+        - status
         - message
       properties:
         status:
@@ -584,6 +620,23 @@ components:
           format: int32
         message:
           type: string
+
+    PublicTruck:
+      type: object
+      description: Represent public info of single truck
+      required:
+        - plateNumber
+        - vin
+      properties:
+        name:
+          type: string
+        plateNumber:
+          type: string
+        vin:
+          type: string
+          description: >
+            Truck identification number. This is unique for each truck and
+            should be used as a hardware identifier for this specific truck.
 
     Truck:
       type: object

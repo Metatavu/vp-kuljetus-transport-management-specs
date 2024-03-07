@@ -121,6 +121,20 @@
           "white_list": [
             {
               "disabled": false,
+              "path": "/v1/publicTrucks",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
               "path": "/v1/system/ping",
               "method": "",
               "ignore_case": false,
@@ -281,6 +295,10 @@
             }
           ],
           "track_endpoints": [
+            {
+              "path": "/v1/publicTrucks",
+              "method": "GET"
+            },
             {
               "path": "/v1/system/ping",
               "method": "GET"
