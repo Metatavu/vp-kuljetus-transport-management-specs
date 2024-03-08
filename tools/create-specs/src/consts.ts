@@ -6,7 +6,7 @@ export const OPENAPI_VERSION = "3.0.3";
 /**
  * Tyk image version
  */
-export const TYK_IMAGE = "docker.tyk.io/tyk-gateway/tyk-gateway:v5.1.0";
+export const TYK_IMAGE = "docker.io/tykio/tyk-gateway:v5.1";
 
 /**
  * User roles for bearer auth

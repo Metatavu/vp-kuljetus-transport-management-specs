@@ -60,6 +60,11 @@
             "enabled": true
           }
         },
+        "receiveDriverCardEvent": {
+          "validateRequest": {
+            "enabled": true
+          }
+        },
         "createVehicle": {
           "validateRequest": {
             "enabled": true
@@ -715,6 +720,59 @@
         }
       }
     },
+    "/v1/telematics/{vin}/driverCard": {
+      "post": {
+        "operationId": "receiveDriverCardEvent",
+        "summary": "Receives driver card events",
+        "description": "Receives driver card events. Truck will be identified via VIN in the path. Events are sent when card is inserted to a vehicle and when removed from it. When card is inserted, driverCardId value should be the ID of the card. When card is removed, driverCardId value should be null.\n",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "tags": [
+          "Telematics",
+          "SpecVehicleDataReceiver"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DriverCard"
+              }
+            }
+          },
+          "description": "Payload",
+          "required": true
+        },
+        "parameters": [
+          {
+            "name": "vin",
+            "required": true,
+            "in": "path",
+            "description": "Truck or towable vehicle identification number",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/vehicles": {
       "get": {
         "operationId": "listVehicles",
@@ -1178,6 +1236,16 @@
           "longitude": {
             "type": "number",
             "format": "double"
+          }
+        }
+      },
+      "DriverCard": {
+        "type": "object",
+        "properties": {
+          "driverCardId": {
+            "type": "string",
+            "nullable": true,
+            "description": "Driver card ID"
           }
         }
       }

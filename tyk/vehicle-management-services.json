@@ -149,6 +149,20 @@
             },
             {
               "disabled": false,
+              "path": "/v1/telematics/{vin}/driverCard",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "POST": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
               "path": "/v1/towables",
               "method": "",
               "ignore_case": false,
@@ -287,6 +301,10 @@
             },
             {
               "path": "/v1/telematics/{vin}",
+              "method": "POST"
+            },
+            {
+              "path": "/v1/telematics/{vin}/driverCard",
               "method": "POST"
             },
             {
@@ -506,7 +524,10 @@
     },
     "proxy": {
       "auth_headers": null,
-      "request_headers": null
+      "request_headers": null,
+      "use_response_extensions": {
+        "on_error_forwarding": false
+      }
     },
     "subgraph": {
       "sdl": ""
