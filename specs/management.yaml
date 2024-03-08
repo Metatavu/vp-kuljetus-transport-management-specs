@@ -1342,7 +1342,7 @@ components:
       type: object
       description: Error object
       required:
-        - code
+        - status
         - message
       properties:
         status:
@@ -1350,22 +1350,6 @@ components:
           format: int32
         message:
           type: string
-        creatorId:
-          type: string
-          readOnly: true
-          format: uuid
-        createdAt:
-          format: date-time
-          type: string
-          readOnly: true
-        lastModifierId:
-          type: string
-          readOnly: true
-          format: uuid
-        modifiedAt:
-          format: date-time
-          type: string
-          readOnly: true
     Truck:
       type: object
       description: Represent single truck

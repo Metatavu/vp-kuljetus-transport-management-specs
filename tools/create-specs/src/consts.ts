@@ -38,7 +38,7 @@ export const SPEC_VERSIONS = [
   {
     name: "full",
     description: "Full",
-    tags: ["App", "ManagementUI", "VehicleDataReceiver"],
+    tags: ["App", "ManagementUI", "VehicleDataReceiver", "Auth"],
     securitySchemes: ["bearerAuth", "apiKeyAuth"]
   },
   {
@@ -57,6 +57,12 @@ export const SPEC_VERSIONS = [
     name: "vehicle-data-receiver",
     description: "Vehicle data receiver",
     tags: ["VehicleDataReceiver"],
+    securitySchemes: ["apiKeyAuth"]
+  },
+  {
+    name: "auth",
+    description: "Auth",
+    tags: ["Auth"],
     securitySchemes: ["apiKeyAuth"]
   }
 ];
