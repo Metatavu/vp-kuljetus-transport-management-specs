@@ -237,7 +237,7 @@ components:
       type: object
       description: Error object
       required:
-        - code
+        - status
         - message
       properties:
         status:

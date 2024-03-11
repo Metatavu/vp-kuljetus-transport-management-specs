@@ -218,9 +218,20 @@ const main = async () => {
             }));
 
             Object.entries(methodContent.responses).forEach(([_responseCode, responseContent]) => {
-              responseContent.content && Object.entries(responseContent.content).forEach(([_contentType, contentTypeContent]) => {
-                if (contentTypeContent.schema && contentTypeContent.schema.$ref) {
+              responseContent.content && Object.values(responseContent.content).forEach((contentTypeContent) => {
+                if (!contentTypeContent.schema) return;
+
+                if ("$ref" in contentTypeContent.schema) {
                   const schemaName = contentTypeContent.schema.$ref.split("/").pop();
+
+                  if (!includedSchemas.includes(schemaName)) {
+                    includedSchemas.push(schemaName);
+                    specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(spec.components.schemas[schemaName]));
+                  }
+                }
+
+                if ("items" in contentTypeContent.schema && contentTypeContent.schema.items.$ref) {
+                  const schemaName = contentTypeContent.schema.items.$ref.split("/").pop();
 
                   if (!includedSchemas.includes(schemaName)) {
                     includedSchemas.push(schemaName);
@@ -230,9 +241,21 @@ const main = async () => {
               });
             });
 
-            methodContent.requestBody?.content && Object.entries(methodContent.requestBody.content).forEach(([_contentType, contentTypeContent]) => {
-              if (contentTypeContent.schema && contentTypeContent.schema.$ref) {
+            methodContent.requestBody?.content && Object.values(methodContent.requestBody.content).forEach((contentTypeContent) => {
+              if (!contentTypeContent.schema) return;
+
+              if ("$ref" in contentTypeContent.schema) {
                 const schemaName = contentTypeContent.schema.$ref.split("/").pop();
+
+                if (!includedSchemas.includes(schemaName)) {
+                  includedSchemas.push(schemaName);
+                  specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(spec.components.schemas[schemaName]));
+                }
+              }
+
+              if ("items" in contentTypeContent.schema && contentTypeContent.schema.items.$ref) {
+                const schemaName = contentTypeContent.schema.items.$ref.split("/").pop();
+
                 if (!includedSchemas.includes(schemaName)) {
                   includedSchemas.push(schemaName);
                   specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(spec.components.schemas[schemaName]));

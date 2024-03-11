@@ -1338,34 +1338,6 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    Error:
-      type: object
-      description: Error object
-      required:
-        - code
-        - message
-      properties:
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
-        creatorId:
-          type: string
-          readOnly: true
-          format: uuid
-        createdAt:
-          format: date-time
-          type: string
-          readOnly: true
-        lastModifierId:
-          type: string
-          readOnly: true
-          format: uuid
-        modifiedAt:
-          format: date-time
-          type: string
-          readOnly: true
     Truck:
       type: object
       description: Represent single truck
@@ -1423,6 +1395,18 @@ components:
             marked as archived will not appear in list requests unless archived
             filter is set to true. Archived truck cannot be updated, unless
             archivedAt is first set to null.
+    Error:
+      type: object
+      description: Error object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
     Towable:
       type: object
       description: Represent single towable
