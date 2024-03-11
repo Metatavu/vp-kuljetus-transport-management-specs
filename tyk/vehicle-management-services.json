@@ -121,11 +121,19 @@
           "white_list": [
             {
               "disabled": false,
+<<<<<<< HEAD
               "path": "/v1/driverCard/{vin}",
               "method": "",
               "ignore_case": false,
               "method_actions": {
                 "GET": {
+=======
+              "path": "/v1/driverCards/{driverCardId}",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "PUT": {
+>>>>>>> 80aa0d8f2df58d4672341c97813a120dc2ee5217
                   "action": "no_action",
                   "code": 200,
                   "data": "",
@@ -150,20 +158,6 @@
             {
               "disabled": false,
               "path": "/v1/telematics/{vin}",
-              "method": "",
-              "ignore_case": false,
-              "method_actions": {
-                "POST": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                }
-              }
-            },
-            {
-              "disabled": false,
-              "path": "/v1/telematics/{vin}/driverCard",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -310,8 +304,13 @@
           ],
           "track_endpoints": [
             {
+<<<<<<< HEAD
               "path": "/v1/driverCard/{vin}",
               "method": "GET"
+=======
+              "path": "/v1/driverCards/{driverCardId}",
+              "method": "PUT"
+>>>>>>> 80aa0d8f2df58d4672341c97813a120dc2ee5217
             },
             {
               "path": "/v1/system/ping",
@@ -319,10 +318,6 @@
             },
             {
               "path": "/v1/telematics/{vin}",
-              "method": "POST"
-            },
-            {
-              "path": "/v1/telematics/{vin}/driverCard",
               "method": "POST"
             },
             {
