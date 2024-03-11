@@ -9,6 +9,7 @@ security:
       - driver
       - manager
 paths:
+<<<<<<< HEAD
   /vehicle-management/v1/driverCards/{driverCardId}:
     put:
       operationId: updateDriverCard
@@ -39,6 +40,36 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DriverCard"
+=======
+  /vehicle-management/v1/publicTrucks:
+    get:
+      operationId: listPublicTrucks
+      summary: List PublicTrucks.
+      description: Lists public info about each truck.
+      security: []
+      tags:
+        - PublicTrucks
+      parameters:
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of trucks with only public info
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PublicTruck"
+>>>>>>> c30ddd606e5158812962d514e6896b2c02e6e83f
         default:
           description: Invalid request was sent to the server
           content:
@@ -1479,6 +1510,7 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
+<<<<<<< HEAD
     DriverCard:
       type: object
       required:
@@ -1492,6 +1524,24 @@ components:
           type: string
           nullable: true
           description: Truck's vehicle identification number
+=======
+    PublicTruck:
+      type: object
+      description: Represent public info of single truck
+      required:
+        - plateNumber
+        - vin
+      properties:
+        name:
+          type: string
+        plateNumber:
+          type: string
+        vin:
+          type: string
+          description: >
+            Truck identification number. This is unique for each truck and
+            should be used as a hardware identifier for this specific truck.
+>>>>>>> c30ddd606e5158812962d514e6896b2c02e6e83f
     Error:
       type: object
       description: Error object

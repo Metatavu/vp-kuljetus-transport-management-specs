@@ -50,9 +50,9 @@ export interface OpenAPISpec {
         requestBody?: {
           content?: {
             [contentType: string]: {
-              schema: {
-                $ref?: string;
-              };
+              schema:
+                | { $ref?: string; }
+                | { items?: { $ref?: string; }; };
             };
           };
         };
@@ -61,9 +61,9 @@ export interface OpenAPISpec {
             description: string;
             content?: {
               [contentType: string]: {
-                schema: {
-                  $ref?: string;
-                };
+                schema:
+                  | { $ref?: string; }
+                  | { items?: { $ref?: string; }; };
               };
             };
           };

@@ -122,11 +122,16 @@
             {
               "disabled": false,
 <<<<<<< HEAD
+<<<<<<< HEAD
               "path": "/v1/driverCard/{vin}",
+=======
+              "path": "/v1/publicTrucks",
+>>>>>>> c30ddd606e5158812962d514e6896b2c02e6e83f
               "method": "",
               "ignore_case": false,
               "method_actions": {
                 "GET": {
+<<<<<<< HEAD
 =======
               "path": "/v1/driverCards/{driverCardId}",
               "method": "",
@@ -134,6 +139,8 @@
               "method_actions": {
                 "PUT": {
 >>>>>>> 80aa0d8f2df58d4672341c97813a120dc2ee5217
+=======
+>>>>>>> c30ddd606e5158812962d514e6896b2c02e6e83f
                   "action": "no_action",
                   "code": 200,
                   "data": "",
@@ -305,12 +312,17 @@
           "track_endpoints": [
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
               "path": "/v1/driverCard/{vin}",
               "method": "GET"
 =======
               "path": "/v1/driverCards/{driverCardId}",
               "method": "PUT"
 >>>>>>> 80aa0d8f2df58d4672341c97813a120dc2ee5217
+=======
+              "path": "/v1/publicTrucks",
+              "method": "GET"
+>>>>>>> c30ddd606e5158812962d514e6896b2c02e6e83f
             },
             {
               "path": "/v1/system/ping",
