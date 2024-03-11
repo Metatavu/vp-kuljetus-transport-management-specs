@@ -9,7 +9,38 @@ security:
       - driver
       - manager
 paths:
-<<<<<<< HEAD
+  /vehicle-management/v1/driverCards:
+    get:
+      operationId: listDriverCards
+      summary: Lists driver cards
+      description: Lists driver cards. Used to check if a truck has a driver card inserted.
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - DriverCards
+      parameters:
+        - name: truckVin
+          required: true
+          in: query
+          description: Truck's vehicle identification number
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of driver cards. Contains either empty list or exactly one
+            driver card with given truck VIN.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DriverCard"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /vehicle-management/v1/driverCards/{driverCardId}:
     put:
       operationId: updateDriverCard
@@ -40,7 +71,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DriverCard"
-=======
   /vehicle-management/v1/publicTrucks:
     get:
       operationId: listPublicTrucks
@@ -69,7 +99,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/PublicTruck"
->>>>>>> c30ddd606e5158812962d514e6896b2c02e6e83f
         default:
           description: Invalid request was sent to the server
           content:
@@ -398,74 +427,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-<<<<<<< HEAD
-  /vehicle-management/v1/telematics/{vin}/driverCard:
-    post:
-      operationId: receiveDriverCardEvent
-      summary: Receives driver card events
-      description: >
-        Receives driver card events. Truck will be identified via VIN in the
-        path. Events are sent when card is inserted to a vehicle and when
-        removed from it. When card is inserted, driverCardId value should be the
-        ID of the card. When card is removed, driverCardId value should be null.
-      security:
-        - ApiKeyAuth: []
-      tags:
-        - Telematics
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DriverCard"
-        description: Payload
-        required: true
-      parameters:
-        - name: vin
-          required: true
-          in: path
-          description: Truck or towable vehicle identification number
-          schema:
-            type: string
-      responses:
-        "204":
-          description: Success
-        default:
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-  /vehicle-management/v1/driverCard/{vin}:
-    get:
-      operationId: getCurrentDriverCardInTruck
-      summary: Returns current driver card in truck
-      description: Returns current driver card in truck, or null if no card is inserted.
-      security:
-        - ApiKeyAuth: []
-      tags:
-        - DriverCard
-      parameters:
-        - name: vin
-          required: true
-          in: path
-          description: Vehicle identification number
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Driver card currently inserted in truck
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DriverCard"
-        default:
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-=======
->>>>>>> 80aa0d8f2df58d4672341c97813a120dc2ee5217
   /vehicle-management/v1/vehicles:
     get:
       operationId: listVehicles
@@ -1510,7 +1471,6 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-<<<<<<< HEAD
     DriverCard:
       type: object
       required:
@@ -1524,7 +1484,18 @@ components:
           type: string
           nullable: true
           description: Truck's vehicle identification number
-=======
+    Error:
+      type: object
+      description: Error object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
     PublicTruck:
       type: object
       description: Represent public info of single truck
@@ -1541,19 +1512,6 @@ components:
           description: >
             Truck identification number. This is unique for each truck and
             should be used as a hardware identifier for this specific truck.
->>>>>>> c30ddd606e5158812962d514e6896b2c02e6e83f
-    Error:
-      type: object
-      description: Error object
-      required:
-        - status
-        - message
-      properties:
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
     Truck:
       type: object
       description: Represent single truck

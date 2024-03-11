@@ -1338,21 +1338,6 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-<<<<<<< HEAD
-    Error:
-      type: object
-      description: Error object
-      required:
-        - status
-        - message
-      properties:
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
-=======
->>>>>>> c30ddd606e5158812962d514e6896b2c02e6e83f
     Truck:
       type: object
       description: Represent single truck

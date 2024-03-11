@@ -97,7 +97,58 @@
         }
       }
     },
-<<<<<<< HEAD
+    "/v1/driverCards": {
+      "get": {
+        "operationId": "listDriverCards",
+        "summary": "Lists driver cards",
+        "description": "Lists driver cards. Used to check if a truck has a driver card inserted.",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "tags": [
+          "DriverCards",
+          "SpecAuth"
+        ],
+        "parameters": [
+          {
+            "name": "truckVin",
+            "required": true,
+            "in": "query",
+            "description": "Truck's vehicle identification number",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of driver cards. Contains either empty list or exactly one driver card with given truck VIN.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DriverCard"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/driverCards/{driverCardId}": {
       "put": {
         "operationId": "updateDriverCard",
@@ -131,7 +182,23 @@
             "description": "driver card ID",
             "schema": {
               "type": "string"
-=======
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated driver card",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DriverCard"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/publicTrucks": {
       "get": {
         "operationId": "listPublicTrucks",
@@ -157,19 +224,11 @@
             "description": "Max results.",
             "schema": {
               "type": "integer"
->>>>>>> c30ddd606e5158812962d514e6896b2c02e6e83f
             }
           }
         ],
         "responses": {
           "200": {
-<<<<<<< HEAD
-            "description": "Updated driver card",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DriverCard"
-=======
             "description": "List of trucks with only public info",
             "content": {
               "application/json": {
@@ -178,7 +237,6 @@
                   "items": {
                     "$ref": "#/components/schemas/PublicTruck"
                   }
->>>>>>> c30ddd606e5158812962d514e6896b2c02e6e83f
                 }
               }
             }
@@ -819,111 +877,6 @@
         }
       }
     },
-<<<<<<< HEAD
-    "/v1/telematics/{vin}/driverCard": {
-      "post": {
-        "operationId": "receiveDriverCardEvent",
-        "summary": "Receives driver card events",
-        "description": "Receives driver card events. Truck will be identified via VIN in the path. Events are sent when card is inserted to a vehicle and when removed from it. When card is inserted, driverCardId value should be the ID of the card. When card is removed, driverCardId value should be null.\n",
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "tags": [
-          "Telematics",
-          "SpecVehicleDataReceiver"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DriverCard"
-              }
-            }
-          },
-          "description": "Payload",
-          "required": true
-        },
-        "parameters": [
-          {
-            "name": "vin",
-            "required": true,
-            "in": "path",
-            "description": "Truck or towable vehicle identification number",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Success"
-          },
-          "default": {
-            "description": "Invalid request was sent to the server",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/driverCard/{vin}": {
-      "get": {
-        "operationId": "getCurrentDriverCardInTruck",
-        "summary": "Returns current driver card in truck",
-        "description": "Returns current driver card in truck, or null if no card is inserted.",
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "tags": [
-          "DriverCard",
-          "SpecAuth"
-        ],
-        "parameters": [
-          {
-            "name": "vin",
-            "required": true,
-            "in": "path",
-            "description": "Vehicle identification number",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Driver card currently inserted in truck",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DriverCard"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Invalid request was sent to the server",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-=======
->>>>>>> 80aa0d8f2df58d4672341c97813a120dc2ee5217
     "/v1/vehicles": {
       "get": {
         "operationId": "listVehicles",
