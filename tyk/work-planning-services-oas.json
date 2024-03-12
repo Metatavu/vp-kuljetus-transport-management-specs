@@ -31,18 +31,7 @@
       }
     },
     "middleware": {
-      "operations": {
-        "createRoute": {
-          "validateRequest": {
-            "enabled": true
-          }
-        },
-        "updateRoute": {
-          "validateRequest": {
-            "enabled": true
-          }
-        }
-      }
+      "operations": {}
     }
   },
   "paths": {

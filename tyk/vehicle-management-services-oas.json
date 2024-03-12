@@ -34,38 +34,7 @@
       }
     },
     "middleware": {
-      "operations": {
-        "createTruck": {
-          "validateRequest": {
-            "enabled": true
-          }
-        },
-        "updateTruck": {
-          "validateRequest": {
-            "enabled": true
-          }
-        },
-        "createTowable": {
-          "validateRequest": {
-            "enabled": true
-          }
-        },
-        "updateTowable": {
-          "validateRequest": {
-            "enabled": true
-          }
-        },
-        "receiveTelematicData": {
-          "validateRequest": {
-            "enabled": true
-          }
-        },
-        "createVehicle": {
-          "validateRequest": {
-            "enabled": true
-          }
-        }
-      }
+      "operations": {}
     }
   },
   "paths": {
