@@ -1470,6 +1470,22 @@ components:
           format: int32
         message:
           type: string
+    PublicTruck:
+      type: object
+      description: Represent public info of single truck
+      required:
+        - plateNumber
+        - vin
+      properties:
+        name:
+          type: string
+        plateNumber:
+          type: string
+        vin:
+          type: string
+          description: >
+            Truck identification number. This is unique for each truck and
+            should be used as a hardware identifier for this specific truck.
     Truck:
       type: object
       description: Represent single truck
