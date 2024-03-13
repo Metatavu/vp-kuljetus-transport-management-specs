@@ -121,6 +121,20 @@
           "white_list": [
             {
               "disabled": false,
+              "path": "/v1/driverCards",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
               "path": "/v1/driverCards/{driverCardId}",
               "method": "",
               "ignore_case": false,
@@ -309,6 +323,10 @@
             }
           ],
           "track_endpoints": [
+            {
+              "path": "/v1/driverCards",
+              "method": "GET"
+            },
             {
               "path": "/v1/driverCards/{driverCardId}",
               "method": "PUT"

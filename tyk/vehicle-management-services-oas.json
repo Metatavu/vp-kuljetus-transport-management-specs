@@ -34,43 +34,7 @@
       }
     },
     "middleware": {
-      "operations": {
-        "updateDriverCard": {
-          "validateRequest": {
-            "enabled": true
-          }
-        },
-        "createTruck": {
-          "validateRequest": {
-            "enabled": true
-          }
-        },
-        "updateTruck": {
-          "validateRequest": {
-            "enabled": true
-          }
-        },
-        "createTowable": {
-          "validateRequest": {
-            "enabled": true
-          }
-        },
-        "updateTowable": {
-          "validateRequest": {
-            "enabled": true
-          }
-        },
-        "receiveTelematicData": {
-          "validateRequest": {
-            "enabled": true
-          }
-        },
-        "createVehicle": {
-          "validateRequest": {
-            "enabled": true
-          }
-        }
-      }
+      "operations": {}
     }
   },
   "paths": {
@@ -90,6 +54,58 @@
               "text/plain": {
                 "schema": {
                   "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/driverCards": {
+      "get": {
+        "operationId": "listDriverCards",
+        "summary": "Lists driver cards",
+        "description": "Lists driver cards. Used to check if a truck has a driver card inserted.",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "tags": [
+          "DriverCards",
+          "SpecAuth"
+        ],
+        "parameters": [
+          {
+            "name": "truckVin",
+            "required": true,
+            "in": "query",
+            "description": "Truck's vehicle identification number",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of driver cards. Contains either empty list or exactly one driver card with given truck VIN.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DriverCard"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
                 }
               }
             }

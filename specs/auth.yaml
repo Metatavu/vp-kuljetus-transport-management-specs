@@ -1,0 +1,72 @@
+openapi: 3.0.3
+info:
+  title: Vehicle Management Services (auth)
+  description: Vehicle Management Services (auth)
+  version: 1.0.0
+security:
+  - ApiKeyAuth: []
+paths:
+  /vehicle-management/v1/driverCards:
+    get:
+      operationId: listDriverCards
+      summary: Lists driver cards
+      description: Lists driver cards. Used to check if a truck has a driver card inserted.
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - DriverCards
+      parameters:
+        - name: truckVin
+          required: true
+          in: query
+          description: Truck's vehicle identification number
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of driver cards. Contains either empty list or exactly one
+            driver card with given truck VIN.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DriverCard"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    DriverCard:
+      type: object
+      required:
+        - driverCardId
+        - truckVin
+      properties:
+        driverCardId:
+          type: string
+          description: Driver card ID
+        truckVin:
+          type: string
+          nullable: true
+          description: Truck's vehicle identification number
+    Error:
+      type: object
+      description: Error object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
