@@ -31,7 +31,48 @@
       }
     },
     "middleware": {
-      "operations": {}
+      "operations": {
+        "createSite": {
+          "validateRequest": {
+            "enabled": true
+          }
+        },
+        "updateSite": {
+          "validateRequest": {
+            "enabled": true
+          }
+        },
+        "createTask": {
+          "validateRequest": {
+            "enabled": true
+          }
+        },
+        "updateTask": {
+          "validateRequest": {
+            "enabled": true
+          }
+        },
+        "createFreight": {
+          "validateRequest": {
+            "enabled": true
+          }
+        },
+        "updateFreight": {
+          "validateRequest": {
+            "enabled": true
+          }
+        },
+        "createFreightUnit": {
+          "validateRequest": {
+            "enabled": true
+          }
+        },
+        "updateFreightUnit": {
+          "validateRequest": {
+            "enabled": true
+          }
+        }
+      }
     }
   },
   "paths": {

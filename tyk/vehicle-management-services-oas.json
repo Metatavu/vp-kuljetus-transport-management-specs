@@ -34,7 +34,43 @@
       }
     },
     "middleware": {
-      "operations": {}
+      "operations": {
+        "updateDriverCard": {
+          "validateRequest": {
+            "enabled": true
+          }
+        },
+        "createTruck": {
+          "validateRequest": {
+            "enabled": true
+          }
+        },
+        "updateTruck": {
+          "validateRequest": {
+            "enabled": true
+          }
+        },
+        "createTowable": {
+          "validateRequest": {
+            "enabled": true
+          }
+        },
+        "updateTowable": {
+          "validateRequest": {
+            "enabled": true
+          }
+        },
+        "receiveTelematicData": {
+          "validateRequest": {
+            "enabled": true
+          }
+        },
+        "createVehicle": {
+          "validateRequest": {
+            "enabled": true
+          }
+        }
+      }
     }
   },
   "paths": {
@@ -54,6 +90,66 @@
               "text/plain": {
                 "schema": {
                   "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/driverCards/{driverCardId}": {
+      "put": {
+        "operationId": "updateDriverCard",
+        "summary": "Updates driver cards",
+        "description": "Updates single driver card.",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "tags": [
+          "DriverCards",
+          "SpecVehicleDataReceiver"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DriverCard"
+              }
+            }
+          },
+          "description": "Payload",
+          "required": true
+        },
+        "parameters": [
+          {
+            "name": "driverCardId",
+            "required": true,
+            "in": "path",
+            "description": "driver card ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated driver card",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DriverCard"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
                 }
               }
             }
@@ -1222,6 +1318,24 @@
           "longitude": {
             "type": "number",
             "format": "double"
+          }
+        }
+      },
+      "DriverCard": {
+        "type": "object",
+        "required": [
+          "driverCardId",
+          "truckVin"
+        ],
+        "properties": {
+          "driverCardId": {
+            "type": "string",
+            "description": "Driver card ID"
+          },
+          "truckVin": {
+            "type": "string",
+            "nullable": true,
+            "description": "Truck's vehicle identification number"
           }
         }
       }

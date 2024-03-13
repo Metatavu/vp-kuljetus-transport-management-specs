@@ -135,18 +135,17 @@ const addTykOasValidation = (spec: OpenAPISpec): OpenAPISpec => {
     operations: {}
   };
 
-  // FIXME:
-  // Object.entries(spec.paths).forEach(([path, pathContent]) => {
-  //   Object.entries(pathContent).forEach(([method, methodContent]) => {
-  //     if (method === "post" || method === "put" || method === "patch") {
-  //       result["x-tyk-api-gateway"].middleware.operations[methodContent.operationId] = {
-  //         validateRequest: {
-  //           enabled: true
-  //         }
-  //       };
-  //     }
-  //   });
-  // });
+  Object.entries(spec.paths).forEach(([path, pathContent]) => {
+    Object.entries(pathContent).forEach(([method, methodContent]) => {
+      if (method === "post" || method === "put" || method === "patch") {
+        result["x-tyk-api-gateway"].middleware.operations[methodContent.operationId] = {
+          validateRequest: {
+            enabled: true
+          }
+        };
+      }
+    });
+  });
 
   return result;
 };
