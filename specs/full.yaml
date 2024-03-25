@@ -307,15 +307,15 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: from
+        - name: after
           in: query
-          description: Filter results by timestamp from
+          description: Filter results after given date-time
           schema:
             type: string
             format: date-time
-        - name: to
+        - name: before
           in: query
-          description: Filter results by timestamp to
+          description: Filter results before given date-time
           schema:
             type: string
             format: date-time
