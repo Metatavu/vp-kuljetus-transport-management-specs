@@ -48,6 +48,11 @@ paths:
         - Drivers
         - SpecManagementUI
       parameters:
+        - name: driverCardId
+          in: query
+          description: Filter drivers by driver card ID. Will return 0 to 1 drivers.
+          schema:
+            type: string
         - name: archived
           in: query
           description: Filter drivers by archived status
