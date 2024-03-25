@@ -318,6 +318,95 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  "/v1/trucks/{truckId}/speeds":
+    post:
+      operationId: createTruckSpeed
+      summary: Create truck speed
+      description: Create new truck speed. Used by vehicle data receiver to send truck speed data.
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Trucks
+        - SpecVehicleDataReceiver
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TruckSpeed"
+        description: Payload
+        required: true
+      responses:
+        "201":
+          description: Received data
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    get:
+      operationId: listTruckSpeeds
+      summary: List Truck speeds
+      description: Lists Truck speeds.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - Trucks
+        - SpecManagementUI
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck id
+          schema:
+            type: string
+            format: uuid
+        - name: from
+          in: query
+          description: Filter results by timestamp from
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          description: Filter results by timestamp to
+          schema:
+            type: string
+            format: date-time
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of truck speeds
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TruckSpeed"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   /v1/towables:
     get:
       operationId: listTowables
@@ -886,6 +975,20 @@ components:
         longitude:
           type: number
           format: double
+
+    TruckSpeed:
+      type: object
+      required:
+        - id
+        - speed
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Timestamp for truck speed. Unix timestamp in milliseconds.
+        speed:
+          type: number
+          format: float
 
     DriverCard:
       type: object
