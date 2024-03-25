@@ -38,76 +38,6 @@ paths:
               schema:
                 type: string
 
-  /v1/driverCards:
-    get:
-      operationId: listDriverCards
-      summary: Lists driver cards
-      description: Lists driver cards. Used to check if a truck has a driver card inserted.
-      security:
-        - ApiKeyAuth: []
-      tags:
-        - DriverCards
-        - SpecAuth
-      parameters:
-        - name: truckVin
-          required: true
-          in: query
-          description: Truck's vehicle identification number
-          schema:
-            type: string
-      responses:
-        "200":
-          description: List of driver cards. Contains either empty list or exactly one driver card with given truck VIN.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/DriverCard"
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  /v1/driverCards/{driverCardId}:
-    put:
-      operationId: updateDriverCard
-      summary: Updates driver cards
-      description: Updates single driver card.
-      security:
-        - ApiKeyAuth: []
-      tags:
-        - DriverCards
-        - SpecVehicleDataReceiver
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DriverCard"
-        description: Payload
-        required: true
-      parameters:
-        - name: driverCardId
-          required: true
-          in: path
-          description: driver card ID
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Updated driver card
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DriverCard"
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
 
   /v1/publicTrucks:
     get:
@@ -308,6 +238,118 @@ paths:
           schema:
             type: string
             format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/trucks/{truckId}/driverCards:
+    get:
+      operationId: listTruckDriverCards
+      summary: Lists truck driver cards
+      description: Lists truck driver cards. Used to check if a truck has a driver card inserted.
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Trucks
+        - SpecAuth
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of truck driver cards. Contains either 0 or 1 cards.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TruckDriverCard"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createTruckDriverCard
+      summary: Create truck driver card
+      description: Create new truck driver card
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Trucks
+        - SpecVehicleDataReceiver
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TruckDriverCard"
+        description: Payload
+        required: true
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Created driver card
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TruckDriverCard"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/trucks/{truckId}/driverCards/{driverCardId}:
+    delete:
+      operationId: deleteTruckDriverCard
+      summary: Deletes truck driver card
+      description: Deletes single truck driver card. Cards are deleted when they are removed from the truck.
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Trucks
+        - SpecVehicleDataReceiver
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TruckDriverCard"
+        description: Payload
+        required: true
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck ID
+          schema:
+            type: string
+            format: uuid
+        - name: driverCardId
+          required: true
+          in: path
+          description: driver card ID
+          schema:
+            type: string
       responses:
         "204":
           description: Empty response indicating successful removal
@@ -887,16 +929,11 @@ components:
           type: number
           format: double
 
-    DriverCard:
+    TruckDriverCard:
       type: object
       required:
-        - driverCardId
-        - truckVin
+        - id
       properties:
-        driverCardId:
+        id:
           type: string
           description: Driver card ID
-        truckVin:
-          type: string
-          nullable: true
-          description: Truck's vehicle identification number
