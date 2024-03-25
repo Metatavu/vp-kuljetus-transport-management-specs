@@ -181,7 +181,8 @@
         "security": [],
         "tags": [
           "PublicTrucks",
-          "SpecApp"
+          "SpecApp",
+          "SpecVehicleDataReceiver"
         ],
         "parameters": [
           {

@@ -118,6 +118,7 @@ paths:
       tags:
         - PublicTrucks
         - SpecApp
+        - SpecVehicleDataReceiver
       parameters:
         - name: first
           in: query
