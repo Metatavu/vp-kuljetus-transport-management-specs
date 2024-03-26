@@ -147,6 +147,10 @@ components:
         - plateNumber
         - vin
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         name:
           type: string
         plateNumber:
