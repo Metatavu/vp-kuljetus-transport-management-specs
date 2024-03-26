@@ -188,3 +188,4 @@ components:
       enum:
         - REST
         - DRIVE
+        - WORK

@@ -1140,6 +1140,7 @@ components:
       enum:
         - REST
         - DRIVE
+        - WORK
     Route:
       type: object
       description: Represent single planned route for single truck driver

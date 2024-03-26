@@ -1520,7 +1520,8 @@
         "type": "string",
         "enum": [
           "REST",
-          "DRIVE"
+          "DRIVE",
+          "WORK"
         ]
       },
       "DriverCard": {

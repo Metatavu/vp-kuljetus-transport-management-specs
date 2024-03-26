@@ -1009,6 +1009,7 @@ components:
       enum:
         - REST
         - DRIVE
+        - WORK
 
     DriverCard:
       type: object
