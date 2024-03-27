@@ -187,5 +187,8 @@ components:
       type: string
       enum:
         - REST
-        - DRIVE
+        - DRIVER_AVAILABLE
         - WORK
+        - DRIVE
+        - ERROR
+        - NOT_AVAILABLE

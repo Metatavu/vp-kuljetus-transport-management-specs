@@ -343,6 +343,13 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: state
+          in: query
+          description: Filter results by driver state
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/TruckDriveStateEnum"
         - name: after
           in: query
           description: Filter results after given date-time
@@ -1008,8 +1015,11 @@ components:
       type: string
       enum:
         - REST
-        - DRIVE
+        - DRIVER_AVAILABLE
         - WORK
+        - DRIVE
+        - ERROR
+        - NOT_AVAILABLE
 
     DriverCard:
       type: object
