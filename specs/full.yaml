@@ -9,74 +9,6 @@ security:
       - driver
       - manager
 paths:
-  /vehicle-management/v1/driverCards:
-    get:
-      operationId: listDriverCards
-      summary: Lists driver cards
-      description: Lists driver cards. Used to check if a truck has a driver card inserted.
-      security:
-        - ApiKeyAuth: []
-      tags:
-        - DriverCards
-      parameters:
-        - name: truckVin
-          required: true
-          in: query
-          description: Truck's vehicle identification number
-          schema:
-            type: string
-      responses:
-        "200":
-          description: List of driver cards. Contains either empty list or exactly one
-            driver card with given truck VIN.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/DriverCard"
-        default:
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-  /vehicle-management/v1/driverCards/{driverCardId}:
-    put:
-      operationId: updateDriverCard
-      summary: Updates driver cards
-      description: Updates single driver card.
-      security:
-        - ApiKeyAuth: []
-      tags:
-        - DriverCards
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DriverCard"
-        description: Payload
-        required: true
-      parameters:
-        - name: driverCardId
-          required: true
-          in: path
-          description: driver card ID
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Updated driver card
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DriverCard"
-        default:
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
   /vehicle-management/v1/publicTrucks:
     get:
       operationId: listPublicTrucks
@@ -250,6 +182,108 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Truck"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/trucks/{truckId}/driverCards:
+    get:
+      operationId: listTruckDriverCards
+      summary: Lists truck driver cards
+      description: Lists truck driver cards. Used to check if a truck has a driver
+        card inserted.
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Trucks
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of truck driver cards. Contains either 0 or 1 cards.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TruckDriverCard"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createTruckDriverCard
+      summary: Create truck driver card
+      description: Create new truck driver card
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Trucks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TruckDriverCard"
+        description: Payload
+        required: true
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Created driver card
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TruckDriverCard"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/trucks/{truckId}/driverCards/{driverCardId}:
+    delete:
+      operationId: deleteTruckDriverCard
+      summary: Deletes truck driver card
+      description: Deletes single truck driver card. Cards are deleted when they are
+        removed from the truck.
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Trucks
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck ID
+          schema:
+            type: string
+            format: uuid
+        - name: driverCardId
+          required: true
+          in: path
+          description: driver card ID
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Empty response indicating successful removal
         default:
           description: Invalid request was sent to the server
           content:
@@ -1565,31 +1599,6 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    DriverCard:
-      type: object
-      required:
-        - driverCardId
-        - truckVin
-      properties:
-        driverCardId:
-          type: string
-          description: Driver card ID
-        truckVin:
-          type: string
-          nullable: true
-          description: Truck's vehicle identification number
-    Error:
-      type: object
-      description: Error object
-      required:
-        - status
-        - message
-      properties:
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
     PublicTruck:
       type: object
       description: Represent public info of single truck
@@ -1606,6 +1615,18 @@ components:
           description: >
             Truck identification number. This is unique for each truck and
             should be used as a hardware identifier for this specific truck.
+    Error:
+      type: object
+      description: Error object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
     Truck:
       type: object
       description: Represent single truck
@@ -1663,6 +1684,14 @@ components:
             marked as archived will not appear in list requests unless archived
             filter is set to true. Archived truck cannot be updated, unless
             archivedAt is first set to null.
+    TruckDriverCard:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Driver card ID
     TruckSpeed:
       type: object
       required:
