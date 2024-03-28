@@ -121,34 +121,6 @@
           "white_list": [
             {
               "disabled": false,
-              "path": "/v1/driverCards",
-              "method": "",
-              "ignore_case": false,
-              "method_actions": {
-                "GET": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                }
-              }
-            },
-            {
-              "disabled": false,
-              "path": "/v1/driverCards/{driverCardId}",
-              "method": "",
-              "ignore_case": false,
-              "method_actions": {
-                "PUT": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                }
-              }
-            },
-            {
-              "disabled": false,
               "path": "/v1/publicTrucks",
               "method": "",
               "ignore_case": false,
@@ -274,6 +246,40 @@
                   "headers": null
                 },
                 "PUT": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/trucks/{truckId}/driverCards",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "POST": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/trucks/{truckId}/driverCards/{driverCardId}",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "DELETE": {
                   "action": "no_action",
                   "code": 200,
                   "data": "",
@@ -324,14 +330,6 @@
           ],
           "track_endpoints": [
             {
-              "path": "/v1/driverCards",
-              "method": "GET"
-            },
-            {
-              "path": "/v1/driverCards/{driverCardId}",
-              "method": "PUT"
-            },
-            {
               "path": "/v1/publicTrucks",
               "method": "GET"
             },
@@ -382,6 +380,18 @@
             {
               "path": "/v1/trucks/{truckId}",
               "method": "PUT"
+            },
+            {
+              "path": "/v1/trucks/{truckId}/driverCards",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/trucks/{truckId}/driverCards",
+              "method": "POST"
+            },
+            {
+              "path": "/v1/trucks/{truckId}/driverCards/{driverCardId}",
+              "method": "DELETE"
             },
             {
               "path": "/v1/vehicles",
