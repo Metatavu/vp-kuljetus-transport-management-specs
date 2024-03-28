@@ -6,32 +6,33 @@ info:
 security:
   - ApiKeyAuth: []
 paths:
-  /vehicle-management/v1/driverCards:
+  /vehicle-management/v1/trucks/{truckId}/driverCards:
     get:
-      operationId: listDriverCards
-      summary: Lists driver cards
-      description: Lists driver cards. Used to check if a truck has a driver card inserted.
+      operationId: listTruckDriverCards
+      summary: Lists truck driver cards
+      description: Lists truck driver cards. Used to check if a truck has a driver
+        card inserted.
       security:
         - ApiKeyAuth: []
       tags:
-        - DriverCards
+        - Trucks
       parameters:
-        - name: truckVin
+        - name: truckId
           required: true
-          in: query
-          description: Truck's vehicle identification number
+          in: path
+          description: truck ID
           schema:
             type: string
+            format: uuid
       responses:
         "200":
-          description: List of driver cards. Contains either empty list or exactly one
-            driver card with given truck VIN.
+          description: List of truck driver cards. Contains either 0 or 1 cards.
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/DriverCard"
+                  $ref: "#/components/schemas/TruckDriverCard"
         default:
           description: Invalid request was sent to the server
           content:
@@ -45,19 +46,14 @@ components:
       in: header
       name: X-API-Key
   schemas:
-    DriverCard:
+    TruckDriverCard:
       type: object
       required:
-        - driverCardId
-        - truckVin
+        - id
       properties:
-        driverCardId:
+        id:
           type: string
           description: Driver card ID
-        truckVin:
-          type: string
-          nullable: true
-          description: Truck's vehicle identification number
     Error:
       type: object
       description: Error object

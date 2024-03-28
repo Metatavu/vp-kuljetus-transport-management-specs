@@ -6,23 +6,61 @@ info:
 security:
   - ApiKeyAuth: []
 paths:
-  /vehicle-management/v1/driverCards/{driverCardId}:
-    put:
-      operationId: updateDriverCard
-      summary: Updates driver cards
-      description: Updates single driver card.
+  /vehicle-management/v1/trucks/{truckId}/driverCards:
+    post:
+      operationId: createTruckDriverCard
+      summary: Create truck driver card
+      description: Create new truck driver card
       security:
         - ApiKeyAuth: []
       tags:
-        - DriverCards
+        - Trucks
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DriverCard"
+              $ref: "#/components/schemas/TruckDriverCard"
         description: Payload
         required: true
       parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Created driver card
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TruckDriverCard"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/trucks/{truckId}/driverCards/{driverCardId}:
+    delete:
+      operationId: deleteTruckDriverCard
+      summary: Deletes truck driver card
+      description: Deletes single truck driver card. Cards are deleted when they are
+        removed from the truck.
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Trucks
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck ID
+          schema:
+            type: string
+            format: uuid
         - name: driverCardId
           required: true
           in: path
@@ -30,12 +68,8 @@ paths:
           schema:
             type: string
       responses:
-        "200":
-          description: Updated driver card
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DriverCard"
+        "204":
+          description: Empty response indicating successful removal
         default:
           description: Invalid request was sent to the server
           content:
@@ -81,19 +115,14 @@ components:
       in: header
       name: X-API-Key
   schemas:
-    DriverCard:
+    TruckDriverCard:
       type: object
       required:
-        - driverCardId
-        - truckVin
+        - id
       properties:
-        driverCardId:
+        id:
           type: string
           description: Driver card ID
-        truckVin:
-          type: string
-          nullable: true
-          description: Truck's vehicle identification number
     Error:
       type: object
       description: Error object
