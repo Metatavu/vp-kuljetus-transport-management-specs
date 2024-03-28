@@ -329,13 +329,6 @@ paths:
       tags:
         - Trucks
         - SpecVehicleDataReceiver
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/TruckDriverCard"
-        description: Payload
-        required: true
       parameters:
         - name: truckId
           required: true
