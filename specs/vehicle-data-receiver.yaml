@@ -6,6 +6,40 @@ info:
 security:
   - ApiKeyAuth: []
 paths:
+  /vehicle-management/v1/publicTrucks:
+    get:
+      operationId: listPublicTrucks
+      summary: List PublicTrucks.
+      description: Lists public info about each truck.
+      security: []
+      tags:
+        - PublicTrucks
+      parameters:
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of trucks with only public info
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PublicTruck"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /vehicle-management/v1/trucks/{truckId}/driverCards:
     post:
       operationId: createTruckDriverCard
@@ -70,6 +104,40 @@ paths:
       responses:
         "204":
           description: Empty response indicating successful removal
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/trucks/{truckId}/speeds:
+    post:
+      operationId: createTruckSpeed
+      summary: Create truck speed
+      description: Create new truck speed. Used by vehicle data receiver to send truck
+        speed data.
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Trucks
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TruckSpeed"
+        description: Payload
+        required: true
+      responses:
+        "201":
+          description: Received data
         default:
           description: Invalid request was sent to the server
           content:
@@ -149,14 +217,26 @@ components:
       in: header
       name: X-API-Key
   schemas:
-    TruckDriverCard:
+    PublicTruck:
       type: object
+      description: Represent public info of single truck
       required:
-        - id
+        - plateNumber
+        - vin
       properties:
         id:
           type: string
-          description: Driver card ID
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+        plateNumber:
+          type: string
+        vin:
+          type: string
+          description: >
+            Truck identification number. This is unique for each truck and
+            should be used as a hardware identifier for this specific truck.
     Error:
       type: object
       description: Error object
@@ -197,6 +277,27 @@ components:
           type: number
           format: double
           description: heading in degrees.
+    TruckDriverCard:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Driver card ID
+    TruckSpeed:
+      type: object
+      required:
+        - id
+        - speed
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Timestamp for truck speed. Unix timestamp in milliseconds.
+        speed:
+          type: number
+          format: float
     TelematicData:
       type: object
       required:

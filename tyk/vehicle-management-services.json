@@ -289,7 +289,7 @@
             },
             {
               "disabled": false,
-              "path": "/v1/trucks/{truckId}/locations",
+              "path": "/v1/trucks/{truckId}/speeds",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -414,11 +414,11 @@
               "method": "DELETE"
             },
             {
-              "path": "/v1/trucks/{truckId}/locations",
+              "path": "/v1/trucks/{truckId}/speeds",
               "method": "GET"
             },
             {
-              "path": "/v1/trucks/{truckId}/locations",
+              "path": "/v1/trucks/{truckId}/speeds",
               "method": "POST"
             },
             {

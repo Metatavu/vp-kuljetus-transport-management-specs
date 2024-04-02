@@ -153,11 +153,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /vehicle-management/v1/trucks/{truckId}/locations:
+  /vehicle-management/v1/trucks/{truckId}/speeds:
     get:
-      operationId: listTruckLocations
-      summary: List Truck locations
-      description: Lists Truck locations.
+      operationId: listTruckSpeeds
+      summary: List Truck speeds
+      description: Lists Truck speeds.
       security:
         - BearerAuth:
             - manager
@@ -195,13 +195,13 @@ paths:
             type: integer
       responses:
         "200":
-          description: List of truck locations
+          description: List of truck speeds
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/TruckLocation"
+                  $ref: "#/components/schemas/TruckSpeed"
         default:
           description: Invalid request was sent to the server
           content:
@@ -1462,34 +1462,19 @@ components:
           format: int32
         message:
           type: string
-    TruckLocation:
+    TruckSpeed:
       type: object
       required:
-        - timestamp
-        - latitude
-        - longitude
-        - heading
+        - id
+        - speed
       properties:
         id:
-          type: string
-          format: uuid
-          readOnly: true
-        timestamp:
           type: integer
           format: int64
-          description: Timestamp for truck speed
-        latitude:
+          description: Timestamp for truck speed. Unix timestamp in milliseconds.
+        speed:
           type: number
-          format: double
-          description: Latitude in degrees.
-        longitude:
-          type: number
-          format: double
-          description: Longitude in degrees.
-        heading:
-          type: number
-          format: double
-          description: heading in degrees.
+          format: float
     Towable:
       type: object
       description: Represent single towable
