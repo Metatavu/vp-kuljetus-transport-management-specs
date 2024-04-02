@@ -110,40 +110,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /vehicle-management/v1/trucks/{truckId}/speeds:
-    post:
-      operationId: createTruckSpeed
-      summary: Create truck speed
-      description: Create new truck speed. Used by vehicle data receiver to send truck
-        speed data.
-      security:
-        - ApiKeyAuth: []
-      tags:
-        - Trucks
-      parameters:
-        - name: truckId
-          required: true
-          in: path
-          description: truck id
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/TruckSpeed"
-        description: Payload
-        required: true
-      responses:
-        "201":
-          description: Received data
-        default:
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
   /vehicle-management/v1/trucks/{truckId}/locations:
     post:
       operationId: createTruckLocation
@@ -167,6 +133,40 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/TruckLocation"
+        description: Payload
+        required: true
+      responses:
+        "201":
+          description: Received data
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/trucks/{truckId}/speeds:
+    post:
+      operationId: createTruckSpeed
+      summary: Create truck speed
+      description: Create new truck speed. Used by vehicle data receiver to send truck
+        speed data.
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Trucks
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TruckSpeed"
         description: Payload
         required: true
       responses:
@@ -249,6 +249,14 @@ components:
           format: int32
         message:
           type: string
+    TruckDriverCard:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Driver card ID
     TruckLocation:
       type: object
       required:
@@ -277,14 +285,6 @@ components:
           type: number
           format: double
           description: heading in degrees.
-    TruckDriverCard:
-      type: object
-      required:
-        - id
-      properties:
-        id:
-          type: string
-          description: Driver card ID
     TruckSpeed:
       type: object
       required:
