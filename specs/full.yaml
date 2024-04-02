@@ -1695,10 +1695,14 @@ components:
     TruckSpeed:
       type: object
       required:
-        - id
+        - timestamp
         - speed
       properties:
         id:
+          type: string
+          format: uuid
+          description: Truck speed ID
+        timestamp:
           type: integer
           format: int64
           description: Timestamp for truck speed. Unix timestamp in milliseconds.
