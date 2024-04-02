@@ -48,6 +48,7 @@ paths:
       tags:
         - PublicTrucks
         - SpecApp
+        - SpecVehicleDataReceiver
       parameters:
         - name: first
           in: query
@@ -823,6 +824,10 @@ components:
         - plateNumber
         - vin
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         name:
           type: string
         plateNumber:
