@@ -1014,12 +1014,16 @@ components:
     TruckLocation:
       type: object
       required:
-        - id
+        - timestamp
         - latitude
         - longitude
         - heading
       properties:
         id:
+          type: string
+          format: uuid
+          readOnly: true
+        timestamp:
           type: integer
           format: int64
           description: Timestamp for truck speed
