@@ -69,7 +69,8 @@
         "security": [],
         "tags": [
           "PublicTrucks",
-          "SpecApp"
+          "SpecApp",
+          "SpecVehicleDataReceiver"
         ],
         "parameters": [
           {
@@ -1170,6 +1171,11 @@
           "vin"
         ],
         "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
           "name": {
             "type": "string"
           },
