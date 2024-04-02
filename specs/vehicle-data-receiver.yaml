@@ -232,6 +232,7 @@ components:
         id:
           type: string
           format: uuid
+          readOnly: true
           description: Truck speed ID
         timestamp:
           type: integer
