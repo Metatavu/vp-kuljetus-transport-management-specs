@@ -1872,6 +1872,7 @@
           },
           "driverId": {
             "type": "string",
+            "format": "uuid",
             "readOnly": true,
             "description": "Driver ID."
           },

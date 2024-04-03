@@ -1961,6 +1961,7 @@ components:
           $ref: "#/components/schemas/TruckDriveStateEnum"
         driverId:
           type: string
+          format: uuid
           readOnly: true
           description: Driver ID.
         driverCardId:
