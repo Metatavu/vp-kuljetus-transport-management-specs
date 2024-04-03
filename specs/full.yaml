@@ -193,16 +193,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-<<<<<<< HEAD
-  /vehicle-management/v1/trucks/{truckId}/driveStates:
-    get:
-      operationId: listDriveStates
-      summary: List drive states.
-      description: Lists drive states for truck.
-      security:
-        - BearerAuth:
-            - driver
-=======
   /vehicle-management/v1/trucks/{truckId}/driverCards:
     get:
       operationId: listTruckDriverCards
@@ -345,7 +335,6 @@ paths:
       description: Lists Truck locations.
       security:
         - BearerAuth:
->>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
             - manager
       tags:
         - Trucks
@@ -357,22 +346,6 @@ paths:
           schema:
             type: string
             format: uuid
-<<<<<<< HEAD
-        - name: driverId
-          in: query
-          description: Filter results by driver ID
-          schema:
-            type: string
-            format: uuid
-        - name: state
-          in: query
-          description: Filter results by driver state
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/TruckDriveStateEnum"
-=======
->>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
         - name: after
           in: query
           description: Filter results after given date-time
@@ -397,54 +370,29 @@ paths:
             type: integer
       responses:
         "200":
-<<<<<<< HEAD
-          description: List of drive states
-=======
           description: List of truck locations
->>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
           content:
             application/json:
               schema:
                 type: array
                 items:
-<<<<<<< HEAD
-                  $ref: "#/components/schemas/TruckDriveState"
-=======
                   $ref: "#/components/schemas/TruckLocation"
->>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
         default:
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-<<<<<<< HEAD
-    post:
-      operationId: createDriveState
-      summary: Create drive state
-      description: Create new drive state for truck
-=======
   /vehicle-management/v1/trucks/{truckId}/speeds:
     post:
       operationId: createTruckSpeed
       summary: Create truck speed
       description: Create new truck speed. Used by vehicle data receiver to send truck
         speed data.
->>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
       security:
         - ApiKeyAuth: []
       tags:
         - Trucks
-<<<<<<< HEAD
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/TruckDriveState"
-        description: Payload
-        required: true
-=======
->>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
       parameters:
         - name: truckId
           required: true
@@ -453,11 +401,6 @@ paths:
           schema:
             type: string
             format: uuid
-<<<<<<< HEAD
-      responses:
-        "204":
-          description: Created drive state
-=======
       requestBody:
         content:
           application/json:
@@ -522,7 +465,107 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/TruckSpeed"
->>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/trucks/{truckId}/driveStates:
+    get:
+      operationId: listDriveStates
+      summary: List drive states.
+      description: Lists drive states for truck.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - Trucks
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck id
+          schema:
+            type: string
+            format: uuid
+        - name: driverId
+          in: query
+          description: Filter results by driver ID
+          schema:
+            type: string
+            format: uuid
+        - name: state
+          in: query
+          description: Filter results by driver state
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/TruckDriveStateEnum"
+        - name: after
+          in: query
+          description: Filter results after given date-time
+          schema:
+            type: string
+            format: date-time
+        - name: before
+          in: query
+          description: Filter results before given date-time
+          schema:
+            type: string
+            format: date-time
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of drive states
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TruckDriveState"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createDriveState
+      summary: Create drive state
+      description: Create new drive state for truck
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Trucks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TruckDriveState"
+        description: Payload
+        required: true
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Created drive state
         default:
           description: Invalid request was sent to the server
           content:
@@ -1844,29 +1887,6 @@ components:
             marked as archived will not appear in list requests unless archived
             filter is set to true. Archived truck cannot be updated, unless
             archivedAt is first set to null.
-<<<<<<< HEAD
-    TruckDriveState:
-      type: object
-      required:
-        - id
-        - state
-        - driverCardId
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: Timestamp for truck drive state
-        state:
-          $ref: "#/components/schemas/TruckDriveStateEnum"
-        driverId:
-          type: string
-          readOnly: true
-          description: Driver ID.
-        driverCardId:
-          type: string
-          description: Driver card ID. This is used to identify the driver when creating a
-            new drive state.
-=======
     TruckDriverCard:
       type: object
       required:
@@ -1921,7 +1941,27 @@ components:
         speed:
           type: number
           format: float
->>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
+    TruckDriveState:
+      type: object
+      required:
+        - id
+        - state
+        - driverCardId
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Timestamp for truck drive state
+        state:
+          $ref: "#/components/schemas/TruckDriveStateEnum"
+        driverId:
+          type: string
+          readOnly: true
+          description: Driver ID.
+        driverCardId:
+          type: string
+          description: Driver card ID. This is used to identify the driver when creating a
+            new drive state.
     Towable:
       type: object
       description: Represent single towable

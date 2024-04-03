@@ -410,19 +410,6 @@
         }
       }
     },
-<<<<<<< HEAD
-    "/v1/trucks/{truckId}/driveStates": {
-      "get": {
-        "operationId": "listDriveStates",
-        "summary": "List drive states.",
-        "description": "Lists drive states for truck.",
-        "security": [
-          {
-            "BearerAuth": [
-              "driver",
-              "manager"
-            ]
-=======
     "/v1/trucks/{truckId}/driverCards": {
       "get": {
         "operationId": "listTruckDriverCards",
@@ -431,15 +418,10 @@
         "security": [
           {
             "ApiKeyAuth": []
->>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
           }
         ],
         "tags": [
           "Trucks",
-<<<<<<< HEAD
-          "SpecApp",
-          "SpecManagementUI"
-=======
           "SpecAuth"
         ],
         "parameters": [
@@ -605,7 +587,6 @@
         "tags": [
           "Trucks",
           "SpecVehicleDataReceiver"
->>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
         ],
         "parameters": [
           {
@@ -617,13 +598,6 @@
               "type": "string",
               "format": "uuid"
             }
-<<<<<<< HEAD
-          },
-          {
-            "name": "driverId",
-            "in": "query",
-            "description": "Filter results by driver ID",
-=======
           }
         ],
         "requestBody": {
@@ -674,27 +648,12 @@
             "required": true,
             "in": "path",
             "description": "truck id",
->>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
             "schema": {
               "type": "string",
               "format": "uuid"
             }
           },
           {
-<<<<<<< HEAD
-            "name": "state",
-            "in": "query",
-            "description": "Filter results by driver state",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/TruckDriveStateEnum"
-              }
-            }
-          },
-          {
-=======
->>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
             "name": "after",
             "in": "query",
             "description": "Filter results after given date-time",
@@ -731,21 +690,13 @@
         ],
         "responses": {
           "200": {
-<<<<<<< HEAD
-            "description": "List of drive states",
-=======
             "description": "List of truck locations",
->>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-<<<<<<< HEAD
-                    "$ref": "#/components/schemas/TruckDriveState"
-=======
                     "$ref": "#/components/schemas/TruckLocation"
->>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
                   }
                 }
               }
@@ -762,13 +713,6 @@
             }
           }
         }
-<<<<<<< HEAD
-      },
-      "post": {
-        "operationId": "createDriveState",
-        "summary": "Create drive state",
-        "description": "Create new drive state for truck",
-=======
       }
     },
     "/v1/trucks/{truckId}/speeds": {
@@ -776,7 +720,6 @@
         "operationId": "createTruckSpeed",
         "summary": "Create truck speed",
         "description": "Create new truck speed. Used by vehicle data receiver to send truck speed data.",
->>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
         "security": [
           {
             "ApiKeyAuth": []
@@ -786,20 +729,6 @@
           "Trucks",
           "SpecVehicleDataReceiver"
         ],
-<<<<<<< HEAD
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TruckDriveState"
-              }
-            }
-          },
-          "description": "Payload",
-          "required": true
-        },
-=======
->>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
         "parameters": [
           {
             "name": "truckId",
@@ -812,11 +741,6 @@
             }
           }
         ],
-<<<<<<< HEAD
-        "responses": {
-          "204": {
-            "description": "Created drive state"
-=======
         "requestBody": {
           "content": {
             "application/json": {
@@ -918,7 +842,169 @@
                 }
               }
             }
->>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trucks/{truckId}/driveStates": {
+      "get": {
+        "operationId": "listDriveStates",
+        "summary": "List drive states.",
+        "description": "Lists drive states for truck.",
+        "security": [
+          {
+            "BearerAuth": [
+              "driver",
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Trucks",
+          "SpecApp",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "truckId",
+            "required": true,
+            "in": "path",
+            "description": "truck id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "driverId",
+            "in": "query",
+            "description": "Filter results by driver ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "description": "Filter results by driver state",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TruckDriveStateEnum"
+              }
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "description": "Filter results after given date-time",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "description": "Filter results before given date-time",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "first",
+            "in": "query",
+            "description": "First result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "max",
+            "in": "query",
+            "description": "Max results.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of drive states",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TruckDriveState"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createDriveState",
+        "summary": "Create drive state",
+        "description": "Create new drive state for truck",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "tags": [
+          "Trucks",
+          "SpecVehicleDataReceiver"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TruckDriveState"
+              }
+            }
+          },
+          "description": "Payload",
+          "required": true
+        },
+        "parameters": [
+          {
+            "name": "truckId",
+            "required": true,
+            "in": "path",
+            "description": "truck id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Created drive state"
           },
           "default": {
             "description": "Invalid request was sent to the server",
@@ -1762,7 +1848,6 @@
           }
         }
       },
-<<<<<<< HEAD
       "TruckDriveState": {
         "type": "object",
         "required": [
@@ -1801,10 +1886,7 @@
           "NOT_AVAILABLE"
         ]
       },
-      "DriverCard": {
-=======
       "TruckLocation": {
->>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
         "type": "object",
         "required": [
           "timestamp",
