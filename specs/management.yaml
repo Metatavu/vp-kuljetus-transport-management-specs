@@ -153,6 +153,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+<<<<<<< HEAD
   /vehicle-management/v1/trucks/{truckId}/driveStates:
     get:
       operationId: listDriveStates
@@ -161,6 +162,15 @@ paths:
       security:
         - BearerAuth:
             - driver
+=======
+  /vehicle-management/v1/trucks/{truckId}/locations:
+    get:
+      operationId: listTruckLocations
+      summary: List Truck locations
+      description: Lists Truck locations.
+      security:
+        - BearerAuth:
+>>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
             - manager
       tags:
         - Trucks
@@ -172,6 +182,7 @@ paths:
           schema:
             type: string
             format: uuid
+<<<<<<< HEAD
         - name: driverId
           in: query
           description: Filter results by driver ID
@@ -185,6 +196,8 @@ paths:
             type: array
             items:
               $ref: "#/components/schemas/TruckDriveStateEnum"
+=======
+>>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
         - name: after
           in: query
           description: Filter results after given date-time
@@ -209,13 +222,76 @@ paths:
             type: integer
       responses:
         "200":
+<<<<<<< HEAD
           description: List of drive states
+=======
+          description: List of truck locations
+>>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
           content:
             application/json:
               schema:
                 type: array
                 items:
+<<<<<<< HEAD
                   $ref: "#/components/schemas/TruckDriveState"
+=======
+                  $ref: "#/components/schemas/TruckLocation"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/trucks/{truckId}/speeds:
+    get:
+      operationId: listTruckSpeeds
+      summary: List Truck speeds
+      description: Lists Truck speeds.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Trucks
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck id
+          schema:
+            type: string
+            format: uuid
+        - name: after
+          in: query
+          description: Filter results after given date-time
+          schema:
+            type: string
+            format: date-time
+        - name: before
+          in: query
+          description: Filter results before given date-time
+          schema:
+            type: string
+            format: date-time
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of truck speeds
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TruckSpeed"
+>>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
         default:
           description: Invalid request was sent to the server
           content:
@@ -677,6 +753,11 @@ paths:
       tags:
         - Drivers
       parameters:
+        - name: driverCardId
+          in: query
+          description: Filter drivers by driver card ID. Will return 0 to 1 drivers.
+          schema:
+            type: string
         - name: archived
           in: query
           description: Filter drivers by archived status
@@ -1476,6 +1557,7 @@ components:
           format: int32
         message:
           type: string
+<<<<<<< HEAD
     TruckDriveState:
       type: object
       required:
@@ -1497,6 +1579,54 @@ components:
           type: string
           description: Driver card ID. This is used to identify the driver when creating a
             new drive state.
+=======
+    TruckLocation:
+      type: object
+      required:
+        - timestamp
+        - latitude
+        - longitude
+        - heading
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp for truck speed
+        latitude:
+          type: number
+          format: double
+          description: Latitude in degrees.
+        longitude:
+          type: number
+          format: double
+          description: Longitude in degrees.
+        heading:
+          type: number
+          format: double
+          description: heading in degrees.
+    TruckSpeed:
+      type: object
+      required:
+        - timestamp
+        - speed
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Truck speed ID
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp for truck speed. Unix timestamp in milliseconds.
+        speed:
+          type: number
+          format: float
+>>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
     Towable:
       type: object
       description: Represent single towable

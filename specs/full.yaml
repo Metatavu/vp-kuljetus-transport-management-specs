@@ -9,74 +9,6 @@ security:
       - driver
       - manager
 paths:
-  /vehicle-management/v1/driverCards:
-    get:
-      operationId: listDriverCards
-      summary: Lists driver cards
-      description: Lists driver cards. Used to check if a truck has a driver card inserted.
-      security:
-        - ApiKeyAuth: []
-      tags:
-        - DriverCards
-      parameters:
-        - name: truckVin
-          required: true
-          in: query
-          description: Truck's vehicle identification number
-          schema:
-            type: string
-      responses:
-        "200":
-          description: List of driver cards. Contains either empty list or exactly one
-            driver card with given truck VIN.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/DriverCard"
-        default:
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-  /vehicle-management/v1/driverCards/{driverCardId}:
-    put:
-      operationId: updateDriverCard
-      summary: Updates driver cards
-      description: Updates single driver card.
-      security:
-        - ApiKeyAuth: []
-      tags:
-        - DriverCards
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DriverCard"
-        description: Payload
-        required: true
-      parameters:
-        - name: driverCardId
-          required: true
-          in: path
-          description: driver card ID
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Updated driver card
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DriverCard"
-        default:
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
   /vehicle-management/v1/publicTrucks:
     get:
       operationId: listPublicTrucks
@@ -86,6 +18,11 @@ paths:
       tags:
         - PublicTrucks
       parameters:
+        - name: vin
+          in: query
+          description: Filter results by vin
+          schema:
+            type: string
         - name: first
           in: query
           description: First result.
@@ -256,6 +193,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+<<<<<<< HEAD
   /vehicle-management/v1/trucks/{truckId}/driveStates:
     get:
       operationId: listDriveStates
@@ -264,6 +202,150 @@ paths:
       security:
         - BearerAuth:
             - driver
+=======
+  /vehicle-management/v1/trucks/{truckId}/driverCards:
+    get:
+      operationId: listTruckDriverCards
+      summary: Lists truck driver cards
+      description: Lists truck driver cards. Used to check if a truck has a driver
+        card inserted.
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Trucks
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of truck driver cards. Contains either 0 or 1 cards.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TruckDriverCard"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createTruckDriverCard
+      summary: Create truck driver card
+      description: Create new truck driver card
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Trucks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TruckDriverCard"
+        description: Payload
+        required: true
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Created driver card
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TruckDriverCard"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/trucks/{truckId}/driverCards/{driverCardId}:
+    delete:
+      operationId: deleteTruckDriverCard
+      summary: Deletes truck driver card
+      description: Deletes single truck driver card. Cards are deleted when they are
+        removed from the truck.
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Trucks
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck ID
+          schema:
+            type: string
+            format: uuid
+        - name: driverCardId
+          required: true
+          in: path
+          description: driver card ID
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/trucks/{truckId}/locations:
+    post:
+      operationId: createTruckLocation
+      summary: Create truck location
+      description: Create new truck location. Used by vehicle data receiver to send
+        truck location data.
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Trucks
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TruckLocation"
+        description: Payload
+        required: true
+      responses:
+        "201":
+          description: Received data
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    get:
+      operationId: listTruckLocations
+      summary: List Truck locations
+      description: Lists Truck locations.
+      security:
+        - BearerAuth:
+>>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
             - manager
       tags:
         - Trucks
@@ -275,6 +357,7 @@ paths:
           schema:
             type: string
             format: uuid
+<<<<<<< HEAD
         - name: driverId
           in: query
           description: Filter results by driver ID
@@ -288,6 +371,8 @@ paths:
             type: array
             items:
               $ref: "#/components/schemas/TruckDriveStateEnum"
+=======
+>>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
         - name: after
           in: query
           description: Filter results after given date-time
@@ -312,27 +397,45 @@ paths:
             type: integer
       responses:
         "200":
+<<<<<<< HEAD
           description: List of drive states
+=======
+          description: List of truck locations
+>>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
           content:
             application/json:
               schema:
                 type: array
                 items:
+<<<<<<< HEAD
                   $ref: "#/components/schemas/TruckDriveState"
+=======
+                  $ref: "#/components/schemas/TruckLocation"
+>>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
         default:
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+<<<<<<< HEAD
     post:
       operationId: createDriveState
       summary: Create drive state
       description: Create new drive state for truck
+=======
+  /vehicle-management/v1/trucks/{truckId}/speeds:
+    post:
+      operationId: createTruckSpeed
+      summary: Create truck speed
+      description: Create new truck speed. Used by vehicle data receiver to send truck
+        speed data.
+>>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
       security:
         - ApiKeyAuth: []
       tags:
         - Trucks
+<<<<<<< HEAD
       requestBody:
         content:
           application/json:
@@ -340,6 +443,8 @@ paths:
               $ref: "#/components/schemas/TruckDriveState"
         description: Payload
         required: true
+=======
+>>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
       parameters:
         - name: truckId
           required: true
@@ -348,9 +453,76 @@ paths:
           schema:
             type: string
             format: uuid
+<<<<<<< HEAD
       responses:
         "204":
           description: Created drive state
+=======
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TruckSpeed"
+        description: Payload
+        required: true
+      responses:
+        "201":
+          description: Received data
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    get:
+      operationId: listTruckSpeeds
+      summary: List Truck speeds
+      description: Lists Truck speeds.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Trucks
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck id
+          schema:
+            type: string
+            format: uuid
+        - name: after
+          in: query
+          description: Filter results after given date-time
+          schema:
+            type: string
+            format: date-time
+        - name: before
+          in: query
+          description: Filter results before given date-time
+          schema:
+            type: string
+            format: date-time
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of truck speeds
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TruckSpeed"
+>>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
         default:
           description: Invalid request was sent to the server
           content:
@@ -844,6 +1016,11 @@ paths:
       tags:
         - Drivers
       parameters:
+        - name: driverCardId
+          in: query
+          description: Filter drivers by driver card ID. Will return 0 to 1 drivers.
+          schema:
+            type: string
         - name: archived
           in: query
           description: Filter drivers by archived status
@@ -1578,19 +1755,26 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    DriverCard:
+    PublicTruck:
       type: object
+      description: Represent public info of single truck
       required:
-        - driverCardId
-        - truckVin
+        - plateNumber
+        - vin
       properties:
-        driverCardId:
+        id:
           type: string
-          description: Driver card ID
-        truckVin:
+          format: uuid
+          readOnly: true
+        name:
           type: string
-          nullable: true
-          description: Truck's vehicle identification number
+        plateNumber:
+          type: string
+        vin:
+          type: string
+          description: >
+            Truck identification number. This is unique for each truck and
+            should be used as a hardware identifier for this specific truck.
     Error:
       type: object
       description: Error object
@@ -1603,22 +1787,6 @@ components:
           format: int32
         message:
           type: string
-    PublicTruck:
-      type: object
-      description: Represent public info of single truck
-      required:
-        - plateNumber
-        - vin
-      properties:
-        name:
-          type: string
-        plateNumber:
-          type: string
-        vin:
-          type: string
-          description: >
-            Truck identification number. This is unique for each truck and
-            should be used as a hardware identifier for this specific truck.
     Truck:
       type: object
       description: Represent single truck
@@ -1676,6 +1844,7 @@ components:
             marked as archived will not appear in list requests unless archived
             filter is set to true. Archived truck cannot be updated, unless
             archivedAt is first set to null.
+<<<<<<< HEAD
     TruckDriveState:
       type: object
       required:
@@ -1697,6 +1866,62 @@ components:
           type: string
           description: Driver card ID. This is used to identify the driver when creating a
             new drive state.
+=======
+    TruckDriverCard:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Driver card ID
+    TruckLocation:
+      type: object
+      required:
+        - timestamp
+        - latitude
+        - longitude
+        - heading
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp for truck speed
+        latitude:
+          type: number
+          format: double
+          description: Latitude in degrees.
+        longitude:
+          type: number
+          format: double
+          description: Longitude in degrees.
+        heading:
+          type: number
+          format: double
+          description: heading in degrees.
+    TruckSpeed:
+      type: object
+      required:
+        - timestamp
+        - speed
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Truck speed ID
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp for truck speed. Unix timestamp in milliseconds.
+        speed:
+          type: number
+          format: float
+>>>>>>> 2c5e7d00e99a9ff91a2c5d563ec76aebe7816e49
     Towable:
       type: object
       description: Represent single towable
