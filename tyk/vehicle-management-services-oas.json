@@ -1851,12 +1851,18 @@
       "TruckDriveState": {
         "type": "object",
         "required": [
-          "id",
+          "timestamp",
           "state",
           "driverCardId"
         ],
         "properties": {
           "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true,
+            "description": "Truck drive state ID"
+          },
+          "timestamp": {
             "type": "integer",
             "format": "int64",
             "description": "Timestamp for truck drive state"
