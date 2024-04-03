@@ -50,6 +50,11 @@ paths:
         - SpecApp
         - SpecVehicleDataReceiver
       parameters:
+        - name: vin
+          in: query
+          description: Filter results by vin
+          schema:
+            type: string
         - name: first
           in: query
           description: First result.
