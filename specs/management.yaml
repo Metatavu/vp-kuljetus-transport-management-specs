@@ -1642,7 +1642,6 @@ components:
       required:
         - timestamp
         - state
-        - driverCardId
       properties:
         id:
           type: string

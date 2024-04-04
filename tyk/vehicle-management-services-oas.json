@@ -1852,8 +1852,7 @@
         "type": "object",
         "required": [
           "timestamp",
-          "state",
-          "driverCardId"
+          "state"
         ],
         "properties": {
           "id": {
