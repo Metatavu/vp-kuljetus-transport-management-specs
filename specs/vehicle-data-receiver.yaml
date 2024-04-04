@@ -183,6 +183,39 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/trucks/{truckId}/driveStates:
+    post:
+      operationId: createDriveState
+      summary: Create drive state
+      description: Create new drive state for truck
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Trucks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TruckDriveState"
+        description: Payload
+        required: true
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Created drive state
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /vehicle-management/v1/telematics/{vin}:
     post:
       operationId: receiveTelematicData
@@ -308,6 +341,32 @@ components:
         speed:
           type: number
           format: float
+    TruckDriveState:
+      type: object
+      required:
+        - timestamp
+        - state
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Truck drive state ID
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp for truck drive state
+        state:
+          $ref: "#/components/schemas/TruckDriveStateEnum"
+        driverId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Driver ID.
+        driverCardId:
+          type: string
+          description: Driver card ID. This is used to identify the driver when creating a
+            new drive state.
     TelematicData:
       type: object
       required:
@@ -331,3 +390,12 @@ components:
         longitude:
           type: number
           format: double
+    TruckDriveStateEnum:
+      type: string
+      enum:
+        - REST
+        - DRIVER_AVAILABLE
+        - WORK
+        - DRIVE
+        - ERROR
+        - NOT_AVAILABLE
