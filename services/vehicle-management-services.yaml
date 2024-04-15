@@ -44,7 +44,9 @@ paths:
       operationId: listPublicTrucks
       summary: List PublicTrucks.
       description: Lists public info about each truck.
-      security: []
+      security:
+        - ApiKeyAuth: []
+        - BearerAuth: [driver, manager]
       tags:
         - PublicTrucks
         - SpecApp
