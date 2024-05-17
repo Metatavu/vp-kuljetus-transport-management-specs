@@ -168,6 +168,7 @@ paths:
         - BearerAuth: [manager]
       tags:
         - Routes
+        - SpecApp
         - SpecManagementUI
       requestBody:
         content:
