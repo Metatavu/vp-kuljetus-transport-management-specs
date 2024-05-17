@@ -1314,59 +1314,6 @@
         }
       }
     },
-    "/v1/telematics/{vin}": {
-      "post": {
-        "operationId": "receiveTelematicData",
-        "summary": "Receives telematic data entry",
-        "description": "Receives telematic data entry",
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "tags": [
-          "Telematics",
-          "SpecVehicleDataReceiver"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TelematicData"
-              }
-            }
-          },
-          "description": "Payload",
-          "required": true
-        },
-        "parameters": [
-          {
-            "name": "vin",
-            "required": true,
-            "in": "path",
-            "description": "Truck or towable vehicle identification number",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Success"
-          },
-          "default": {
-            "description": "Invalid request was sent to the server",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/v1/vehicles": {
       "get": {
         "operationId": "listVehicles",
@@ -1824,37 +1771,6 @@
             "type": "string",
             "format": "date-time",
             "description": "Setting the archivedAt time marks the vehicle as archived. Vehicles marked as archived will not appear in list requests unless archived filter is set to true. Archived vehicle cannot be updated, unless archivedAt is first set to null.\n"
-          }
-        }
-      },
-      "TelematicData": {
-        "type": "object",
-        "required": [
-          "timestamp",
-          "imei",
-          "speed",
-          "latitude",
-          "longitude"
-        ],
-        "properties": {
-          "timestamp": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "imei": {
-            "type": "string"
-          },
-          "speed": {
-            "type": "number",
-            "format": "float"
-          },
-          "latitude": {
-            "type": "number",
-            "format": "double"
-          },
-          "longitude": {
-            "type": "number",
-            "format": "double"
           }
         }
       },

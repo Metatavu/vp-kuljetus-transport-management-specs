@@ -149,20 +149,6 @@
             },
             {
               "disabled": false,
-              "path": "/v1/telematics/{vin}",
-              "method": "",
-              "ignore_case": false,
-              "method_actions": {
-                "POST": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                }
-              }
-            },
-            {
-              "disabled": false,
               "path": "/v1/towables",
               "method": "",
               "ignore_case": false,
@@ -396,10 +382,6 @@
             {
               "path": "/v1/system/ping",
               "method": "GET"
-            },
-            {
-              "path": "/v1/telematics/{vin}",
-              "method": "POST"
             },
             {
               "path": "/v1/towables",
