@@ -272,6 +272,7 @@
         ],
         "tags": [
           "Routes",
+          "SpecApp",
           "SpecManagementUI"
         ],
         "requestBody": {
