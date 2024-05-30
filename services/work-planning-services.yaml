@@ -4,7 +4,7 @@ info:
   title: VP-Kuljetus Work Planning Services
 
 security:
-  - bearerAuth: []
+  - bearerAuth: [driver, manager]
 
 x-tyk-api-gateway:
   info:
@@ -26,9 +26,9 @@ paths:
       operationId: ping
       summary: Replies with pong
       description: Replies ping with pong
+      security: []
       tags:
         - System
-        - SpecExternal
       responses:
         "200":
           description: Pong
@@ -42,15 +42,16 @@ paths:
       operationId: listRoutes
       summary: List Routes.
       description: Lists Routes.
+      security:
+        - BearerAuth: [driver, manager]
       tags:
         - Routes
         - SpecManagementUI
         - SpecApp
-        - SpecExternal
       parameters:
-        - name: vehicleId
+        - name: truckId
           in: query
-          description: Filter results by vehicle id
+          description: Filter results by truck id
           schema:
             type: string
             format: uuid
@@ -60,6 +61,18 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: departureAfter
+          in: query
+          description: Filter results by departure time same or after this time
+          schema:
+            type: string
+            format: date-time
+        - name: departureBefore
+          in: query
+          description: Filter results by departure time before this time
+          schema:
+            type: string
+            format: date-time
         - name: first
           in: query
           description: First result.
@@ -89,10 +102,11 @@ paths:
       operationId: createRoute
       summary: Create route
       description: Create new route
+      security:
+        - BearerAuth: [manager]
       tags:
         - Routes
         - SpecManagementUI
-        - SpecExternal
       requestBody:
         content:
           application/json:
@@ -119,11 +133,12 @@ paths:
       operationId: findRoute
       summary: Find a route.
       description: Finds a route by id.
+      security:
+        - BearerAuth: [driver, manager]
       tags:
         - Routes
         - SpecApp
         - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: routeId
           required: true
@@ -149,10 +164,11 @@ paths:
       operationId: updateRoute
       summary: Updates routes
       description: Updates single route
+      security:
+        - BearerAuth: [manager]
       tags:
         - Routes
         - SpecManagementUI
-        - SpecExternal
       requestBody:
         content:
           application/json:
@@ -186,10 +202,11 @@ paths:
       operationId: deleteRoute
       summary: Deletes route
       description: Deletes route
+      security:
+        - BearerAuth: [manager]
       tags:
         - Routes
         - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: routeId
           required: true
@@ -220,7 +237,7 @@ components:
       type: object
       description: Error object
       required:
-        - code
+        - status
         - message
       properties:
         status:
@@ -232,16 +249,42 @@ components:
     Route:
       type: object
       description: Represent single planned route for single truck driver
+      required:
+        - name
+        - departureTime
       properties:
         id:
           type: string
           format: uuid
           readOnly: true
-        vehicleId:
+        truckId:
           type: string
           format: uuid
-          description: Vehicle id
+          description: Truck id
         driverId:
           type: string
           format: uuid
           description: Driver id
+        name:
+          type: string
+          description: Name of the route
+        departureTime:
+          type: string
+          format: date-time
+          description: Departure time of the route
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true

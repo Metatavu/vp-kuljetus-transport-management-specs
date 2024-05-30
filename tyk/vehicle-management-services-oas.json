@@ -6,7 +6,13 @@
   },
   "security": [
     {
-      "bearerAuth": []
+      "BearerAuth": [
+        "driver",
+        "manager"
+      ]
+    },
+    {
+      "ApiKeyAuth": []
     }
   ],
   "x-tyk-api-gateway": {
@@ -28,18 +34,7 @@
       }
     },
     "middleware": {
-      "operations": {
-        "createTruck": {
-          "validateRequest": {
-            "enabled": true
-          }
-        },
-        "updateTruck": {
-          "validateRequest": {
-            "enabled": true
-          }
-        }
-      }
+      "operations": {}
     }
   },
   "paths": {
@@ -48,9 +43,9 @@
         "operationId": "ping",
         "summary": "Replies with pong",
         "description": "Replies ping with pong",
+        "security": [],
         "tags": [
-          "System",
-          "SpecExternal"
+          "System"
         ],
         "responses": {
           "200": {
@@ -66,16 +61,97 @@
         }
       }
     },
+    "/v1/publicTrucks": {
+      "get": {
+        "operationId": "listPublicTrucks",
+        "summary": "List PublicTrucks.",
+        "description": "Lists public info about each truck.",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          },
+          {
+            "BearerAuth": [
+              "driver",
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "PublicTrucks",
+          "SpecApp",
+          "SpecVehicleDataReceiver"
+        ],
+        "parameters": [
+          {
+            "name": "vin",
+            "in": "query",
+            "description": "Filter results by vin",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "first",
+            "in": "query",
+            "description": "First result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "max",
+            "in": "query",
+            "description": "Max results.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of trucks with only public info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PublicTruck"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/trucks": {
       "get": {
         "operationId": "listTrucks",
         "summary": "List Trucks.",
         "description": "Lists Trucks.",
+        "security": [
+          {
+            "BearerAuth": [
+              "driver",
+              "manager"
+            ]
+          }
+        ],
         "tags": [
           "Trucks",
           "SpecApp",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "parameters": [
           {
@@ -84,6 +160,14 @@
             "description": "Filter results by plate number",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "archived",
+            "in": "query",
+            "description": "Filter results by archived status",
+            "schema": {
+              "type": "boolean"
             }
           },
           {
@@ -133,10 +217,16 @@
         "operationId": "createTruck",
         "summary": "Create truck",
         "description": "Create new truck",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
         "tags": [
           "Trucks",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "requestBody": {
           "content": {
@@ -178,11 +268,18 @@
         "operationId": "findTruck",
         "summary": "Find a truck.",
         "description": "Finds a truck by id.",
+        "security": [
+          {
+            "BearerAuth": [
+              "driver",
+              "manager"
+            ]
+          }
+        ],
         "tags": [
           "Trucks",
           "SpecApp",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "parameters": [
           {
@@ -223,10 +320,16 @@
         "operationId": "updateTruck",
         "summary": "Updates trucks",
         "description": "Updates single truck",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
         "tags": [
           "Trucks",
-          "SpecManagementUI",
-          "SpecExternal"
+          "SpecManagementUI"
         ],
         "requestBody": {
           "content": {
@@ -277,11 +380,16 @@
       "delete": {
         "operationId": "deleteTruck",
         "summary": "Deletes truck",
-        "description": "Deletes truck",
+        "description": "Deletes truck. For non-production use. Returns forbidden in production environment.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
         "tags": [
-          "Trucks",
-          "SpecManagementUI",
-          "SpecExternal"
+          "Trucks"
         ],
         "parameters": [
           {
@@ -311,14 +419,1140 @@
           }
         }
       }
+    },
+    "/v1/trucks/{truckId}/driverCards": {
+      "get": {
+        "operationId": "listTruckDriverCards",
+        "summary": "Lists truck driver cards",
+        "description": "Lists truck driver cards. Used to check if a truck has a driver card inserted.",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "tags": [
+          "Trucks",
+          "SpecAuth"
+        ],
+        "parameters": [
+          {
+            "name": "truckId",
+            "required": true,
+            "in": "path",
+            "description": "truck ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of truck driver cards. Contains either 0 or 1 cards.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TruckDriverCard"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createTruckDriverCard",
+        "summary": "Create truck driver card",
+        "description": "Create new truck driver card",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "tags": [
+          "Trucks",
+          "SpecVehicleDataReceiver"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TruckDriverCard"
+              }
+            }
+          },
+          "description": "Payload",
+          "required": true
+        },
+        "parameters": [
+          {
+            "name": "truckId",
+            "required": true,
+            "in": "path",
+            "description": "truck ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created driver card",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TruckDriverCard"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trucks/{truckId}/driverCards/{driverCardId}": {
+      "delete": {
+        "operationId": "deleteTruckDriverCard",
+        "summary": "Deletes truck driver card",
+        "description": "Deletes single truck driver card. Cards are deleted when they are removed from the truck.",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "tags": [
+          "Trucks",
+          "SpecVehicleDataReceiver"
+        ],
+        "parameters": [
+          {
+            "name": "truckId",
+            "required": true,
+            "in": "path",
+            "description": "truck ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "driverCardId",
+            "required": true,
+            "in": "path",
+            "description": "driver card ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Empty response indicating successful removal"
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trucks/{truckId}/locations": {
+      "post": {
+        "operationId": "createTruckLocation",
+        "summary": "Create truck location",
+        "description": "Create new truck location. Used by vehicle data receiver to send truck location data.",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "tags": [
+          "Trucks",
+          "SpecVehicleDataReceiver"
+        ],
+        "parameters": [
+          {
+            "name": "truckId",
+            "required": true,
+            "in": "path",
+            "description": "truck id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TruckLocation"
+              }
+            }
+          },
+          "description": "Payload",
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Received data"
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "listTruckLocations",
+        "summary": "List Truck locations",
+        "description": "Lists Truck locations.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Trucks",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "truckId",
+            "required": true,
+            "in": "path",
+            "description": "truck id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "description": "Filter results after given date-time",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "description": "Filter results before given date-time",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "first",
+            "in": "query",
+            "description": "First result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "max",
+            "in": "query",
+            "description": "Max results.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of truck locations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TruckLocation"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trucks/{truckId}/speeds": {
+      "post": {
+        "operationId": "createTruckSpeed",
+        "summary": "Create truck speed",
+        "description": "Create new truck speed. Used by vehicle data receiver to send truck speed data.",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "tags": [
+          "Trucks",
+          "SpecVehicleDataReceiver"
+        ],
+        "parameters": [
+          {
+            "name": "truckId",
+            "required": true,
+            "in": "path",
+            "description": "truck id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TruckSpeed"
+              }
+            }
+          },
+          "description": "Payload",
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Received data"
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "listTruckSpeeds",
+        "summary": "List Truck speeds",
+        "description": "Lists Truck speeds.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Trucks",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "truckId",
+            "required": true,
+            "in": "path",
+            "description": "truck id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "description": "Filter results after given date-time",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "description": "Filter results before given date-time",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "first",
+            "in": "query",
+            "description": "First result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "max",
+            "in": "query",
+            "description": "Max results.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of truck speeds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TruckSpeed"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trucks/{truckId}/driveStates": {
+      "get": {
+        "operationId": "listDriveStates",
+        "summary": "List drive states.",
+        "description": "Lists drive states for truck.",
+        "security": [
+          {
+            "BearerAuth": [
+              "driver",
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Trucks",
+          "SpecApp",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "truckId",
+            "required": true,
+            "in": "path",
+            "description": "truck id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "driverId",
+            "in": "query",
+            "description": "Filter results by driver ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "description": "Filter results by driver state",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TruckDriveStateEnum"
+              }
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "description": "Filter results after given date-time",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "description": "Filter results before given date-time",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "first",
+            "in": "query",
+            "description": "First result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "max",
+            "in": "query",
+            "description": "Max results.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of drive states",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TruckDriveState"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createDriveState",
+        "summary": "Create drive state",
+        "description": "Create new drive state for truck",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "tags": [
+          "Trucks",
+          "SpecVehicleDataReceiver"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TruckDriveState"
+              }
+            }
+          },
+          "description": "Payload",
+          "required": true
+        },
+        "parameters": [
+          {
+            "name": "truckId",
+            "required": true,
+            "in": "path",
+            "description": "truck id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Created drive state"
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/towables": {
+      "get": {
+        "operationId": "listTowables",
+        "summary": "List Towables.",
+        "description": "Lists Towables.",
+        "security": [
+          {
+            "BearerAuth": [
+              "driver",
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Towables",
+          "SpecApp",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "plateNumber",
+            "in": "query",
+            "description": "Filter results by plate number",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "archived",
+            "in": "query",
+            "description": "Filter results by archived status",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "first",
+            "in": "query",
+            "description": "First result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "max",
+            "in": "query",
+            "description": "Max results.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of towables",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Towable"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createTowable",
+        "summary": "Create towable",
+        "description": "Create new towable",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Towables",
+          "SpecManagementUI"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Towable"
+              }
+            }
+          },
+          "description": "Payload",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Created towable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Towable"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/towables/{towableId}": {
+      "get": {
+        "operationId": "findTowable",
+        "summary": "Find a towable.",
+        "description": "Finds a towable by id.",
+        "security": [
+          {
+            "BearerAuth": [
+              "driver",
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Towables",
+          "SpecApp",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "towableId",
+            "required": true,
+            "in": "path",
+            "description": "towables id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found towable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Towable"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "updateTowable",
+        "summary": "Updates towables",
+        "description": "Updates single towable",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Towables",
+          "SpecManagementUI"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Towable"
+              }
+            }
+          },
+          "description": "Payload",
+          "required": true
+        },
+        "parameters": [
+          {
+            "name": "towableId",
+            "required": true,
+            "in": "path",
+            "description": "towable id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated towable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Towable"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteTowable",
+        "summary": "Deletes towable",
+        "description": "Deletes towable. For non-production use. Returns forbidden response in production environment.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Towables"
+        ],
+        "parameters": [
+          {
+            "name": "towableId",
+            "required": true,
+            "in": "path",
+            "description": "towable id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Empty response indicating successful removal"
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/vehicles": {
+      "get": {
+        "operationId": "listVehicles",
+        "summary": "List Vehicles.",
+        "description": "Lists Vehicles.",
+        "security": [
+          {
+            "BearerAuth": [
+              "driver",
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Vehicles",
+          "SpecApp",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "truckId",
+            "in": "query",
+            "description": "Filter results by truck id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "archived",
+            "in": "query",
+            "description": "Filter results by archived status",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "first",
+            "in": "query",
+            "description": "First result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "max",
+            "in": "query",
+            "description": "Max results.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of vehicles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vehicle"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createVehicle",
+        "summary": "Create vehicle",
+        "description": "Create new vehicle. Vehicles are the history of the combinations of towables behind a truck. When a vehicle structure needs to be updated, a new vehicle with updated structure should be created. This updates the active vehicle for the truck and archives the previous one.\n",
+        "security": [
+          {
+            "BearerAuth": [
+              "driver",
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Vehicles",
+          "SpecApp",
+          "SpecManagementUI"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Vehicle"
+              }
+            }
+          },
+          "description": "Payload",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Created vehicle",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vehicle"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/vehicles/{vehicleId}": {
+      "get": {
+        "operationId": "findVehicle",
+        "summary": "Find a vehicle.",
+        "description": "Finds a vehicle by id.",
+        "security": [
+          {
+            "BearerAuth": [
+              "driver",
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Vehicles",
+          "SpecApp",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "vehicleId",
+            "required": true,
+            "in": "path",
+            "description": "vehicles id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found vehicle",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vehicle"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteVehicle",
+        "summary": "Deletes vehicle",
+        "description": "Deletes vehicle. For non-production use. Returns forbidden response in production environment.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Vehicles"
+        ],
+        "parameters": [
+          {
+            "name": "vehicleId",
+            "required": true,
+            "in": "path",
+            "description": "vehicle id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Empty response indicating successful removal"
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "securitySchemes": {
-      "bearerAuth": {
+      "BearerAuth": {
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT"
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
       }
     },
     "schemas": {
@@ -326,7 +1560,7 @@
         "type": "object",
         "description": "Error object",
         "required": [
-          "code",
+          "status",
           "message"
         ],
         "properties": {
@@ -339,11 +1573,12 @@
           }
         }
       },
-      "Truck": {
+      "PublicTruck": {
         "type": "object",
-        "description": "Represent single truck",
+        "description": "Represent public info of single truck",
         "required": [
-          "plateNumber"
+          "plateNumber",
+          "vin"
         ],
         "properties": {
           "id": {
@@ -351,8 +1586,307 @@
             "format": "uuid",
             "readOnly": true
           },
+          "name": {
+            "type": "string"
+          },
           "plateNumber": {
             "type": "string"
+          },
+          "vin": {
+            "type": "string",
+            "description": "Truck identification number. This is unique for each truck and should be used as a hardware identifier for this specific truck.\n"
+          }
+        }
+      },
+      "Truck": {
+        "type": "object",
+        "description": "Represent single truck",
+        "required": [
+          "plateNumber",
+          "type",
+          "vin"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "plateNumber": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "TRUCK",
+              "SEMI_TRUCK"
+            ]
+          },
+          "vin": {
+            "type": "string",
+            "description": "Truck identification number. This is unique for each truck and should be used as a hardware identifier for this specific truck.\n"
+          },
+          "activeVehicleId": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true,
+            "description": "Active vehicle id. This is the current vehicle that the truck is part of. It updates whenever the vehicle structure is updated.\n"
+          },
+          "creatorId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "lastModifierId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "modifiedAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "archivedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Setting the archivedAt time marks the truck as archived. Trucks marked as archived will not appear in list requests unless archived filter is set to true. Archived truck cannot be updated, unless archivedAt is first set to null.\n"
+          }
+        }
+      },
+      "Towable": {
+        "type": "object",
+        "description": "Represent single towable",
+        "required": [
+          "plateNumber",
+          "type",
+          "vin"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "plateNumber": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "TRAILER",
+              "SEMI_TRAILER",
+              "DOLLY"
+            ]
+          },
+          "vin": {
+            "type": "string",
+            "description": "Towable identification number. This is unique for each towable and should be used as a hardware identifier for this specific towable.\n"
+          },
+          "creatorId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "lastModifierId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "modifiedAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "archivedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Setting the archivedAt time marks the towable as archived. Towables marked as archived will not appear in list requests unless archived filter is set to true. Archived towable cannot be updated, unless archivedAt is first set to null.\n"
+          }
+        }
+      },
+      "Vehicle": {
+        "type": "object",
+        "description": "Represent single vehicle",
+        "required": [
+          "truckId",
+          "towableIds"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "truckId": {
+            "type": "string",
+            "description": "Truck that towing the vehicle",
+            "format": "uuid"
+          },
+          "towableIds": {
+            "type": "array",
+            "description": "List of attached towables to vehicle. Order of towables should reflect the order of towables in the vehicle where first towable is the closest to the truck.\n",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "creatorId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "lastModifierId": {
+            "type": "string",
+            "readOnly": true,
+            "format": "uuid"
+          },
+          "modifiedAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "archivedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Setting the archivedAt time marks the vehicle as archived. Vehicles marked as archived will not appear in list requests unless archived filter is set to true. Archived vehicle cannot be updated, unless archivedAt is first set to null.\n"
+          }
+        }
+      },
+      "TruckDriveState": {
+        "type": "object",
+        "required": [
+          "timestamp",
+          "state"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true,
+            "description": "Truck drive state ID"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Timestamp for truck drive state"
+          },
+          "state": {
+            "$ref": "#/components/schemas/TruckDriveStateEnum"
+          },
+          "driverId": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true,
+            "description": "Driver ID."
+          },
+          "driverCardId": {
+            "type": "string",
+            "description": "Driver card ID. This is used to identify the driver when creating a new drive state."
+          }
+        }
+      },
+      "TruckDriveStateEnum": {
+        "type": "string",
+        "enum": [
+          "REST",
+          "DRIVER_AVAILABLE",
+          "WORK",
+          "DRIVE",
+          "ERROR",
+          "NOT_AVAILABLE"
+        ]
+      },
+      "TruckLocation": {
+        "type": "object",
+        "required": [
+          "timestamp",
+          "latitude",
+          "longitude",
+          "heading"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Timestamp for truck speed"
+          },
+          "latitude": {
+            "type": "number",
+            "format": "double",
+            "description": "Latitude in degrees."
+          },
+          "longitude": {
+            "type": "number",
+            "format": "double",
+            "description": "Longitude in degrees."
+          },
+          "heading": {
+            "type": "number",
+            "format": "double",
+            "description": "heading in degrees."
+          }
+        }
+      },
+      "TruckSpeed": {
+        "type": "object",
+        "required": [
+          "timestamp",
+          "speed"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true,
+            "description": "Truck speed ID"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Timestamp for truck speed. Unix timestamp in milliseconds."
+          },
+          "speed": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "TruckDriverCard": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Driver card ID"
           }
         }
       }

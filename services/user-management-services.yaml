@@ -1,0 +1,158 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: VP-Kuljetus User Management Services
+
+security:
+  - BearerAuth: [driver, manager]
+
+x-tyk-api-gateway:
+  info:
+    id: user-management-services
+    orgId: vp
+    name: User Management Services
+    state:
+      active: true
+  upstream:
+    url: http://user-management
+  server:
+    listenPath:
+      value: /user-management/
+      strip: true
+
+paths:
+  /v1/system/ping:
+    get:
+      operationId: ping
+      summary: Replies with pong
+      description: Replies ping with pong
+      security: []
+      tags:
+        - System
+      responses:
+        "200":
+          description: Pong
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /v1/drivers:
+    get:
+      operationId: listDrivers
+      summary: List Drivers.
+      description: Lists Drivers.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - Drivers
+        - SpecManagementUI
+      parameters:
+        - name: driverCardId
+          in: query
+          description: Filter drivers by driver card ID. Will return 0 to 1 drivers.
+          schema:
+            type: string
+        - name: archived
+          in: query
+          description: Filter drivers by archived status
+          schema:
+            type: boolean
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of routes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Driver"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  "/v1/drivers/{driverId}":
+    get:
+      operationId: findDriver
+      summary: Find a driver.
+      description: Finds a driver by id.
+      security:
+        - BearerAuth: [driver, manager]
+      tags:
+        - Drivers
+        - SpecApp
+        - SpecManagementUI
+      parameters:
+        - name: driverId
+          required: true
+          in: path
+          description: driver's id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found driver
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Driver"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Error:
+      type: object
+      description: Error object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+
+    Driver:
+      type: object
+      description: Represents single truck driver
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        displayName:
+          type: string
+          description: Driver display name
+        archivedAt:
+          type: string
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the driver as archived.
+            Drivers marked as archived will not appear in list requests unless archived filter is set to true.
+            Archived driver cannot be updated, unless archivedAt is first set to null.

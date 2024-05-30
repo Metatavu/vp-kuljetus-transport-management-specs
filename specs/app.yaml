@@ -3,23 +3,76 @@ info:
   title: Vehicle Management Services (app)
   description: Vehicle Management Services (app)
   version: 1.0.0
+security:
+  - BearerAuth:
+      - driver
+      - manager
 paths:
-  /v1/trucks:
+  /vehicle-management/v1/publicTrucks:
+    get:
+      operationId: listPublicTrucks
+      summary: List PublicTrucks.
+      description: Lists public info about each truck.
+      security:
+        - ApiKeyAuth: []
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - PublicTrucks
+      parameters:
+        - name: vin
+          in: query
+          description: Filter results by vin
+          schema:
+            type: string
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of trucks with only public info
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PublicTruck"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/trucks:
     get:
       operationId: listTrucks
       summary: List Trucks.
       description: Lists Trucks.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Trucks
-        - SpecApp
-        - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: plateNumber
           in: query
           description: Filter results by plate number
           schema:
             type: string
+        - name: archived
+          in: query
+          description: Filter results by archived status
+          schema:
+            type: boolean
         - name: first
           in: query
           description: First result.
@@ -45,16 +98,17 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /v1/trucks/{truckId}:
+  /vehicle-management/v1/trucks/{truckId}:
     get:
       operationId: findTruck
       summary: Find a truck.
       description: Finds a truck by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Trucks
-        - SpecApp
-        - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: truckId
           required: true
@@ -76,20 +130,283 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /v1/routes:
+  /vehicle-management/v1/trucks/{truckId}/driveStates:
+    get:
+      operationId: listDriveStates
+      summary: List drive states.
+      description: Lists drive states for truck.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - Trucks
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck id
+          schema:
+            type: string
+            format: uuid
+        - name: driverId
+          in: query
+          description: Filter results by driver ID
+          schema:
+            type: string
+            format: uuid
+        - name: state
+          in: query
+          description: Filter results by driver state
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/TruckDriveStateEnum"
+        - name: after
+          in: query
+          description: Filter results after given date-time
+          schema:
+            type: string
+            format: date-time
+        - name: before
+          in: query
+          description: Filter results before given date-time
+          schema:
+            type: string
+            format: date-time
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of drive states
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TruckDriveState"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/towables:
+    get:
+      operationId: listTowables
+      summary: List Towables.
+      description: Lists Towables.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - Towables
+      parameters:
+        - name: plateNumber
+          in: query
+          description: Filter results by plate number
+          schema:
+            type: string
+        - name: archived
+          in: query
+          description: Filter results by archived status
+          schema:
+            type: boolean
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of towables
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Towable"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/towables/{towableId}:
+    get:
+      operationId: findTowable
+      summary: Find a towable.
+      description: Finds a towable by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - Towables
+      parameters:
+        - name: towableId
+          required: true
+          in: path
+          description: towables id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found towable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Towable"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/vehicles:
+    get:
+      operationId: listVehicles
+      summary: List Vehicles.
+      description: Lists Vehicles.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - Vehicles
+      parameters:
+        - name: truckId
+          in: query
+          description: Filter results by truck id
+          schema:
+            type: string
+            format: uuid
+        - name: archived
+          in: query
+          description: Filter results by archived status
+          schema:
+            type: boolean
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of vehicles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Vehicle"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createVehicle
+      summary: Create vehicle
+      description: >
+        Create new vehicle. Vehicles are the history of the combinations of
+        towables behind a truck. When a vehicle structure needs to be updated, a
+        new vehicle with updated structure should be created. This updates the
+        active vehicle for the truck and archives the previous one.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - Vehicles
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Vehicle"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created vehicle
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/vehicles/{vehicleId}:
+    get:
+      operationId: findVehicle
+      summary: Find a vehicle.
+      description: Finds a vehicle by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - Vehicles
+      parameters:
+        - name: vehicleId
+          required: true
+          in: path
+          description: vehicles id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found vehicle
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /work-planning/v1/routes:
     get:
       operationId: listRoutes
       summary: List Routes.
       description: Lists Routes.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Routes
-        - SpecManagementUI
-        - SpecApp
-        - SpecExternal
       parameters:
-        - name: vehicleId
+        - name: truckId
           in: query
-          description: Filter results by vehicle id
+          description: Filter results by truck id
           schema:
             type: string
             format: uuid
@@ -99,6 +416,18 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: departureAfter
+          in: query
+          description: Filter results by departure time same or after this time
+          schema:
+            type: string
+            format: date-time
+        - name: departureBefore
+          in: query
+          description: Filter results by departure time before this time
+          schema:
+            type: string
+            format: date-time
         - name: first
           in: query
           description: First result.
@@ -124,16 +453,17 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /v1/routes/{routeId}:
+  /work-planning/v1/routes/{routeId}:
     get:
       operationId: findRoute
       summary: Find a route.
       description: Finds a route by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Routes
-        - SpecApp
-        - SpecManagementUI
-        - SpecExternal
       parameters:
         - name: routeId
           required: true
@@ -155,13 +485,492 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /user-management/v1/drivers/{driverId}:
+    get:
+      operationId: findDriver
+      summary: Find a driver.
+      description: Finds a driver by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - Drivers
+      parameters:
+        - name: driverId
+          required: true
+          in: path
+          description: driver's id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found driver
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Driver"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /delivery-info/v1/sites:
+    get:
+      operationId: listSites
+      summary: List Sites.
+      description: Lists Sites.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - Sites
+      parameters:
+        - name: archived
+          in: query
+          description: Filter sites by archived status
+          schema:
+            type: boolean
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of sites
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Site"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /delivery-info/v1/sites/{siteId}:
+    get:
+      operationId: findSite
+      summary: Find a site.
+      description: Finds a site by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - Sites
+      parameters:
+        - name: siteId
+          required: true
+          in: path
+          description: site id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found site
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Site"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /delivery-info/v1/tasks:
+    get:
+      operationId: listTasks
+      summary: List Tasks.
+      description: Lists Tasks.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - Tasks
+      parameters:
+        - name: routeId
+          in: query
+          description: Route id
+          schema:
+            type: string
+            format: uuid
+        - name: assignedToRoute
+          in: query
+          description: Has been assigned to a route. Should not be used together with
+            routeId.
+          schema:
+            type: boolean
+        - name: freightId
+          in: query
+          description: Freight id
+          schema:
+            type: string
+            format: uuid
+        - name: customerSiteId
+          in: query
+          description: Customer site id
+          schema:
+            type: string
+            format: uuid
+        - name: type
+          in: query
+          description: Task type
+          schema:
+            $ref: "#/components/schemas/TaskType"
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Task"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /delivery-info/v1/tasks/{taskId}:
+    get:
+      operationId: findTask
+      summary: Find a task.
+      description: Finds a task by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - Tasks
+      parameters:
+        - name: taskId
+          required: true
+          in: path
+          description: task id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found task
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateTask
+      summary: Updates task
+      description: Updates single task
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - Tasks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Task"
+        description: Payload
+        required: true
+      parameters:
+        - name: taskId
+          required: true
+          in: path
+          description: task id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated task
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /delivery-info/v1/freights:
+    get:
+      operationId: listFreights
+      summary: List Freights.
+      description: Lists Freights.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - Freights
+      parameters:
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of freights
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Freight"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /delivery-info/v1/freights/{freightId}:
+    get:
+      operationId: findFreight
+      summary: Find a freight.
+      description: Finds a freight by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - Freights
+      parameters:
+        - name: freightId
+          required: true
+          in: path
+          description: freight id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found freight
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Freight"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /delivery-info/v1/freightUnits:
+    get:
+      operationId: listFreightUnits
+      summary: List FreightUnits.
+      description: Lists FreightUnits.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - FreightUnits
+      parameters:
+        - name: freightId
+          in: query
+          description: Freight id
+          schema:
+            type: string
+            format: uuid
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of freight units
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FreightUnit"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createFreightUnit
+      summary: Create freight unit
+      description: Create new freight unit
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - FreightUnits
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FreightUnit"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created freight unit
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FreightUnit"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /delivery-info/v1/freightUnits/{freightUnitId}:
+    get:
+      operationId: findFreightUnit
+      summary: Find a freight unit.
+      description: Finds a freight unit by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - FreightUnits
+      parameters:
+        - name: freightUnitId
+          required: true
+          in: path
+          description: freight unit id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found freight unit
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FreightUnit"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateFreightUnit
+      summary: Updates freight unit
+      description: Updates single freight unit
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - FreightUnits
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FreightUnit"
+        description: Payload
+        required: true
+      parameters:
+        - name: freightUnitId
+          required: true
+          in: path
+          description: freight unit id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated freight unit
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FreightUnit"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
+    PublicTruck:
+      type: object
+      description: Represent public info of single truck
+      required:
+        - plateNumber
+        - vin
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+        plateNumber:
+          type: string
+        vin:
+          type: string
+          description: >
+            Truck identification number. This is unique for each truck and
+            should be used as a hardware identifier for this specific truck.
     Error:
       type: object
       description: Error object
       required:
-        - code
+        - status
         - message
       properties:
         status:
@@ -174,26 +983,508 @@ components:
       description: Represent single truck
       required:
         - plateNumber
+        - type
+        - vin
       properties:
         id:
           type: string
           format: uuid
           readOnly: true
+        name:
+          type: string
         plateNumber:
           type: string
+        type:
+          type: string
+          enum:
+            - TRUCK
+            - SEMI_TRUCK
+        vin:
+          type: string
+          description: >
+            Truck identification number. This is unique for each truck and
+            should be used as a hardware identifier for this specific truck.
+        activeVehicleId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: >
+            Active vehicle id. This is the current vehicle that the truck is
+            part of. It updates whenever the vehicle structure is updated.
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
+        archivedAt:
+          type: string
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the truck as archived. Trucks
+            marked as archived will not appear in list requests unless archived
+            filter is set to true. Archived truck cannot be updated, unless
+            archivedAt is first set to null.
+    TruckDriveState:
+      type: object
+      required:
+        - timestamp
+        - state
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Truck drive state ID
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp for truck drive state
+        state:
+          $ref: "#/components/schemas/TruckDriveStateEnum"
+        driverId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Driver ID.
+        driverCardId:
+          type: string
+          description: Driver card ID. This is used to identify the driver when creating a
+            new drive state.
+    Towable:
+      type: object
+      description: Represent single towable
+      required:
+        - plateNumber
+        - type
+        - vin
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+        plateNumber:
+          type: string
+        type:
+          type: string
+          enum:
+            - TRAILER
+            - SEMI_TRAILER
+            - DOLLY
+        vin:
+          type: string
+          description: >
+            Towable identification number. This is unique for each towable and
+            should be used as a hardware identifier for this specific towable.
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
+        archivedAt:
+          type: string
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the towable as archived. Towables
+            marked as archived will not appear in list requests unless archived
+            filter is set to true. Archived towable cannot be updated, unless
+            archivedAt is first set to null.
+    Vehicle:
+      type: object
+      description: Represent single vehicle
+      required:
+        - truckId
+        - towableIds
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        truckId:
+          type: string
+          description: Truck that towing the vehicle
+          format: uuid
+        towableIds:
+          type: array
+          description: >
+            List of attached towables to vehicle. Order of towables should
+            reflect the order of towables in the vehicle where first towable is
+            the closest to the truck.
+          items:
+            type: string
+            format: uuid
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
+        archivedAt:
+          type: string
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the vehicle as archived. Vehicles
+            marked as archived will not appear in list requests unless archived
+            filter is set to true. Archived vehicle cannot be updated, unless
+            archivedAt is first set to null.
+    TruckDriveStateEnum:
+      type: string
+      enum:
+        - REST
+        - DRIVER_AVAILABLE
+        - WORK
+        - DRIVE
+        - ERROR
+        - NOT_AVAILABLE
     Route:
       type: object
       description: Represent single planned route for single truck driver
+      required:
+        - name
+        - departureTime
       properties:
         id:
           type: string
           format: uuid
           readOnly: true
-        vehicleId:
+        truckId:
           type: string
           format: uuid
-          description: Vehicle id
+          description: Truck id
         driverId:
           type: string
           format: uuid
           description: Driver id
+        name:
+          type: string
+          description: Name of the route
+        departureTime:
+          type: string
+          format: date-time
+          description: Departure time of the route
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
+    Driver:
+      type: object
+      description: Represents single truck driver
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        displayName:
+          type: string
+          description: Driver display name
+        archivedAt:
+          type: string
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the driver as archived. Drivers
+            marked as archived will not appear in list requests unless archived
+            filter is set to true. Archived driver cannot be updated, unless
+            archivedAt is first set to null.
+    Site:
+      type: object
+      description: Represents a single customer site
+      required:
+        - name
+        - location
+        - address
+        - postalCode
+        - locality
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          description: Site name
+        location:
+          type: string
+          format: wkt
+          description: Site location as well-known text Point
+        address:
+          type: string
+          description: Address of the site
+        postalCode:
+          type: string
+          description: Postal code of the site
+        locality:
+          type: string
+          description: Locality of the site
+        additionalInfo:
+          type: string
+          description: >
+            additional information about the site, e.g. delivery instructions.
+            This is shown in the task for the driver.
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
+        archivedAt:
+          type: string
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the site as archived. Sites marked
+            as archived will not appear in list requests unless archived filter
+            is set to true. Archived site cannot be updated, unless archivedAt
+            is first set to null.
+    Task:
+      type: object
+      description: Represent single task for freight
+      required:
+        - freightId
+        - customerSiteId
+        - type
+        - groupNumber
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        freightId:
+          type: string
+          format: uuid
+          description: Freight id
+        customerSiteId:
+          type: string
+          format: uuid
+          description: Customer site id
+        type:
+          $ref: "#/components/schemas/TaskType"
+        groupNumber:
+          type: integer
+          description: >
+            Group number of the task. Gets a value of 0 by default. Can be
+            updated from the management UI. All tasks with the same freightId,
+            customerSiteId, type and group number are shown as grouped together
+            in the driver app.
+        orderNumber:
+          type: integer
+          description: >
+            Order number of the task. Tasks have order numbers when being part
+            of a route (having a routeId). Unallocated tasks (not having a
+            routeId) do not have order numbers. When creating/updating a route
+            with a routeId, the order number MUST also be in place. Negative
+            order numbers are not allowed. If a number higher than the current
+            amount of tasks in the route is used, it will be silently updated to
+            be one higher than the current maximum. When either routeId or
+            orderNumber is updated to a task, order numbers of other tasks with
+            the same routeId are also updated accordingly. This means all of the
+            tasks in a route should be reloaded when order number of a single
+            task is updated. When updating a task to have an order number that
+            already exists in the same route, the existing task is placed after
+            the updated task. Tasks are also displayed as grouped, when they
+            have the same routeId, customerSiteId, type and groupNumber. Order
+            of tasks inside a group does not matter, so a new task added to the
+            group will be the last task in the group. When order is updated, the
+            grouping should be taken into account in order numbers. All of the
+            grouped tasks should be next to each other. A task after the grouped
+            tasks should have the next order number from the highest one of the
+            group.
+        status:
+          $ref: "#/components/schemas/TaskStatus"
+        remarks:
+          type: string
+          description: Task remarks
+        routeId:
+          type: string
+          format: uuid
+          description: Route id
+        startedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          description: >
+            Time the task was started at. Filled when task status is changed
+            from TODO to IN_PROGRESS.
+        finishedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          description: >
+            Time the task was finished at. Filled when task status is changed
+            from IN_PROGRESS to DONE.
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
+    Freight:
+      type: object
+      description: Represents a single freight shipment, aka. waybill.
+      required:
+        - senderSiteId
+        - recipientSiteId
+        - pointOfDepartureSiteId
+        - destinationSiteId
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        freightNumber:
+          type: integer
+          readOnly: true
+          description: Freight number. Unique and auto-incremented.
+        senderSiteId:
+          type: string
+          format: uuid
+          description: Shipment sender site
+        recipientSiteId:
+          type: string
+          format: uuid
+          description: Shipment receiver site
+        pointOfDepartureSiteId:
+          type: string
+          format: uuid
+          description: Point of departure site
+        destinationSiteId:
+          type: string
+          format: uuid
+          description: Point of arrival site
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
+    FreightUnit:
+      type: object
+      description: Represents a single freight unit in a freight shipment.
+      required:
+        - freightId
+        - type
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        freightId:
+          type: string
+          format: uuid
+          description: Id of the freight shipment
+        type:
+          type: string
+          description: Type of the unit
+        quantity:
+          type: number
+          format: double
+          description: Quantity of the unit, can be a decimal number
+        contents:
+          type: string
+          description: Description of contents of the unit
+        reservations:
+          type: string
+          description: Reservations for the unit
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
+    TaskType:
+      type: string
+      description: Type of the task
+      enum:
+        - UNLOAD
+        - LOAD
+    TaskStatus:
+      type: string
+      description: Status of the task
+      enum:
+        - TODO
+        - IN_PROGRESS
+        - DONE

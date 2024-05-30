@@ -1,10 +1,10 @@
 {
-  "name": "VP-Kuljetus Vehicle Management Services",
+  "name": "VP-Kuljetus Delivery Info Services",
   "slug": "",
   "listen_port": 0,
   "protocol": "",
   "enable_proxy_protocol": false,
-  "api_id": "vehicle-management-service",
+  "api_id": "delivery-info-services",
   "org_id": "vp",
   "use_keyless": true,
   "use_oauth2": false,
@@ -121,11 +121,135 @@
           "white_list": [
             {
               "disabled": false,
-              "path": "/v1/publicTrucks",
+              "path": "/v1/freights",
               "method": "",
               "ignore_case": false,
               "method_actions": {
                 "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "POST": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/freights/{freightId}",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "DELETE": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "PUT": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/freightUnits",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "POST": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/freightUnits/{freightUnitId}",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "DELETE": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "PUT": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/sites",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "POST": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/sites/{siteId}",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "DELETE": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "PUT": {
                   "action": "no_action",
                   "code": 200,
                   "data": "",
@@ -149,7 +273,7 @@
             },
             {
               "disabled": false,
-              "path": "/v1/towables",
+              "path": "/v1/tasks",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -169,7 +293,7 @@
             },
             {
               "disabled": false,
-              "path": "/v1/towables/{towableId}",
+              "path": "/v1/tasks/{taskId}",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -186,186 +310,6 @@
                   "headers": null
                 },
                 "PUT": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                }
-              }
-            },
-            {
-              "disabled": false,
-              "path": "/v1/trucks",
-              "method": "",
-              "ignore_case": false,
-              "method_actions": {
-                "GET": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                },
-                "POST": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                }
-              }
-            },
-            {
-              "disabled": false,
-              "path": "/v1/trucks/{truckId}",
-              "method": "",
-              "ignore_case": false,
-              "method_actions": {
-                "DELETE": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                },
-                "GET": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                },
-                "PUT": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                }
-              }
-            },
-            {
-              "disabled": false,
-              "path": "/v1/trucks/{truckId}/driverCards",
-              "method": "",
-              "ignore_case": false,
-              "method_actions": {
-                "GET": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                },
-                "POST": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                }
-              }
-            },
-            {
-              "disabled": false,
-              "path": "/v1/trucks/{truckId}/driverCards/{driverCardId}",
-              "method": "",
-              "ignore_case": false,
-              "method_actions": {
-                "DELETE": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                }
-              }
-            },
-            {
-              "disabled": false,
-              "path": "/v1/trucks/{truckId}/driveStates",
-              "method": "",
-              "ignore_case": false,
-              "method_actions": {
-                "GET": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                },
-                "POST": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                }
-              }
-            },
-            {
-              "disabled": false,
-              "path": "/v1/trucks/{truckId}/locations",
-              "method": "",
-              "ignore_case": false,
-              "method_actions": {
-                "GET": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                },
-                "POST": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                }
-              }
-            },
-            {
-              "disabled": false,
-              "path": "/v1/trucks/{truckId}/speeds",
-              "method": "",
-              "ignore_case": false,
-              "method_actions": {
-                "GET": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                },
-                "POST": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                }
-              }
-            },
-            {
-              "disabled": false,
-              "path": "/v1/vehicles",
-              "method": "",
-              "ignore_case": false,
-              "method_actions": {
-                "GET": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                },
-                "POST": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                }
-              }
-            },
-            {
-              "disabled": false,
-              "path": "/v1/vehicles/{vehicleId}",
-              "method": "",
-              "ignore_case": false,
-              "method_actions": {
-                "DELETE": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                },
-                "GET": {
                   "action": "no_action",
                   "code": 200,
                   "data": "",
@@ -376,104 +320,88 @@
           ],
           "track_endpoints": [
             {
-              "path": "/v1/publicTrucks",
+              "path": "/v1/freights",
               "method": "GET"
+            },
+            {
+              "path": "/v1/freights",
+              "method": "POST"
+            },
+            {
+              "path": "/v1/freights/{freightId}",
+              "method": "DELETE"
+            },
+            {
+              "path": "/v1/freights/{freightId}",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/freights/{freightId}",
+              "method": "PUT"
+            },
+            {
+              "path": "/v1/freightUnits",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/freightUnits",
+              "method": "POST"
+            },
+            {
+              "path": "/v1/freightUnits/{freightUnitId}",
+              "method": "DELETE"
+            },
+            {
+              "path": "/v1/freightUnits/{freightUnitId}",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/freightUnits/{freightUnitId}",
+              "method": "PUT"
+            },
+            {
+              "path": "/v1/sites",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/sites",
+              "method": "POST"
+            },
+            {
+              "path": "/v1/sites/{siteId}",
+              "method": "DELETE"
+            },
+            {
+              "path": "/v1/sites/{siteId}",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/sites/{siteId}",
+              "method": "PUT"
             },
             {
               "path": "/v1/system/ping",
               "method": "GET"
             },
             {
-              "path": "/v1/towables",
+              "path": "/v1/tasks",
               "method": "GET"
             },
             {
-              "path": "/v1/towables",
+              "path": "/v1/tasks",
               "method": "POST"
             },
             {
-              "path": "/v1/towables/{towableId}",
+              "path": "/v1/tasks/{taskId}",
               "method": "DELETE"
             },
             {
-              "path": "/v1/towables/{towableId}",
+              "path": "/v1/tasks/{taskId}",
               "method": "GET"
             },
             {
-              "path": "/v1/towables/{towableId}",
+              "path": "/v1/tasks/{taskId}",
               "method": "PUT"
-            },
-            {
-              "path": "/v1/trucks",
-              "method": "GET"
-            },
-            {
-              "path": "/v1/trucks",
-              "method": "POST"
-            },
-            {
-              "path": "/v1/trucks/{truckId}",
-              "method": "DELETE"
-            },
-            {
-              "path": "/v1/trucks/{truckId}",
-              "method": "GET"
-            },
-            {
-              "path": "/v1/trucks/{truckId}",
-              "method": "PUT"
-            },
-            {
-              "path": "/v1/trucks/{truckId}/driverCards",
-              "method": "GET"
-            },
-            {
-              "path": "/v1/trucks/{truckId}/driverCards",
-              "method": "POST"
-            },
-            {
-              "path": "/v1/trucks/{truckId}/driverCards/{driverCardId}",
-              "method": "DELETE"
-            },
-            {
-              "path": "/v1/trucks/{truckId}/driveStates",
-              "method": "GET"
-            },
-            {
-              "path": "/v1/trucks/{truckId}/driveStates",
-              "method": "POST"
-            },
-            {
-              "path": "/v1/trucks/{truckId}/locations",
-              "method": "GET"
-            },
-            {
-              "path": "/v1/trucks/{truckId}/locations",
-              "method": "POST"
-            },
-            {
-              "path": "/v1/trucks/{truckId}/speeds",
-              "method": "GET"
-            },
-            {
-              "path": "/v1/trucks/{truckId}/speeds",
-              "method": "POST"
-            },
-            {
-              "path": "/v1/vehicles",
-              "method": "GET"
-            },
-            {
-              "path": "/v1/vehicles",
-              "method": "POST"
-            },
-            {
-              "path": "/v1/vehicles/{vehicleId}",
-              "method": "DELETE"
-            },
-            {
-              "path": "/v1/vehicles/{vehicleId}",
-              "method": "GET"
             }
           ],
           "persist_graphql": null
@@ -510,8 +438,8 @@
   },
   "proxy": {
     "preserve_host_header": false,
-    "listen_path": "/vehicle-management/",
-    "target_url": "http://vehicle-management",
+    "listen_path": "/delivery-info/",
+    "target_url": "http://delivery-info",
     "disable_strip_slash": false,
     "strip_listen_path": true,
     "enable_load_balancing": false,
