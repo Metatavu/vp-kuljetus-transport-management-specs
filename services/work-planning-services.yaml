@@ -165,7 +165,7 @@ paths:
       summary: Updates routes
       description: Updates single route
       security:
-        - BearerAuth: [manager]
+        - BearerAuth: [driver, manager]
       tags:
         - Routes
         - SpecApp

@@ -491,6 +491,7 @@ paths:
       description: Updates single route
       security:
         - BearerAuth:
+            - driver
             - manager
       tags:
         - Routes
