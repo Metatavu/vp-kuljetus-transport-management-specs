@@ -266,12 +266,14 @@
         "security": [
           {
             "BearerAuth": [
+              "driver",
               "manager"
             ]
           }
         ],
         "tags": [
           "Routes",
+          "SpecApp",
           "SpecManagementUI"
         ],
         "requestBody": {
