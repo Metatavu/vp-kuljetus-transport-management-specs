@@ -171,6 +171,22 @@
             }
           },
           {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Sort results by field",
+            "schema": {
+              "$ref": "#/components/schemas/TruckSortByField"
+            }
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "description": "Sort direction",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "first",
             "in": "query",
             "description": "First result.",
@@ -1889,6 +1905,13 @@
             "description": "Driver card ID"
           }
         }
+      },
+      "TruckSortByField": {
+        "type": "string",
+        "enum": [
+          "NAME",
+          "PLATE_NUMBER"
+        ]
       }
     }
   }

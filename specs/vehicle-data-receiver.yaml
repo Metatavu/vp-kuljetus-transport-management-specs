@@ -259,6 +259,11 @@ components:
           format: int32
         message:
           type: string
+    TruckSortByField:
+      type: string
+      enum:
+        - NAME
+        - PLATE_NUMBER
     TruckDriverCard:
       type: object
       required:
@@ -313,6 +318,15 @@ components:
         speed:
           type: number
           format: float
+    TruckDriveStateEnum:
+      type: string
+      enum:
+        - REST
+        - DRIVER_AVAILABLE
+        - WORK
+        - DRIVE
+        - ERROR
+        - NOT_AVAILABLE
     TruckDriveState:
       type: object
       required:
@@ -339,12 +353,9 @@ components:
           type: string
           description: Driver card ID. This is used to identify the driver when creating a
             new drive state.
-    TruckDriveStateEnum:
+    TaskType:
       type: string
+      description: Type of the task
       enum:
-        - REST
-        - DRIVER_AVAILABLE
-        - WORK
-        - DRIVE
-        - ERROR
-        - NOT_AVAILABLE
+        - UNLOAD
+        - LOAD
