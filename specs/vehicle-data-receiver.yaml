@@ -264,6 +264,11 @@ components:
       enum:
         - NAME
         - PLATE_NUMBER
+    SortOrder:
+      type: string
+      enum:
+        - ASCENDING
+        - DESCENDING
     TruckDriverCard:
       type: object
       required:

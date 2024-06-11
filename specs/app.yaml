@@ -82,7 +82,7 @@ paths:
           in: query
           description: Sort direction
           schema:
-            type: string
+            $ref: "#/components/schemas/SortOrder"
         - name: first
           in: query
           description: First result.
@@ -993,6 +993,11 @@ components:
       enum:
         - NAME
         - PLATE_NUMBER
+    SortOrder:
+      type: string
+      enum:
+        - ASCENDING
+        - DESCENDING
     Truck:
       type: object
       description: Represent single truck

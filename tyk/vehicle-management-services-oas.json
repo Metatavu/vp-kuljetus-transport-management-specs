@@ -183,7 +183,7 @@
             "in": "query",
             "description": "Sort direction",
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/SortOrder"
             }
           },
           {
@@ -1911,6 +1911,13 @@
         "enum": [
           "NAME",
           "PLATE_NUMBER"
+        ]
+      },
+      "SortOrder": {
+        "type": "string",
+        "enum": [
+          "ASCENDING",
+          "DESCENDING"
         ]
       }
     }
