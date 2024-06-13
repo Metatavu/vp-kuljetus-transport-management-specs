@@ -795,6 +795,7 @@ paths:
       security:
         - BearerAuth:
             - manager
+        - ApiKeyAuth: []
       tags:
         - Drivers
       parameters:

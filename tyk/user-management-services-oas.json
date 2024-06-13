@@ -10,6 +10,9 @@
         "driver",
         "manager"
       ]
+    },
+    {
+      "ApiKeyAuth": []
     }
   ],
   "x-tyk-api-gateway": {
@@ -68,6 +71,9 @@
             "BearerAuth": [
               "manager"
             ]
+          },
+          {
+            "ApiKeyAuth": []
           }
         ],
         "tags": [
@@ -196,6 +202,11 @@
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT"
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
       }
     },
     "schemas": {
