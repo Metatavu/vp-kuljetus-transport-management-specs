@@ -30,6 +30,16 @@ paths:
           description: Filter results by archived status
           schema:
             type: boolean
+        - name: sortBy
+          in: query
+          description: Sort results by field
+          schema:
+            $ref: "#/components/schemas/TruckSortByField"
+        - name: sortDirection
+          in: query
+          description: Sort direction
+          schema:
+            $ref: "#/components/schemas/SortOrder"
         - name: first
           in: query
           description: First result.
@@ -1523,6 +1533,16 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
+    TruckSortByField:
+      type: string
+      enum:
+        - NAME
+        - PLATE_NUMBER
+    SortOrder:
+      type: string
+      enum:
+        - ASCENDING
+        - DESCENDING
     Truck:
       type: object
       description: Represent single truck
@@ -1638,6 +1658,15 @@ components:
         speed:
           type: number
           format: float
+    TruckDriveStateEnum:
+      type: string
+      enum:
+        - REST
+        - DRIVER_AVAILABLE
+        - WORK
+        - DRIVE
+        - ERROR
+        - NOT_AVAILABLE
     TruckDriveState:
       type: object
       required:
@@ -1763,15 +1792,6 @@ components:
             marked as archived will not appear in list requests unless archived
             filter is set to true. Archived vehicle cannot be updated, unless
             archivedAt is first set to null.
-    TruckDriveStateEnum:
-      type: string
-      enum:
-        - REST
-        - DRIVER_AVAILABLE
-        - WORK
-        - DRIVE
-        - ERROR
-        - NOT_AVAILABLE
     Route:
       type: object
       description: Represent single planned route for single truck driver
@@ -1892,6 +1912,12 @@ components:
             as archived will not appear in list requests unless archived filter
             is set to true. Archived site cannot be updated, unless archivedAt
             is first set to null.
+    TaskType:
+      type: string
+      description: Type of the task
+      enum:
+        - UNLOAD
+        - LOAD
     Task:
       type: object
       description: Represent single task for freight
@@ -2078,12 +2104,6 @@ components:
           format: date-time
           type: string
           readOnly: true
-    TaskType:
-      type: string
-      description: Type of the task
-      enum:
-        - UNLOAD
-        - LOAD
     TaskStatus:
       type: string
       description: Status of the task

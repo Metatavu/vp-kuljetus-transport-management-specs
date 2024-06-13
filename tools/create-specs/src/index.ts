@@ -211,6 +211,25 @@ const main = async () => {
         const prefixedPath = `${prefix}${path}`;
 
         for (const [method, methodContent] of Object.entries(pathContent)) {
+          for (const parameterContent of methodContent.parameters ?? []) {
+            if ("$ref" in parameterContent.schema) {
+              const schemaName = parameterContent.schema.$ref.split("/").pop();
+
+              if (!includedSchemas.includes(schemaName)) {
+                includedSchemas.push(schemaName);
+                specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(spec.components.schemas[schemaName]));
+              }
+            }
+
+            if ("items" in parameterContent.schema && parameterContent.schema.items.$ref) {
+              const schemaName = parameterContent.schema.items.$ref.split("/").pop();
+
+              if (!includedSchemas.includes(schemaName)) {
+                includedSchemas.push(schemaName);
+                specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(spec.components.schemas[schemaName]));
+              }
+            }
+          }
           if (methodContent.tags && methodContent.tags.some(tag => specVersionTags.includes(tag))) {
             specVersionFileContent.paths[prefixedPath] = specVersionFileContent.paths[prefixedPath] || {};
             specVersionFileContent.paths[prefixedPath][method] = JSON.parse(JSON.stringify({

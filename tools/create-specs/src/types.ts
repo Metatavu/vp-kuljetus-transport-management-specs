@@ -47,6 +47,13 @@ export interface OpenAPISpec {
         security?: {
           [scheme: string]: string[]
         }[];
+        parameters?: {
+            name: string;
+            in: "query" | "path";
+            schema:
+              | { $ref?: string; }
+              | { items?: { $ref?: string; }; };
+        }[];
         requestBody?: {
           content?: {
             [contentType: string]: {
