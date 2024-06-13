@@ -46,6 +46,16 @@ components:
       in: header
       name: X-API-Key
   schemas:
+    TruckSortByField:
+      type: string
+      enum:
+        - NAME
+        - PLATE_NUMBER
+    SortOrder:
+      type: string
+      enum:
+        - ASCENDING
+        - DESCENDING
     TruckDriverCard:
       type: object
       required:
@@ -66,3 +76,18 @@ components:
           format: int32
         message:
           type: string
+    TruckDriveStateEnum:
+      type: string
+      enum:
+        - REST
+        - DRIVER_AVAILABLE
+        - WORK
+        - DRIVE
+        - ERROR
+        - NOT_AVAILABLE
+    TaskType:
+      type: string
+      description: Type of the task
+      enum:
+        - UNLOAD
+        - LOAD
