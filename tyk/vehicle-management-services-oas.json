@@ -444,11 +444,17 @@
         "security": [
           {
             "ApiKeyAuth": []
+          },
+          {
+            "BearerAuth": [
+              "driver"
+            ]
           }
         ],
         "tags": [
           "Trucks",
-          "SpecAuth"
+          "SpecAuth",
+          "SpecApp"
         ],
         "parameters": [
           {

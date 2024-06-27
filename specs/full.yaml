@@ -215,6 +215,8 @@ paths:
         card inserted.
       security:
         - ApiKeyAuth: []
+        - BearerAuth:
+            - driver
       tags:
         - Trucks
       parameters:

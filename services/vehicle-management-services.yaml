@@ -273,9 +273,11 @@ paths:
       description: Lists truck driver cards. Used to check if a truck has a driver card inserted.
       security:
         - ApiKeyAuth: []
+        - BearerAuth: [driver]
       tags:
         - Trucks
         - SpecAuth
+        - SpecApp
       parameters:
         - name: truckId
           required: true
