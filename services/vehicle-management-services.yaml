@@ -105,6 +105,16 @@ paths:
           description: Filter results by archived status
           schema:
             type: boolean
+        - name: sortBy
+          in: query
+          description: Sort results by field
+          schema:
+            $ref: "#/components/schemas/TruckSortByField"
+        - name: sortDirection
+          in: query
+          description: Sort direction
+          schema:
+            $ref: "#/components/schemas/SortOrder"
         - name: first
           in: query
           description: First result.
@@ -1251,3 +1261,15 @@ components:
         id:
           type: string
           description: Driver card ID
+
+    TruckSortByField:
+      type: string
+      enum:
+        - NAME
+        - PLATE_NUMBER
+
+    SortOrder:
+      type: string
+      enum:
+        - ASCENDING
+        - DESCENDING
