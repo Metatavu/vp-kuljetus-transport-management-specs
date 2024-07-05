@@ -423,7 +423,7 @@ components:
       type: string
       description: |
         Employee's salary group
-        Kuljettaja (Driver)- Should be default IF the employees office is not KOTKA
+        Kuljettaja (Driver) - Should be default IF the employees office is not KOTKA
         VP-Logistics (VPlogistics)
         Office
         Terminal
@@ -432,4 +432,4 @@ components:
     Office:
       type: string
       description: Employee's office. Salary group should be set to VPLogistics if the office is KOTKA
-      enum: [KOTKA, KOUVOLA, LAPPEENRANTA]
+      enum: [KOTKA, KOUVOLA, RAUHA]
