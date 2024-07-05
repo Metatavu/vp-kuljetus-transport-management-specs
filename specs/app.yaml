@@ -1336,7 +1336,7 @@ components:
       description: >
         Employee's salary group
 
-        Kuljettaja (Driver)- Should be default IF the employees office is not KOTKA
+        Kuljettaja (Driver) - Should be default IF the employees office is not KOTKA
 
         VP-Logistics (VPlogistics)
 
@@ -1397,7 +1397,7 @@ components:
       enum:
         - KOTKA
         - KOUVOLA
-        - LAPPEENRANTA
+        - RAUHA
     Site:
       type: object
       description: Represents a single customer site

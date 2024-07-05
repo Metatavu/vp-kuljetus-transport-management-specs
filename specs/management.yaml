@@ -870,7 +870,8 @@ paths:
     get:
       operationId: listEmployees
       summary: List Employees.
-      description: Lists Employees.
+      description: Lists Employees. A user is considered an employee if they're given
+        the employee realm role.
       security:
         - BearerAuth:
             - manager
@@ -899,7 +900,7 @@ paths:
             $ref: "#/components/schemas/Office"
         - name: archived
           in: query
-          description: Filter drivers by archived status
+          description: Filter employees by archived status
           schema:
             type: boolean
         - name: first
@@ -907,11 +908,13 @@ paths:
           description: First result.
           schema:
             type: integer
+            default: 0
         - name: max
           in: query
           description: Max results.
           schema:
             type: integer
+            default: 10
       responses:
         "200":
           description: List of employees
@@ -930,7 +933,8 @@ paths:
     post:
       operationId: createEmployee
       summary: Create Employee.
-      description: Creates Employee.
+      description: Creates Employee. All new users created via this endpoint should be
+        given the employee realm role.
       security:
         - BearerAuth:
             - manager
@@ -2048,7 +2052,7 @@ components:
       description: >
         Employee's salary group
 
-        Kuljettaja (Driver)- Should be default IF the employees office is not KOTKA
+        Kuljettaja (Driver) - Should be default IF the employees office is not KOTKA
 
         VP-Logistics (VPlogistics)
 
@@ -2109,7 +2113,7 @@ components:
       enum:
         - KOTKA
         - KOUVOLA
-        - LAPPEENRANTA
+        - RAUHA
     Employee:
       type: object
       description: Represents single employee
@@ -2132,7 +2136,7 @@ components:
           description: Employee's last name
         driverCardId:
           type: string
-          description: Employee's driver card ID
+          description: Employee's driver card ID.
         type:
           $ref: "#/components/schemas/EmployeeType"
         salaryGroup:

@@ -199,7 +199,7 @@
       "get": {
         "operationId": "listEmployees",
         "summary": "List Employees.",
-        "description": "Lists Employees.",
+        "description": "Lists Employees. A user is considered an employee if they're given the employee realm role.",
         "security": [
           {
             "BearerAuth": [
@@ -247,7 +247,7 @@
           {
             "name": "archived",
             "in": "query",
-            "description": "Filter drivers by archived status",
+            "description": "Filter employees by archived status",
             "schema": {
               "type": "boolean"
             }
@@ -257,7 +257,8 @@
             "in": "query",
             "description": "First result.",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "default": 0
             }
           },
           {
@@ -265,7 +266,8 @@
             "in": "query",
             "description": "Max results.",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "default": 10
             }
           }
         ],
@@ -298,7 +300,7 @@
       "post": {
         "operationId": "createEmployee",
         "summary": "Create Employee.",
-        "description": "Creates Employee.",
+        "description": "Creates Employee. All new users created via this endpoint should be given the employee realm role.",
         "security": [
           {
             "BearerAuth": [
@@ -584,7 +586,7 @@
           },
           "driverCardId": {
             "type": "string",
-            "description": "Employee's driver card ID"
+            "description": "Employee's driver card ID."
           },
           "type": {
             "$ref": "#/components/schemas/EmployeeType"
@@ -632,7 +634,7 @@
       },
       "SalaryGroup": {
         "type": "string",
-        "description": "Employee's salary group\nKuljettaja (Driver)- Should be default IF the employees office is not KOTKA\nVP-Logistics (VPlogistics)\nOffice\nTerminal\n",
+        "description": "Employee's salary group\nKuljettaja (Driver) - Should be default IF the employees office is not KOTKA\nVP-Logistics (VPlogistics)\nOffice\nTerminal\n",
         "enum": [
           "Driver",
           "VPLogistics",
@@ -646,7 +648,7 @@
         "enum": [
           "KOTKA",
           "KOUVOLA",
-          "LAPPEENRANTA"
+          "RAUHA"
         ]
       }
     }
