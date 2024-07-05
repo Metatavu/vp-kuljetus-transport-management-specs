@@ -1112,6 +1112,195 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /user-management/v1/employees:
+    get:
+      operationId: listEmployees
+      summary: List Employees.
+      description: Lists Employees.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Employees
+      parameters:
+        - name: search
+          in: query
+          description: Search string. Should search from first and last names.
+          schema:
+            type: string
+        - name: salaryGroup
+          in: query
+          description: Filter employees by salary group
+          schema:
+            $ref: "#/components/schemas/SalaryGroup"
+        - name: type
+          in: query
+          description: Filter employees by type
+          schema:
+            $ref: "#/components/schemas/EmployeeType"
+        - name: office
+          in: query
+          description: Filter employees by office
+          schema:
+            $ref: "#/components/schemas/Office"
+        - name: archived
+          in: query
+          description: Filter drivers by archived status
+          schema:
+            type: boolean
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of employees
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Employee"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createEmployee
+      summary: Create Employee.
+      description: Creates Employee.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Employees
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Employee"
+      responses:
+        "200":
+          description: Created employee
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /user-management/v1/employees/{employeeId}:
+    get:
+      operationId: findEmployee
+      summary: Find an employee.
+      description: Finds an employee by id.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Employees
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found employee
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateEmployee
+      summary: Update Employee.
+      description: Updates Employee.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Employees
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Employee"
+      responses:
+        "200":
+          description: Updated employee
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteEmployee
+      summary: Delete Employee.
+      description: >
+        Deletes Employee.
+
+        This should only be allowed to be used in tests. In production usage the employee should be archived instead.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Employees
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Deleted employee
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /delivery-info/v1/sites:
     get:
       operationId: listSites
@@ -2132,6 +2321,122 @@ components:
             marked as archived will not appear in list requests unless archived
             filter is set to true. Archived driver cannot be updated, unless
             archivedAt is first set to null.
+    SalaryGroup:
+      type: string
+      description: >
+        Employee's salary group
+
+        Kuljettaja (Driver)- Should be default IF the employees office is not KOTKA
+
+        VP-Logistics (VPlogistics)
+
+        Office
+
+        Terminal
+      enum:
+        - Driver
+        - VPLogistics
+        - Office
+        - Terminal
+    EmployeeType:
+      type: string
+      description: >
+        Employee's type described as finnish abbreviation. UI implementations
+        should translate these to more human readable form.
+
+        Pakettiautonkuljettaja (PA)
+
+        Kuorma-auton kuljettaja (KA)
+
+        Alihankkija (AH)
+
+        Vuokratyöntekijä (VK)
+
+        Työharjoittelija (TH)
+
+        Tilapäistyöntekijä (TP)
+
+        Ajojärjestelijä (AJ)
+
+        Esimies (JH)
+
+        Aikatuntipalkka (AP)
+
+        Kuukausipalkka (KK)
+
+        Ei-aktiivinen (POIS)
+
+        Täysperäkuljettaja (TPK)
+      enum:
+        - PA
+        - KA
+        - AH
+        - VK
+        - TH
+        - TP
+        - AJ
+        - JH
+        - AP
+        - KK
+        - POIS
+        - TPK
+    Office:
+      type: string
+      description: Employee's office. Salary group should be set to VPLogistics if the
+        office is KOTKA
+      enum:
+        - KOTKA
+        - KOUVOLA
+        - LAPPEENRANTA
+    Employee:
+      type: object
+      description: Represents single employee
+      required:
+        - firstName
+        - lastName
+        - type
+        - salaryGroup
+        - office
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        firstName:
+          type: string
+          description: Employee's first name
+        lastName:
+          type: string
+          description: Employee's last name
+        driverCardId:
+          type: string
+          description: Employee's driver card ID
+        type:
+          $ref: "#/components/schemas/EmployeeType"
+        salaryGroup:
+          $ref: "#/components/schemas/SalaryGroup"
+        office:
+          $ref: "#/components/schemas/Office"
+        regularWorkingHours:
+          type: number
+          format: float
+          description: >
+            Employee's regular working hours per two weeks. Used for employee's
+            whose salary group is either Driver or VPLogistics.
+        driverCardLastReadOut:
+          type: string
+          format: date-time
+          description: >
+            Last time the driver card was read out. In the beginning this should
+            be set manually but later probably automated.
+        archivedAt:
+          type: string
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the employee as archived.
+            Employees marked as archived will not appear in list requests unless
+            archived filter is set to true. Archived employee cannot be updated,
+            unless archivedAt is first set to null.
     Site:
       type: object
       description: Represents a single customer site
