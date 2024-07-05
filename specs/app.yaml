@@ -1331,6 +1331,73 @@ components:
             marked as archived will not appear in list requests unless archived
             filter is set to true. Archived driver cannot be updated, unless
             archivedAt is first set to null.
+    SalaryGroup:
+      type: string
+      description: >
+        Employee's salary group
+
+        Kuljettaja (Driver) - Should be default IF the employees office is not KOTKA
+
+        VP-Logistics (VPlogistics)
+
+        Office
+
+        Terminal
+      enum:
+        - Driver
+        - VPLogistics
+        - Office
+        - Terminal
+    EmployeeType:
+      type: string
+      description: >
+        Employee's type described as finnish abbreviation. UI implementations
+        should translate these to more human readable form.
+
+        Pakettiautonkuljettaja (PA)
+
+        Kuorma-auton kuljettaja (KA)
+
+        Alihankkija (AH)
+
+        Vuokratyöntekijä (VK)
+
+        Työharjoittelija (TH)
+
+        Tilapäistyöntekijä (TP)
+
+        Ajojärjestelijä (AJ)
+
+        Esimies (JH)
+
+        Aikatuntipalkka (AP)
+
+        Kuukausipalkka (KK)
+
+        Ei-aktiivinen (POIS)
+
+        Täysperäkuljettaja (TPK)
+      enum:
+        - PA
+        - KA
+        - AH
+        - VK
+        - TH
+        - TP
+        - AJ
+        - JH
+        - AP
+        - KK
+        - POIS
+        - TPK
+    Office:
+      type: string
+      description: Employee's office. Salary group should be set to VPLogistics if the
+        office is KOTKA
+      enum:
+        - KOTKA
+        - KOUVOLA
+        - RAUHA
     Site:
       type: object
       description: Represents a single customer site

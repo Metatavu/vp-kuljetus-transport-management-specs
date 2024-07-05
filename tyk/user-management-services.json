@@ -149,6 +149,52 @@
             },
             {
               "disabled": false,
+              "path": "/v1/employees",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "POST": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/employees/{employeeId}",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "DELETE": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "PUT": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
               "path": "/v1/system/ping",
               "method": "",
               "ignore_case": false,
@@ -170,6 +216,26 @@
             {
               "path": "/v1/drivers/{driverId}",
               "method": "GET"
+            },
+            {
+              "path": "/v1/employees",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/employees",
+              "method": "POST"
+            },
+            {
+              "path": "/v1/employees/{employeeId}",
+              "method": "DELETE"
+            },
+            {
+              "path": "/v1/employees/{employeeId}",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/employees/{employeeId}",
+              "method": "PUT"
             },
             {
               "path": "/v1/system/ping",
