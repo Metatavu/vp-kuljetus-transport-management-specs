@@ -568,7 +568,8 @@
           "lastName",
           "type",
           "salaryGroup",
-          "office"
+          "office",
+          "employeeNumber"
         ],
         "properties": {
           "id": {
@@ -606,6 +607,10 @@
             "type": "string",
             "format": "date-time",
             "description": "Last time the driver card was read out. In the beginning this should be set manually but later probably automated.\n"
+          },
+          "employeeNumber": {
+            "type": "string",
+            "description": "Employee's number. Should be unique."
           },
           "archivedAt": {
             "type": "string",

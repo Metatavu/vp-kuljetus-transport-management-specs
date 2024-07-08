@@ -2401,6 +2401,7 @@ components:
         - type
         - salaryGroup
         - office
+        - employeeNumber
       properties:
         id:
           type: string
@@ -2433,6 +2434,9 @@ components:
           description: >
             Last time the driver card was read out. In the beginning this should
             be set manually but later probably automated.
+        employeeNumber:
+          type: string
+          description: Employee's number. Should be unique.
         archivedAt:
           type: string
           format: date-time
