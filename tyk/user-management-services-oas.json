@@ -485,15 +485,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Deleted employee",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Employee"
-                }
-              }
-            }
+          "204": {
+            "description": "Empty response indicating successful removal"
           },
           "default": {
             "description": "Invalid request was sent to the server",
@@ -1200,10 +1193,10 @@
         "type": "string",
         "description": "Employee's salary group\nKuljettaja (Driver) - Should be default IF the employees office is not KOTKA\nVP-Logistics (VPlogistics)\nOffice\nTerminal\n",
         "enum": [
-          "Driver",
-          "VPLogistics",
-          "Office",
-          "Terminal"
+          "DRIVER",
+          "VPLOGISTICS",
+          "OFFICE",
+          "TERMINAL"
         ]
       },
       "Office": {
