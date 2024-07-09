@@ -485,15 +485,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Deleted employee",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Employee"
-                }
-              }
-            }
+          "204": {
+            "description": "Empty response indicating successful removal"
           },
           "default": {
             "description": "Invalid request was sent to the server",
