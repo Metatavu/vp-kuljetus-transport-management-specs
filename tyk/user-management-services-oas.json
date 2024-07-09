@@ -642,10 +642,10 @@
         "type": "string",
         "description": "Employee's salary group\nKuljettaja (Driver) - Should be default IF the employees office is not KOTKA\nVP-Logistics (VPlogistics)\nOffice\nTerminal\n",
         "enum": [
-          "Driver",
-          "VPLogistics",
-          "Office",
-          "Terminal"
+          "DRIVER",
+          "VPLOGISTICS",
+          "OFFICE",
+          "TERMINAL"
         ]
       },
       "Office": {

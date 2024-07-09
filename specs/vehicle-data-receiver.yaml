@@ -371,10 +371,10 @@ components:
 
         Terminal
       enum:
-        - Driver
-        - VPLogistics
-        - Office
-        - Terminal
+        - DRIVER
+        - VPLOGISTICS
+        - OFFICE
+        - TERMINAL
     EmployeeType:
       type: string
       description: >

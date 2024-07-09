@@ -435,7 +435,7 @@ components:
         VP-Logistics (VPlogistics)
         Office
         Terminal
-      enum: [Driver, VPLogistics, Office, Terminal]
+      enum: [DRIVER, VPLOGISTICS, OFFICE, TERMINAL]
 
     Office:
       type: string
