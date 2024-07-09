@@ -947,7 +947,7 @@ paths:
             schema:
               $ref: "#/components/schemas/Employee"
       responses:
-        "200":
+        "201":
           description: Created employee
           content:
             application/json:
@@ -1053,6 +1053,341 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Employee"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /user-management/v1/employees/{employeeId}/timeEntries:
+    get:
+      operationId: listEmployeeTimeEntries
+      summary: List Employees Time Entries.
+      description: Lists Employees Time Entries.
+      security:
+        - BearerAuth:
+            - manager
+            - driver
+            - employee
+      tags:
+        - TimeEntries
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's id
+          schema:
+            type: string
+            format: uuid
+        - name: start
+          in: query
+          description: Start time for time entries.
+          schema:
+            type: string
+            format: date-time
+        - name: end
+          in: query
+          description: End time for time entries.
+          schema:
+            type: string
+            format: date-time
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+            default: 0
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: List of time entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TimeEntry"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createEmployeeTimeEntry
+      summary: Create Employees Time Entry.
+      description: Creates Employees Time Entry.
+      security:
+        - BearerAuth:
+            - manager
+            - driver
+            - employee
+      tags:
+        - TimeEntries
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TimeEntry"
+      responses:
+        "201":
+          description: Created time entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimeEntry"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /user-management/v1/employees/{employeeId}/timeEntries/{timeEntryId}:
+    get:
+      operationId: findEmployeeTimeEntry
+      summary: Find an employee's time entry.
+      description: Finds an employee's time entry by id.
+      security:
+        - BearerAuth:
+            - manager
+            - driver
+            - employee
+      tags:
+        - TimeEntries
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's id
+          schema:
+            type: string
+            format: uuid
+        - name: timeEntryId
+          required: true
+          in: path
+          description: time entry's id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found time entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimeEntry"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateEmployeeTimeEntry
+      summary: Update Employee's Time Entry.
+      description: Updates Employee's Time Entry. Only accessible by managers.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - TimeEntries
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's id
+          schema:
+            type: string
+            format: uuid
+        - name: timeEntryId
+          required: true
+          in: path
+          description: time entry's id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TimeEntry"
+      responses:
+        "200":
+          description: Updated time entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimeEntry"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteEmployeeTimeEntry
+      summary: Delete Employee's Time Entry.
+      description: Deletes Employee's Time Entry. Only accessible by managers.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - TimeEntries
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's id
+          schema:
+            type: string
+            format: uuid
+        - name: timeEntryId
+          required: true
+          in: path
+          description: time entry's id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Deleted time entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimeEntry"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /user-management/v1/workTypes:
+    get:
+      operationId: listWorkTypes
+      summary: List Work Types.
+      description: Lists Work Types.
+      security:
+        - BearerAuth:
+            - manager
+            - driver
+            - employee
+      tags:
+        - WorkTypes
+      parameters:
+        - name: category
+          in: query
+          description: Filter work types by category
+          schema:
+            $ref: "#/components/schemas/WorkTypeCategory"
+      responses:
+        "200":
+          description: List of work types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WorkType"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createWorkType
+      summary: Create Work Type.
+      description: Creates Work Type.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - WorkTypes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkType"
+      responses:
+        "201":
+          description: Created work type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkType"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /user-management/v1/workTypes/{workTypeId}:
+    get:
+      operationId: findWorkType
+      summary: Find a work type.
+      description: Finds a work type by id.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - WorkTypes
+      parameters:
+        - name: workTypeId
+          required: true
+          in: path
+          description: work type's id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found work type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkType"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteWorkType
+      summary: Delete Work Type.
+      description: Deletes Work Type.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - WorkTypes
+      parameters:
+        - name: workTypeId
+          required: true
+          in: path
+          description: work type's id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Deleted work type
         default:
           description: Invalid request was sent to the server
           content:
@@ -2173,6 +2508,66 @@ components:
             Employees marked as archived will not appear in list requests unless
             archived filter is set to true. Archived employee cannot be updated,
             unless archivedAt is first set to null.
+    TimeEntry:
+      type: object
+      description: Represents single time entry
+      required:
+        - id
+        - employeeId
+        - startTime
+        - workTypeId
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        employeeId:
+          type: string
+          format: uuid
+          description: Employee's id
+        startTime:
+          type: string
+          format: date-time
+          description: Time entry start time
+        endTime:
+          type: string
+          format: date-time
+          description: >
+            Time entry end time. End time is not required for time entries that
+            are still running.
+
+            If an employee has an existing time entry without an end time and the new entry is missing end time,
+
+            the new time entry should not be created and instead a bad request is to be returned.
+
+            When a new entry is created with both start and end times, the existing entry is ignored.
+        workTypeId:
+          type: string
+          format: uuid
+          description: Work type id
+    WorkTypeCategory:
+      type: string
+      description: Describes work type's category
+      enum:
+        - DRIVER
+        - TERMINAL
+        - OFFICE
+    WorkType:
+      type: object
+      description: Describes different work types that employees can have
+      required:
+        - name
+        - category
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          description: Work type name
+        category:
+          $ref: "#/components/schemas/WorkTypeCategory"
     Site:
       type: object
       description: Represents a single customer site
