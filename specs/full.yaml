@@ -2437,6 +2437,12 @@ components:
         employeeNumber:
           type: string
           description: Employee's number. Should be unique.
+        email:
+          type: string
+          description: Employee's email address
+        phoneNumber:
+          type: string
+          description: Employee's phone number
         archivedAt:
           type: string
           format: date-time
