@@ -311,7 +311,7 @@ paths:
     get:
       operationId: listEmployeeTimeEntries
       summary: List Employees Time Entries.
-      description: Lists Employees Time Entries.
+      description: Lists Employees Time Entries. Sort by start time, latest first.
       security:
         - BearerAuth: [manager, driver, employee]
       tags:
@@ -369,7 +369,9 @@ paths:
     post:
       operationId: createEmployeeTimeEntry
       summary: Create Employees Time Entry.
-      description: Creates Employees Time Entry.
+      description: |
+        Creates Employees Time Entry.
+        New time entries's start or end times shouldn't overlap with existing time entries.
       security:
         - BearerAuth: [manager, driver, employee]
       tags:
