@@ -1263,12 +1263,8 @@ paths:
             type: string
             format: uuid
       responses:
-        "200":
+        "204":
           description: Deleted time entry
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/TimeEntry"
         default:
           description: Invalid request was sent to the server
           content:
@@ -2511,7 +2507,6 @@ components:
       type: object
       description: Represents single time entry
       required:
-        - id
         - employeeId
         - startTime
         - workTypeId

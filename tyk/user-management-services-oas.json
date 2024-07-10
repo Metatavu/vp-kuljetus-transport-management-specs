@@ -830,15 +830,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Deleted time entry",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TimeEntry"
-                }
-              }
-            }
+          "204": {
+            "description": "Deleted time entry"
           },
           "default": {
             "description": "Invalid request was sent to the server",
@@ -1212,7 +1205,6 @@
         "type": "object",
         "description": "Represents single time entry",
         "required": [
-          "id",
           "employeeId",
           "startTime",
           "workTypeId"
