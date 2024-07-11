@@ -371,7 +371,10 @@ paths:
       summary: Create Employees Time Entry.
       description: |
         Creates Employees Time Entry.
-        New time entries's start or end times shouldn't overlap with existing time entries.
+        
+        Attempt to create new time entry should fail if:
+          1) New time entry does not have endTime but there is already one time entry without endTime for the same employee. This is because time entries without endTime are considered to be running timers and only one is allowed at a time.
+          2) If time new entry intersects with an existing time entry.
       security:
         - BearerAuth: [manager, driver, employee]
       tags:
