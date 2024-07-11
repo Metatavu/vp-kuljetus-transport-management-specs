@@ -371,7 +371,7 @@ paths:
       summary: Create Employees Time Entry.
       description: |
         Creates Employees Time Entry.
-        
+
         Attempt to create new time entry should fail if:
           1) New time entry does not have endTime but there is already one time entry without endTime for the same employee. This is because time entries without endTime are considered to be running timers and only one is allowed at a time.
           2) If time new entry intersects with an existing time entry.
@@ -452,11 +452,12 @@ paths:
     put:
       operationId: updateEmployeeTimeEntry
       summary: Update Employee's Time Entry.
-      description: Updates Employee's Time Entry. Only accessible by managers.
+      description: |
+        Updates Employee's Time Entry. Only accessible by managers.
       
-      Update should fail, when:
+        Update should fail, when:
         1) Modified entry does not have endTime but there is already another entry without endTime present in the system for same employee.  This is because time entries without endTime are considered to be running timers and only one is allowed at a time.
-          2) If modifying the entry would lead it to intersect with another time entry.      
+        2) If modifying the entry would lead it to intersect with another time entry.
       security:
         - BearerAuth: [manager]
       tags:

@@ -597,7 +597,7 @@
       "post": {
         "operationId": "createEmployeeTimeEntry",
         "summary": "Create Employees Time Entry.",
-        "description": "Creates Employees Time Entry.\nNew time entries's start or end times shouldn't overlap with existing time entries.\n",
+        "description": "Creates Employees Time Entry.\n\nAttempt to create new time entry should fail if:\n  1) New time entry does not have endTime but there is already one time entry without endTime for the same employee. This is because time entries without endTime are considered to be running timers and only one is allowed at a time.\n  2) If time new entry intersects with an existing time entry.\n",
         "security": [
           {
             "BearerAuth": [
@@ -725,7 +725,7 @@
       "put": {
         "operationId": "updateEmployeeTimeEntry",
         "summary": "Update Employee's Time Entry.",
-        "description": "Updates Employee's Time Entry. Only accessible by managers.",
+        "description": "Updates Employee's Time Entry. Only accessible by managers.\n\nUpdate should fail, when:\n1) Modified entry does not have endTime but there is already another entry without endTime present in the system for same employee.  This is because time entries without endTime are considered to be running timers and only one is allowed at a time.\n2) If modifying the entry would lead it to intersect with another time entry.\n",
         "security": [
           {
             "BearerAuth": [
