@@ -154,6 +154,13 @@ components:
         - KOTKA
         - KOUVOLA
         - RAUHA
+    WorkTypeCategory:
+      type: string
+      description: Describes work type's category
+      enum:
+        - DRIVER
+        - TERMINAL
+        - OFFICE
     TaskType:
       type: string
       description: Type of the task
