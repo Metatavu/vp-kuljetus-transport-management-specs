@@ -453,15 +453,16 @@ paths:
       operationId: updateEmployeeTimeEntry
       summary: Update Employee's Time Entry.
       description: |
-        Updates Employee's Time Entry. Only accessible by managers.
+        Updates Employee's Time Entry.
       
         Update should fail, when:
         1) Modified entry does not have endTime but there is already another entry without endTime present in the system for same employee.  This is because time entries without endTime are considered to be running timers and only one is allowed at a time.
         2) If modifying the entry would lead it to intersect with another time entry.
       security:
-        - BearerAuth: [manager]
+        - BearerAuth: [manager, employee]
       tags:
         - TimeEntries
+        - SpecApp
         - SpecManagementUI
       parameters:
         - name: employeeId

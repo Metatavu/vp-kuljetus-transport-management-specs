@@ -1448,7 +1448,7 @@ paths:
       operationId: updateEmployeeTimeEntry
       summary: Update Employee's Time Entry.
       description: >
-        Updates Employee's Time Entry. Only accessible by managers.
+        Updates Employee's Time Entry.
 
 
         Update should fail, when:
@@ -1459,6 +1459,7 @@ paths:
       security:
         - BearerAuth:
             - manager
+            - employee
       tags:
         - TimeEntries
       parameters:
