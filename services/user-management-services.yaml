@@ -454,7 +454,7 @@ paths:
       summary: Update Employee's Time Entry.
       description: |
         Updates Employee's Time Entry.
-      
+
         Update should fail, when:
         1) Modified entry does not have endTime but there is already another entry without endTime present in the system for same employee.  This is because time entries without endTime are considered to be running timers and only one is allowed at a time.
         2) If modifying the entry would lead it to intersect with another time entry.
@@ -525,7 +525,231 @@ paths:
             format: uuid
       responses:
         "204":
-          description: Deleted time entry
+          description: Successfully deleted the time entry
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  "/v1/employees/{employeeId}/dailyTimeEntries":
+    get:
+      operationId: listEmployeeDailyTimeEntries
+      summary: List Employees Daily Time Entries.
+      description: Lists Employees Daily Time Entries. There can be 0-1 daily time entries per work type per day.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - DailyTimeEntries
+        - SpecManagementUI
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's id
+          schema:
+            type: string
+            format: uuid
+        - name: workType
+          in: query
+          description: List daily time entries only for specified work type.
+          schema:
+            $ref: "#/components/schemas/WorkType"
+        - name: start
+          in: query
+          description: List daily time entries only after specified date.
+          schema:
+            type: string
+            format: date
+        - name: end
+          in: query
+          description: List daily time entries only before specified date.
+          schema:
+            type: string
+            format: date
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+            default: 0
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: List of daily time entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DailyTimeEntry"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    post:
+      operationId: createEmployeeDailyTimeEntry
+      summary: Create Employees Daily Time Entry.
+      description: |
+        Creates Employees Daily Time Entry.
+
+        Attempt to create new daily time entry should fail if a daily entry with the same date and work type already exists.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - DailyTimeEntries
+        - SpecManagementUI
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DailyTimeEntry"
+      responses:
+        "201":
+          description: Created daily time entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimeEntry"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  "/v1/employees/{employeeId}/dailyTimeEntries/{dailyTimeEntryId}":
+    get:
+      operationId: findEmployeeDailyTimeEntry
+      summary: Find an employee's daily time entry.
+      description: Finds an employee's daily time entry by id.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - DailyTimeEntries
+        - SpecManagementUI
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's id
+          schema:
+            type: string
+            format: uuid
+        - name: dailyTimeEntryId
+          required: true
+          in: path
+          description: daily time entry's id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found daily time entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DailyTimeEntry"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    put:
+      operationId: updateEmployeeDailyTimeEntry
+      summary: Update Employee's Daily Time Entry.
+      description: |
+        Updates Employee's Daily Time Entry.
+
+        Trying to update other than total hours from an entry should fail, as that could potentially
+        clash with another entry. Instead, incorrect entry should be deleted and new one created.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - DailyTimeEntries
+        - SpecManagementUI
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's id
+          schema:
+            type: string
+            format: uuid
+        - name: dailyTimeEntryId
+          required: true
+          in: path
+          description: daily time entry's id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DailyTimeEntry"
+      responses:
+        "200":
+          description: Updated daily time entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DailyTimeEntry"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      operationId: deleteEmployeeDailyTimeEntry
+      summary: Delete Employee's Daily Time Entry.
+      description: Deletes Employee's Daily Time Entry.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - DailyTimeEntries
+        - SpecManagementUI
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's id
+          schema:
+            type: string
+            format: uuid
+        - name: dailyTimeEntryId
+          required: true
+          in: path
+          description: daily time entry's id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Successfully deleted the daily time entry
         "default":
           description: Invalid request was sent to the server
           content:
@@ -836,9 +1060,43 @@ components:
           type: string
           description: Work type name
         category:
-           $ref: "#/components/schemas/WorkTypeCategory"
+          $ref: "#/components/schemas/WorkTypeCategory"
 
     WorkTypeCategory:
       type: string
       description: Describes work type's category
       enum: [DRIVER, TERMINAL, OFFICE]
+
+    DailyTimeEntry:
+      type: object
+      description: |
+        Represents a single daily time entry. Daily time entries are created when total working hours
+        of an employee for some work type needs to be manually changed for a specific day. Only a single
+        daily time entry per work type per day is allowed. If one already exists, it should be updated.
+        Daily time entry is always prioritized over calculating the total from the actual time entries
+        when displaying the aggregated hours and sending the data to payroll.
+      required:
+        - employeeId
+        - date
+        - workTypeId
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        employeeId:
+          type: string
+          format: uuid
+          description: Employee's id
+        date:
+          type: string
+          format: date
+          description: Daily time entry date
+        workTypeId:
+          type: string
+          format: uuid
+          description: Work type id
+        hours:
+          type: number
+          format: float
+          description: Corrected hours for the day for corresponding work type.
