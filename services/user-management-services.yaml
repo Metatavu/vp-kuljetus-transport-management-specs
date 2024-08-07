@@ -1079,6 +1079,8 @@ components:
         - employeeId
         - date
         - workTypeId
+        - hours
+        - approved
       properties:
         id:
           type: string
@@ -1100,3 +1102,8 @@ components:
           type: number
           format: float
           description: Corrected hours for the day for corresponding work type.
+        approved:
+          type: boolean
+          description: |
+            Whether the daily time entry has been approved by a supervisor.
+            Hours cannot be updated unless approved is set to false.
