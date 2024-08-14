@@ -154,6 +154,22 @@ components:
         - KOTKA
         - KOUVOLA
         - RAUHA
+    WorkType:
+      type: object
+      description: Describes different work types that employees can have
+      required:
+        - name
+        - category
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          description: Work type name
+        category:
+          $ref: "#/components/schemas/WorkTypeCategory"
     WorkTypeCategory:
       type: string
       description: Describes work type's category
