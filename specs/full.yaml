@@ -1548,11 +1548,11 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: workType
+        - name: workEventType
           in: query
           description: List daily time entries only for specified work type.
           schema:
-            $ref: "#/components/schemas/WorkType"
+            $ref: "#/components/schemas/WorkEventType"
         - name: start
           in: query
           description: List daily time entries only after specified date.
@@ -1746,124 +1746,6 @@ paths:
       responses:
         "204":
           description: Successfully deleted the daily time entry
-        default:
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-  /user-management/v1/workTypes:
-    get:
-      operationId: listWorkTypes
-      summary: List Work Types.
-      description: Lists Work Types.
-      security:
-        - BearerAuth:
-            - manager
-            - driver
-            - employee
-      tags:
-        - WorkTypes
-      parameters:
-        - name: category
-          in: query
-          description: Filter work types by category
-          schema:
-            $ref: "#/components/schemas/WorkTypeCategory"
-      responses:
-        "200":
-          description: List of work types
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/WorkType"
-        default:
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    post:
-      operationId: createWorkType
-      summary: Create Work Type.
-      description: Creates Work Type.
-      security:
-        - BearerAuth:
-            - manager
-      tags:
-        - WorkTypes
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/WorkType"
-      responses:
-        "201":
-          description: Created work type
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/WorkType"
-        default:
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-  /user-management/v1/workTypes/{workTypeId}:
-    get:
-      operationId: findWorkType
-      summary: Find a work type.
-      description: Finds a work type by id.
-      security:
-        - BearerAuth:
-            - manager
-      tags:
-        - WorkTypes
-      parameters:
-        - name: workTypeId
-          required: true
-          in: path
-          description: work type's id
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "200":
-          description: Found work type
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/WorkType"
-        default:
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    delete:
-      operationId: deleteWorkType
-      summary: Delete Work Type.
-      description: Deletes Work Type.
-      security:
-        - BearerAuth:
-            - manager
-      tags:
-        - WorkTypes
-      parameters:
-        - name: workTypeId
-          required: true
-          in: path
-          description: work type's id
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "204":
-          description: Deleted work type
         default:
           description: Invalid request was sent to the server
           content:
@@ -3022,7 +2904,7 @@ components:
       required:
         - employeeId
         - startTime
-        - workTypeId
+        - workEventType
       properties:
         id:
           type: string
@@ -3036,38 +2918,83 @@ components:
           type: string
           format: date-time
           description: Time entry start time
-        endTime:
-          type: string
-          format: date-time
-          description: >
-            Time entry end time. End time is not required for time entries that
-            are still running.
+        workEventType:
+          $ref: "#/components/schemas/WorkEventType"
+    WorkEventType:
+      type: string
+      description: >
+        Work event type's. UI implementations should translate these to more
+        human readable form.
 
-            If an employee has an existing time entry without an end time and the new entry is missing end time,
 
-            the new time entry should not be created and instead a bad request is to be returned.
+        *Office/Terminal work types*
 
-            When a new entry is created with both start and end times, the existing entry is ignored.
-        workTypeId:
-          type: string
-          format: uuid
-          description: Work type id
-    WorkType:
-      type: object
-      description: Describes different work types that employees can have
-      required:
-        - name
-        - category
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-          description: Work type name
-        category:
-          $ref: "#/components/schemas/WorkTypeCategory"
+        - VEGETABLE (Hevi)
+
+        - DRY (Kuiva)
+
+        - MEAT_CELLAR (Lihakellari)
+
+        - MEIRA (Meira)
+
+        - FROZEN (Pakaste)
+
+        - PALTE (Palte)
+
+        - BREWERY (Panimo)
+
+        - GREASE (Rasva)
+
+        - LOGIN
+
+        - LOGOUT
+
+
+        *Common work types*
+
+        - OTHER_WORK (Muu työ)
+
+        - BREAK (Tauko)
+
+        - SHIFT_START
+
+        - SHIFT_END
+
+
+        *Driver work types*
+
+        - DRIVE
+
+        - LOADING
+
+        - UNLOADING
+
+        - AVAILABILITY
+
+        - DRIVER_CARD_INSERTED
+
+        - DRIVER_CARD_REMOVED
+      enum:
+        - VEGETABLE
+        - DRY
+        - MEAT_CELLAR
+        - MEIRA
+        - FROZEN
+        - PALTE
+        - BREWERY
+        - GREASE
+        - LOGIN
+        - LOGOUT
+        - OTHER_WORK
+        - BREAK
+        - SHIFT_START
+        - SHIFT_END
+        - DRIVE
+        - LOADING
+        - UNLOADING
+        - AVAILABILITY
+        - DRIVER_CARD_INSERTED
+        - DRIVER_CARD_REMOVED
     DailyTimeEntry:
       type: object
       description: >
@@ -3084,7 +3011,7 @@ components:
       required:
         - employeeId
         - date
-        - workTypeId
+        - workEventType
         - hours
         - approved
       properties:
@@ -3100,10 +3027,8 @@ components:
           type: string
           format: date
           description: Daily time entry date
-        workTypeId:
-          type: string
-          format: uuid
-          description: Work type id
+        workEventType:
+          $ref: "#/components/schemas/WorkEventType"
         hours:
           type: number
           format: float
@@ -3113,13 +3038,6 @@ components:
           description: |
             Whether the daily time entry has been approved by a supervisor.
             Hours cannot be updated unless approved is set to false.
-    WorkTypeCategory:
-      type: string
-      description: Describes work type's category
-      enum:
-        - DRIVER
-        - TERMINAL
-        - OFFICE
     Site:
       type: object
       description: Represents a single customer site

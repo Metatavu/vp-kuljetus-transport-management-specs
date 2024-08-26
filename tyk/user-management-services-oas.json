@@ -876,11 +876,11 @@
             }
           },
           {
-            "name": "workType",
+            "name": "workEventType",
             "in": "query",
             "description": "List daily time entries only for specified work type.",
             "schema": {
-              "$ref": "#/components/schemas/WorkType"
+              "$ref": "#/components/schemas/WorkEventType"
             }
           },
           {
@@ -1191,205 +1191,6 @@
           }
         }
       }
-    },
-    "/v1/workTypes": {
-      "get": {
-        "operationId": "listWorkTypes",
-        "summary": "List Work Types.",
-        "description": "Lists Work Types.",
-        "security": [
-          {
-            "BearerAuth": [
-              "manager",
-              "driver",
-              "employee"
-            ]
-          }
-        ],
-        "tags": [
-          "WorkTypes",
-          "SpecApp",
-          "SpecManagementUI"
-        ],
-        "parameters": [
-          {
-            "name": "category",
-            "in": "query",
-            "description": "Filter work types by category",
-            "schema": {
-              "$ref": "#/components/schemas/WorkTypeCategory"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "List of work types",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WorkType"
-                  }
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Invalid request was sent to the server",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "operationId": "createWorkType",
-        "summary": "Create Work Type.",
-        "description": "Creates Work Type.",
-        "security": [
-          {
-            "BearerAuth": [
-              "manager"
-            ]
-          }
-        ],
-        "tags": [
-          "WorkTypes",
-          "SpecManagementUI"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/WorkType"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Created work type",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkType"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Invalid request was sent to the server",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/workTypes/{workTypeId}": {
-      "get": {
-        "operationId": "findWorkType",
-        "summary": "Find a work type.",
-        "description": "Finds a work type by id.",
-        "security": [
-          {
-            "BearerAuth": [
-              "manager"
-            ]
-          }
-        ],
-        "tags": [
-          "WorkTypes",
-          "SpecManagementUI"
-        ],
-        "parameters": [
-          {
-            "name": "workTypeId",
-            "required": true,
-            "in": "path",
-            "description": "work type's id",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Found work type",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkType"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Invalid request was sent to the server",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "operationId": "deleteWorkType",
-        "summary": "Delete Work Type.",
-        "description": "Deletes Work Type.",
-        "security": [
-          {
-            "BearerAuth": [
-              "manager"
-            ]
-          }
-        ],
-        "tags": [
-          "WorkTypes",
-          "SpecManagementUI"
-        ],
-        "parameters": [
-          {
-            "name": "workTypeId",
-            "required": true,
-            "in": "path",
-            "description": "work type's id",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Deleted work type"
-          },
-          "default": {
-            "description": "Invalid request was sent to the server",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -1553,7 +1354,7 @@
         "required": [
           "employeeId",
           "startTime",
-          "workTypeId"
+          "workEventType"
         ],
         "properties": {
           "id": {
@@ -1571,48 +1372,10 @@
             "format": "date-time",
             "description": "Time entry start time"
           },
-          "endTime": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Time entry end time. End time is not required for time entries that are still running.\nIf an employee has an existing time entry without an end time and the new entry is missing end time,\nthe new time entry should not be created and instead a bad request is to be returned.\nWhen a new entry is created with both start and end times, the existing entry is ignored.\n"
-          },
-          "workTypeId": {
-            "type": "string",
-            "format": "uuid",
-            "description": "Work type id"
+          "workEventType": {
+            "$ref": "#/components/schemas/WorkEventType"
           }
         }
-      },
-      "WorkType": {
-        "type": "object",
-        "description": "Describes different work types that employees can have",
-        "required": [
-          "name",
-          "category"
-        ],
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "readOnly": true
-          },
-          "name": {
-            "type": "string",
-            "description": "Work type name"
-          },
-          "category": {
-            "$ref": "#/components/schemas/WorkTypeCategory"
-          }
-        }
-      },
-      "WorkTypeCategory": {
-        "type": "string",
-        "description": "Describes work type's category",
-        "enum": [
-          "DRIVER",
-          "TERMINAL",
-          "OFFICE"
-        ]
       },
       "DailyTimeEntry": {
         "type": "object",
@@ -1620,7 +1383,7 @@
         "required": [
           "employeeId",
           "date",
-          "workTypeId",
+          "workEventType",
           "hours",
           "approved"
         ],
@@ -1640,10 +1403,8 @@
             "format": "date",
             "description": "Daily time entry date"
           },
-          "workTypeId": {
-            "type": "string",
-            "format": "uuid",
-            "description": "Work type id"
+          "workEventType": {
+            "$ref": "#/components/schemas/WorkEventType"
           },
           "hours": {
             "type": "number",
@@ -1655,6 +1416,32 @@
             "description": "Whether the daily time entry has been approved by a supervisor.\nHours cannot be updated unless approved is set to false.\n"
           }
         }
+      },
+      "WorkEventType": {
+        "type": "string",
+        "description": "Work event type's. UI implementations should translate these to more human readable form.\n\n*Office/Terminal work types*\n- VEGETABLE (Hevi)\n- DRY (Kuiva)\n- MEAT_CELLAR (Lihakellari)\n- MEIRA (Meira)\n- FROZEN (Pakaste)\n- PALTE (Palte)\n- BREWERY (Panimo)\n- GREASE (Rasva)\n- LOGIN\n- LOGOUT\n\n*Common work types*\n- OTHER_WORK (Muu työ)\n- BREAK (Tauko)\n- SHIFT_START\n- SHIFT_END\n\n*Driver work types*\n- DRIVE\n- LOADING\n- UNLOADING\n- AVAILABILITY\n- DRIVER_CARD_INSERTED\n- DRIVER_CARD_REMOVED\n",
+        "enum": [
+          "VEGETABLE",
+          "DRY",
+          "MEAT_CELLAR",
+          "MEIRA",
+          "FROZEN",
+          "PALTE",
+          "BREWERY",
+          "GREASE",
+          "LOGIN",
+          "LOGOUT",
+          "OTHER_WORK",
+          "BREAK",
+          "SHIFT_START",
+          "SHIFT_END",
+          "DRIVE",
+          "LOADING",
+          "UNLOADING",
+          "AVAILABILITY",
+          "DRIVER_CARD_INSERTED",
+          "DRIVER_CARD_REMOVED"
+        ]
       }
     }
   }

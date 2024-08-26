@@ -795,39 +795,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /user-management/v1/workTypes:
-    get:
-      operationId: listWorkTypes
-      summary: List Work Types.
-      description: Lists Work Types.
-      security:
-        - BearerAuth:
-            - manager
-            - driver
-            - employee
-      tags:
-        - WorkTypes
-      parameters:
-        - name: category
-          in: query
-          description: Filter work types by category
-          schema:
-            $ref: "#/components/schemas/WorkTypeCategory"
-      responses:
-        "200":
-          description: List of work types
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/WorkType"
-        default:
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
   /delivery-info/v1/sites:
     get:
       operationId: listSites
@@ -1632,7 +1599,7 @@ components:
       required:
         - employeeId
         - startTime
-        - workTypeId
+        - workEventType
       properties:
         id:
           type: string
@@ -1646,45 +1613,83 @@ components:
           type: string
           format: date-time
           description: Time entry start time
-        endTime:
-          type: string
-          format: date-time
-          description: >
-            Time entry end time. End time is not required for time entries that
-            are still running.
-
-            If an employee has an existing time entry without an end time and the new entry is missing end time,
-
-            the new time entry should not be created and instead a bad request is to be returned.
-
-            When a new entry is created with both start and end times, the existing entry is ignored.
-        workTypeId:
-          type: string
-          format: uuid
-          description: Work type id
-    WorkType:
-      type: object
-      description: Describes different work types that employees can have
-      required:
-        - name
-        - category
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-          description: Work type name
-        category:
-          $ref: "#/components/schemas/WorkTypeCategory"
-    WorkTypeCategory:
+        workEventType:
+          $ref: "#/components/schemas/WorkEventType"
+    WorkEventType:
       type: string
-      description: Describes work type's category
+      description: >
+        Work event type's. UI implementations should translate these to more
+        human readable form.
+
+
+        *Office/Terminal work types*
+
+        - VEGETABLE (Hevi)
+
+        - DRY (Kuiva)
+
+        - MEAT_CELLAR (Lihakellari)
+
+        - MEIRA (Meira)
+
+        - FROZEN (Pakaste)
+
+        - PALTE (Palte)
+
+        - BREWERY (Panimo)
+
+        - GREASE (Rasva)
+
+        - LOGIN
+
+        - LOGOUT
+
+
+        *Common work types*
+
+        - OTHER_WORK (Muu työ)
+
+        - BREAK (Tauko)
+
+        - SHIFT_START
+
+        - SHIFT_END
+
+
+        *Driver work types*
+
+        - DRIVE
+
+        - LOADING
+
+        - UNLOADING
+
+        - AVAILABILITY
+
+        - DRIVER_CARD_INSERTED
+
+        - DRIVER_CARD_REMOVED
       enum:
-        - DRIVER
-        - TERMINAL
-        - OFFICE
+        - VEGETABLE
+        - DRY
+        - MEAT_CELLAR
+        - MEIRA
+        - FROZEN
+        - PALTE
+        - BREWERY
+        - GREASE
+        - LOGIN
+        - LOGOUT
+        - OTHER_WORK
+        - BREAK
+        - SHIFT_START
+        - SHIFT_END
+        - DRIVE
+        - LOADING
+        - UNLOADING
+        - AVAILABILITY
+        - DRIVER_CARD_INSERTED
+        - DRIVER_CARD_REMOVED
     Site:
       type: object
       description: Represents a single customer site
