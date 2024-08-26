@@ -1372,6 +1372,11 @@
             "format": "date-time",
             "description": "Time entry start time"
           },
+          "endTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Time entry end time. End time is not required for time entries that are still running.\nIf an employee has an existing time entry without an end time and the new entry is missing end time,\nthe new time entry should not be created and instead a bad request is to be returned.\nWhen a new entry is created with both start and end times, the existing entry is ignored.\n"
+          },
           "workEventType": {
             "$ref": "#/components/schemas/WorkEventType"
           }
