@@ -1188,6 +1188,7 @@ components:
       required:
         - date
         - name
+        - compensationType
       properties:
         id:
           type: string
@@ -1200,6 +1201,8 @@ components:
         name:
           type: string
           description: Holiday name
+        compensationType:
+          $ref: "#/components/schemas/CompensationType"
         creatorId:
           type: string
           format: uuid
@@ -1217,7 +1220,8 @@ components:
           format: date-time
           description: Last modified time
 
-    # HolidayType:
-    #   type: string
-    #   enum:
-    #     -
+    CompensationType:
+      type: string
+      enum:
+        - PUBLIC_HOLIDAY_ALLOWANCE
+        - DAY_OFF_WORK_ALLOWANCE
