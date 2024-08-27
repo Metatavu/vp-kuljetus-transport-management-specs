@@ -425,29 +425,81 @@ components:
         - KOTKA
         - KOUVOLA
         - RAUHA
-    WorkType:
-      type: object
-      description: Describes different work types that employees can have
-      required:
-        - name
-        - category
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-          description: Work type name
-        category:
-          $ref: "#/components/schemas/WorkTypeCategory"
-    WorkTypeCategory:
+    WorkEventType:
       type: string
-      description: Describes work type's category
+      description: >
+        Work event type's. UI implementations should translate these to more
+        human readable form.
+
+
+        *Office/Terminal work types*
+
+        - VEGETABLE (Hevi)
+
+        - DRY (Kuiva)
+
+        - MEAT_CELLAR (Lihakellari)
+
+        - MEIRA (Meira)
+
+        - FROZEN (Pakaste)
+
+        - PALTE (Palte)
+
+        - BREWERY (Panimo)
+
+        - GREASE (Rasva)
+
+        - LOGIN
+
+        - LOGOUT
+
+
+        *Common work types*
+
+        - OTHER_WORK (Muu työ)
+
+        - BREAK (Tauko)
+
+        - SHIFT_START
+
+        - SHIFT_END
+
+
+        *Driver work types*
+
+        - DRIVE
+
+        - LOADING
+
+        - UNLOADING
+
+        - AVAILABILITY
+
+        - DRIVER_CARD_INSERTED
+
+        - DRIVER_CARD_REMOVED
       enum:
-        - DRIVER
-        - TERMINAL
-        - OFFICE
+        - VEGETABLE
+        - DRY
+        - MEAT_CELLAR
+        - MEIRA
+        - FROZEN
+        - PALTE
+        - BREWERY
+        - GREASE
+        - LOGIN
+        - LOGOUT
+        - OTHER_WORK
+        - BREAK
+        - SHIFT_START
+        - SHIFT_END
+        - DRIVE
+        - LOADING
+        - UNLOADING
+        - AVAILABILITY
+        - DRIVER_CARD_INSERTED
+        - DRIVER_CARD_REMOVED
     TaskType:
       type: string
       description: Type of the task
