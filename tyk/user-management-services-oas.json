@@ -1214,8 +1214,7 @@
             "in": "query",
             "description": "What years holidays to list.",
             "schema": {
-              "type": "integer",
-              "default": 0
+              "type": "integer"
             }
           },
           {

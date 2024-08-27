@@ -1768,7 +1768,6 @@ paths:
           description: What years holidays to list.
           schema:
             type: integer
-            default: 0
         - name: first
           in: query
           description: First result.
