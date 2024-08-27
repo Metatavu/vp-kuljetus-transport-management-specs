@@ -838,7 +838,7 @@ paths:
       security:
         - BearerAuth: [manager]
       tags:
-        - Employees
+        - Holidays
         - SpecManagementUI
       parameters:
         - name: holidayId

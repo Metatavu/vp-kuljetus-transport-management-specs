@@ -1833,7 +1833,7 @@ paths:
         - BearerAuth:
             - manager
       tags:
-        - Employees
+        - Holidays
       parameters:
         - name: holidayId
           required: true
