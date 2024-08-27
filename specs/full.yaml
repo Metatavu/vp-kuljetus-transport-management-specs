@@ -3222,6 +3222,10 @@ components:
         - date
         - name
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         date:
           type: string
           format: date
@@ -3229,6 +3233,22 @@ components:
         name:
           type: string
           description: Holiday name
+        creatorId:
+          type: string
+          format: uuid
+          description: Creator's id
+        lastModifierId:
+          type: string
+          format: uuid
+          description: Last modifier's id
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation time
+        modifiedAt:
+          type: string
+          format: date-time
+          description: Last modified time
     Site:
       type: object
       description: Represents a single customer site
