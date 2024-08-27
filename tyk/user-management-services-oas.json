@@ -1191,6 +1191,280 @@
           }
         }
       }
+    },
+    "/v1/holidays": {
+      "get": {
+        "operationId": "listHolidays",
+        "summary": "List Holidays.",
+        "description": "Lists holidays.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Holidays",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "description": "What years holidays to list.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "first",
+            "in": "query",
+            "description": "First result.",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "max",
+            "in": "query",
+            "description": "Max results.",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of holidays",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Holiday"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createHoliday",
+        "summary": "Create Holiday.",
+        "description": "Creates Holiday.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Holidays",
+          "SpecManagementUI"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Holiday"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created Holiday",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Holiday"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/holidays/{holidayId}": {
+      "get": {
+        "operationId": "findHoliday",
+        "summary": "Find an Holiday.",
+        "description": "Finds an Holiday by id.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Holidays",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "holidayId",
+            "required": true,
+            "in": "path",
+            "description": "Holiday's id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found Holiday",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Holiday"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "updateHoliday",
+        "summary": "Update Holiday.",
+        "description": "Updates Holiday.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Holidays",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "holidayId",
+            "required": true,
+            "in": "path",
+            "description": "Holidays's id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Holiday"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated Holiday",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Holiday"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteHoliday",
+        "summary": "Delete Holiday.",
+        "description": "Deletes Holiday.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Holidays",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "holidayId",
+            "required": true,
+            "in": "path",
+            "description": "Holiday's id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Empty response indicating successful removal"
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1424,7 +1698,7 @@
       },
       "WorkEventType": {
         "type": "string",
-        "description": "Work event type's. UI implementations should translate these to more human readable form.\n\n*Office/Terminal work types*\n- VEGETABLE (Hevi)\n- DRY (Kuiva)\n- MEAT_CELLAR (Lihakellari)\n- MEIRA (Meira)\n- FROZEN (Pakaste)\n- PALTE (Palte)\n- BREWERY (Panimo)\n- GREASE (Rasva)\n- LOGIN\n- LOGOUT\n\n*Common work types*\n- OTHER_WORK (Muu työ)\n- BREAK (Tauko)\n- SHIFT_START\n- SHIFT_END\n\n*Driver work types*\n- DRIVE\n- LOADING\n- UNLOADING\n- AVAILABILITY\n- DRIVER_CARD_INSERTED\n- DRIVER_CARD_REMOVED\n",
+        "description": "Work event types. UI implementations should translate these to more human readable form.\n\n*Office/Terminal work types*\n- VEGETABLE (Hevi)\n- DRY (Kuiva)\n- MEAT_CELLAR (Lihakellari)\n- MEIRA (Meira)\n- FROZEN (Pakaste)\n- PALTE (Palte)\n- BREWERY (Panimo)\n- GREASE (Rasva)\n- LOGIN\n- LOGOUT\n\n*Common work types*\n- OTHER_WORK (Muu työ)\n- BREAK (Tauko)\n- SHIFT_START\n- SHIFT_END\n\n*Driver work types*\n- DRIVE\n- LOADING\n- UNLOADING\n- AVAILABILITY\n- DRIVER_CARD_INSERTED\n- DRIVER_CARD_REMOVED\n",
         "enum": [
           "VEGETABLE",
           "DRY",
@@ -1446,6 +1720,61 @@
           "AVAILABILITY",
           "DRIVER_CARD_INSERTED",
           "DRIVER_CARD_REMOVED"
+        ]
+      },
+      "Holiday": {
+        "type": "object",
+        "description": "Represents a single holiday",
+        "required": [
+          "date",
+          "name",
+          "compensationType"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "Holiday date"
+          },
+          "name": {
+            "type": "string",
+            "description": "Holiday name"
+          },
+          "compensationType": {
+            "$ref": "#/components/schemas/CompensationType"
+          },
+          "creatorId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Creator's id"
+          },
+          "lastModifierId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Last modifier's id"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation time"
+          },
+          "modifiedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last modified time"
+          }
+        }
+      },
+      "CompensationType": {
+        "type": "string",
+        "enum": [
+          "PUBLIC_HOLIDAY_ALLOWANCE",
+          "DAY_OFF_WORK_ALLOWANCE"
         ]
       }
     }
