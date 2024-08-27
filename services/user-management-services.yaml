@@ -965,7 +965,7 @@ components:
     WorkEventType:
       type: string
       description: |
-        Work event type's. UI implementations should translate these to more human readable form.
+        Work event types. UI implementations should translate these to more human readable form.
 
         *Office/Terminal work types*
         - VEGETABLE (Hevi)
