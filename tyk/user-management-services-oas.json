@@ -588,7 +588,7 @@
       "post": {
         "operationId": "createEmployeeWorkEvent",
         "summary": "Create Employees Work Event.",
-        "description": "Creates Employees Work Event.\n\nAttempt to create new time entry should fail if:\n  1) New time entry does not have endTime but there is already one time entry without endTime for the same employee. This is because work events without endTime are considered to be running timers and only one is allowed at a time.\n  2) If time new entry intersects with an existing time entry.\n",
+        "description": "Creates Employees Work Event.",
         "security": [
           {
             "BearerAuth": [
@@ -627,7 +627,7 @@
         },
         "responses": {
           "201": {
-            "description": "Created time entry",
+            "description": "Created work event",
             "content": {
               "application/json": {
                 "schema": {
@@ -1615,7 +1615,7 @@
       },
       "WorkEvent": {
         "type": "object",
-        "description": "Represents single time entry",
+        "description": "Represents single work event",
         "required": [
           "employeeId",
           "startTime",
@@ -1635,12 +1635,7 @@
           "startTime": {
             "type": "string",
             "format": "date-time",
-            "description": "Time entry start time"
-          },
-          "endTime": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Time entry end time. End time is not required for time entries that are still running.\nIf an employee has an existing time entry without an end time and the new entry is missing end time,\nthe new time entry should not be created and instead a bad request is to be returned.\nWhen a new entry is created with both start and end times, the existing entry is ignored.\n"
+            "description": "Work event start time"
           },
           "workEventType": {
             "$ref": "#/components/schemas/WorkEventType"
