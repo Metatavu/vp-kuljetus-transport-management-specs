@@ -3104,6 +3104,8 @@ components:
 
         - SHIFT_END
 
+        - UNKNOWN
+
 
         *Driver work types*
 
@@ -3133,6 +3135,7 @@ components:
         - BREAK
         - SHIFT_START
         - SHIFT_END
+        - UNKNOWN
         - DRIVE
         - LOADING
         - UNLOADING
