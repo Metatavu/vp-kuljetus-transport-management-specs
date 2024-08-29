@@ -145,7 +145,7 @@
       "get": {
         "operationId": "findDriver",
         "summary": "Find a driver.",
-        "description": "Finds a driver by id.",
+        "description": "Finds a driver by ID.",
         "security": [
           {
             "BearerAuth": [
@@ -164,7 +164,7 @@
             "name": "driverId",
             "required": true,
             "in": "path",
-            "description": "driver's id",
+            "description": "driver's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -350,7 +350,7 @@
       "get": {
         "operationId": "findEmployee",
         "summary": "Find an employee.",
-        "description": "Finds an employee by id.",
+        "description": "Finds an employee by ID.",
         "security": [
           {
             "BearerAuth": [
@@ -367,7 +367,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -417,7 +417,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -477,7 +477,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -525,16 +525,25 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
             }
           },
           {
-            "name": "start",
+            "name": "after",
             "in": "query",
-            "description": "Start time for work events.",
+            "description": "Filter work events after specified date.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "description": "Filter work events before specified date.",
             "schema": {
               "type": "string",
               "format": "date-time"
@@ -608,7 +617,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -653,7 +662,7 @@
       "get": {
         "operationId": "findEmployeeWorkEvent",
         "summary": "Find an employee's work event.",
-        "description": "Finds an employee's work event by id.",
+        "description": "Finds an employee's work event by ID.",
         "security": [
           {
             "BearerAuth": [
@@ -673,7 +682,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -683,7 +692,7 @@
             "name": "workEventId",
             "required": true,
             "in": "path",
-            "description": "work events id",
+            "description": "work event's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -735,7 +744,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employees id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -745,7 +754,7 @@
             "name": "workEventId",
             "required": true,
             "in": "path",
-            "description": "work events id",
+            "description": "work event's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -805,7 +814,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -815,7 +824,7 @@
             "name": "workEventId",
             "required": true,
             "in": "path",
-            "description": "work events id",
+            "description": "work event's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -860,7 +869,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -957,7 +966,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1002,7 +1011,7 @@
       "get": {
         "operationId": "findEmployeeDailyTimeEntry",
         "summary": "Find an employee's daily time entry.",
-        "description": "Finds an employee's daily time entry by id.",
+        "description": "Finds an employee's daily time entry by ID.",
         "security": [
           {
             "BearerAuth": [
@@ -1019,7 +1028,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1029,7 +1038,7 @@
             "name": "dailyTimeEntryId",
             "required": true,
             "in": "path",
-            "description": "daily time entry's id",
+            "description": "daily time entry's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1079,7 +1088,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1089,7 +1098,7 @@
             "name": "dailyTimeEntryId",
             "required": true,
             "in": "path",
-            "description": "daily time entry's id",
+            "description": "daily time entry's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1149,7 +1158,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1159,7 +1168,7 @@
             "name": "dailyTimeEntryId",
             "required": true,
             "in": "path",
-            "description": "daily time entry's id",
+            "description": "daily time entry's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1306,7 +1315,7 @@
       "get": {
         "operationId": "findHoliday",
         "summary": "Find an Holiday.",
-        "description": "Finds an Holiday by id.",
+        "description": "Finds an Holiday by ID.",
         "security": [
           {
             "BearerAuth": [
@@ -1323,7 +1332,7 @@
             "name": "holidayId",
             "required": true,
             "in": "path",
-            "description": "Holiday's id",
+            "description": "Holiday's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1373,7 +1382,7 @@
             "name": "holidayId",
             "required": true,
             "in": "path",
-            "description": "Holidays's id",
+            "description": "Holidays's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1433,7 +1442,7 @@
             "name": "holidayId",
             "required": true,
             "in": "path",
-            "description": "Holiday's id",
+            "description": "Holiday's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1630,7 +1639,7 @@
           "employeeId": {
             "type": "string",
             "format": "uuid",
-            "description": "Employee's id"
+            "description": "Employee's ID"
           },
           "startTime": {
             "type": "string",
@@ -1661,7 +1670,7 @@
           "employeeId": {
             "type": "string",
             "format": "uuid",
-            "description": "Employee's id"
+            "description": "Employee's ID"
           },
           "date": {
             "type": "string",
@@ -1737,12 +1746,12 @@
           "creatorId": {
             "type": "string",
             "format": "uuid",
-            "description": "Creator's id"
+            "description": "Creator's ID"
           },
           "lastModifierId": {
             "type": "string",
             "format": "uuid",
-            "description": "Last modifier's id"
+            "description": "Last modifier's ID"
           },
           "createdAt": {
             "type": "string",

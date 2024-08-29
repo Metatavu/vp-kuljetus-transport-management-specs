@@ -572,7 +572,7 @@ paths:
     get:
       operationId: findDriver
       summary: Find a driver.
-      description: Finds a driver by id.
+      description: Finds a driver by ID.
       security:
         - BearerAuth:
             - driver
@@ -583,7 +583,7 @@ paths:
         - name: driverId
           required: true
           in: path
-          description: driver's id
+          description: driver's ID
           schema:
             type: string
             format: uuid
@@ -616,13 +616,19 @@ paths:
         - name: employeeId
           required: true
           in: path
-          description: employee's id
+          description: employee's ID
           schema:
             type: string
             format: uuid
-        - name: start
+        - name: after
           in: query
-          description: Start time for work events.
+          description: Filter work events after specified date.
+          schema:
+            type: string
+            format: date-time
+        - name: before
+          in: query
+          description: Filter work events before specified date.
           schema:
             type: string
             format: date-time
@@ -668,7 +674,7 @@ paths:
         - name: employeeId
           required: true
           in: path
-          description: employee's id
+          description: employee's ID
           schema:
             type: string
             format: uuid
@@ -695,7 +701,7 @@ paths:
     get:
       operationId: findEmployeeWorkEvent
       summary: Find an employee's work event.
-      description: Finds an employee's work event by id.
+      description: Finds an employee's work event by ID.
       security:
         - BearerAuth:
             - manager
@@ -707,14 +713,14 @@ paths:
         - name: employeeId
           required: true
           in: path
-          description: employee's id
+          description: employee's ID
           schema:
             type: string
             format: uuid
         - name: workEventId
           required: true
           in: path
-          description: work events id
+          description: work event's ID
           schema:
             type: string
             format: uuid
@@ -745,14 +751,14 @@ paths:
         - name: employeeId
           required: true
           in: path
-          description: employees id
+          description: employee's ID
           schema:
             type: string
             format: uuid
         - name: workEventId
           required: true
           in: path
-          description: work events id
+          description: work event's ID
           schema:
             type: string
             format: uuid
@@ -1588,7 +1594,7 @@ components:
         employeeId:
           type: string
           format: uuid
-          description: Employee's id
+          description: Employee's ID
         startTime:
           type: string
           format: date-time
