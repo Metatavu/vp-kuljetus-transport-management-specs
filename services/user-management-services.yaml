@@ -311,7 +311,7 @@ paths:
     get:
       operationId: listEmployeeWorkEvents
       summary: List Employees Time Entries.
-      description: Lists Employees Work Events. Sort by start time, latest first.
+      description: Lists Employees Work Events. Sort by time, latest first.
       security:
         - BearerAuth: [manager, driver, employee]
       tags:
@@ -1053,7 +1053,7 @@ components:
       description: Represents single work event
       required:
         - employeeId
-        - startTime
+        - time
         - workEventType
       properties:
         id:
@@ -1064,10 +1064,10 @@ components:
           type: string
           format: uuid
           description: Employee's ID
-        startTime:
+        time:
           type: string
           format: date-time
-          description: Work event start time
+          description: Work event time
         workEventType:
           $ref: "#/components/schemas/WorkEventType"
 
