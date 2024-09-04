@@ -572,7 +572,7 @@ paths:
     get:
       operationId: findDriver
       summary: Find a driver.
-      description: Finds a driver by id.
+      description: Finds a driver by ID.
       security:
         - BearerAuth:
             - driver
@@ -583,7 +583,7 @@ paths:
         - name: driverId
           required: true
           in: path
-          description: driver's id
+          description: driver's ID
           schema:
             type: string
             format: uuid
@@ -600,35 +600,35 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /user-management/v1/employees/{employeeId}/timeEntries:
+  /user-management/v1/employees/{employeeId}/workEvents:
     get:
-      operationId: listEmployeeTimeEntries
+      operationId: listEmployeeWorkEvents
       summary: List Employees Time Entries.
-      description: Lists Employees Time Entries. Sort by start time, latest first.
+      description: Lists Employees Work Events. Sort by time, latest first.
       security:
         - BearerAuth:
             - manager
             - driver
             - employee
       tags:
-        - TimeEntries
+        - WorkEvents
       parameters:
         - name: employeeId
           required: true
           in: path
-          description: employee's id
+          description: employee's ID
           schema:
             type: string
             format: uuid
-        - name: start
+        - name: after
           in: query
-          description: Start time for time entries.
+          description: Filter work events after specified date.
           schema:
             type: string
             format: date-time
-        - name: end
+        - name: before
           in: query
-          description: End time for time entries.
+          description: Filter work events before specified date.
           schema:
             type: string
             format: date-time
@@ -646,13 +646,13 @@ paths:
             default: 10
       responses:
         "200":
-          description: List of time entries
+          description: List of work events
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/TimeEntry"
+                  $ref: "#/components/schemas/WorkEvent"
         default:
           description: Invalid request was sent to the server
           content:
@@ -660,27 +660,21 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
-      operationId: createEmployeeTimeEntry
-      summary: Create Employees Time Entry.
-      description: >
-        Creates Employees Time Entry.
-
-
-        Attempt to create new time entry should fail if:
-          1) New time entry does not have endTime but there is already one time entry without endTime for the same employee. This is because time entries without endTime are considered to be running timers and only one is allowed at a time.
-          2) If time new entry intersects with an existing time entry.
+      operationId: createEmployeeWorkEvent
+      summary: Create Employees Work Event.
+      description: Creates Employees Work Event.
       security:
         - BearerAuth:
             - manager
             - driver
             - employee
       tags:
-        - TimeEntries
+        - WorkEvents
       parameters:
         - name: employeeId
           required: true
           in: path
-          description: employee's id
+          description: employee's ID
           schema:
             type: string
             format: uuid
@@ -689,54 +683,54 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TimeEntry"
+              $ref: "#/components/schemas/WorkEvent"
       responses:
         "201":
-          description: Created time entry
+          description: Created work event
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TimeEntry"
+                $ref: "#/components/schemas/WorkEvent"
         default:
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /user-management/v1/employees/{employeeId}/timeEntries/{timeEntryId}:
+  /user-management/v1/employees/{employeeId}/workEvents/{workEventId}:
     get:
-      operationId: findEmployeeTimeEntry
-      summary: Find an employee's time entry.
-      description: Finds an employee's time entry by id.
+      operationId: findEmployeeWorkEvent
+      summary: Find an employee's work event.
+      description: Finds an employee's work event by ID.
       security:
         - BearerAuth:
             - manager
             - driver
             - employee
       tags:
-        - TimeEntries
+        - WorkEvents
       parameters:
         - name: employeeId
           required: true
           in: path
-          description: employee's id
+          description: employee's ID
           schema:
             type: string
             format: uuid
-        - name: timeEntryId
+        - name: workEventId
           required: true
           in: path
-          description: time entry's id
+          description: work event's ID
           schema:
             type: string
             format: uuid
       responses:
         "200":
-          description: Found time entry
+          description: Found work event
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TimeEntry"
+                $ref: "#/components/schemas/WorkEvent"
         default:
           description: Invalid request was sent to the server
           content:
@@ -744,35 +738,27 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     put:
-      operationId: updateEmployeeTimeEntry
-      summary: Update Employee's Time Entry.
-      description: >
-        Updates Employee's Time Entry.
-
-
-        Update should fail, when:
-
-        1) Modified entry does not have endTime but there is already another entry without endTime present in the system for same employee.  This is because time entries without endTime are considered to be running timers and only one is allowed at a time.
-
-        2) If modifying the entry would lead it to intersect with another time entry.
+      operationId: updateEmployeeWorkEvent
+      summary: Update Employee's Work Event.
+      description: Updates Employee's Work Event.
       security:
         - BearerAuth:
             - manager
             - employee
       tags:
-        - TimeEntries
+        - WorkEvents
       parameters:
         - name: employeeId
           required: true
           in: path
-          description: employee's id
+          description: employee's ID
           schema:
             type: string
             format: uuid
-        - name: timeEntryId
+        - name: workEventId
           required: true
           in: path
-          description: time entry's id
+          description: work event's ID
           schema:
             type: string
             format: uuid
@@ -781,14 +767,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TimeEntry"
+              $ref: "#/components/schemas/WorkEvent"
       responses:
         "200":
           description: Updated time entry
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TimeEntry"
+                $ref: "#/components/schemas/WorkEvent"
         default:
           description: Invalid request was sent to the server
           content:
@@ -1593,12 +1579,12 @@ components:
         - KOTKA
         - KOUVOLA
         - RAUHA
-    TimeEntry:
+    WorkEvent:
       type: object
-      description: Represents single time entry
+      description: Represents single work event
       required:
         - employeeId
-        - startTime
+        - time
         - workEventType
       properties:
         id:
@@ -1608,23 +1594,11 @@ components:
         employeeId:
           type: string
           format: uuid
-          description: Employee's id
-        startTime:
+          description: Employee's ID
+        time:
           type: string
           format: date-time
-          description: Time entry start time
-        endTime:
-          type: string
-          format: date-time
-          description: >
-            Time entry end time. End time is not required for time entries that
-            are still running.
-
-            If an employee has an existing time entry without an end time and the new entry is missing end time,
-
-            the new time entry should not be created and instead a bad request is to be returned.
-
-            When a new entry is created with both start and end times, the existing entry is ignored.
+          description: Work event time
         workEventType:
           $ref: "#/components/schemas/WorkEventType"
     WorkEventType:

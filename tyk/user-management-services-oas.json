@@ -145,7 +145,7 @@
       "get": {
         "operationId": "findDriver",
         "summary": "Find a driver.",
-        "description": "Finds a driver by id.",
+        "description": "Finds a driver by ID.",
         "security": [
           {
             "BearerAuth": [
@@ -164,7 +164,7 @@
             "name": "driverId",
             "required": true,
             "in": "path",
-            "description": "driver's id",
+            "description": "driver's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -350,7 +350,7 @@
       "get": {
         "operationId": "findEmployee",
         "summary": "Find an employee.",
-        "description": "Finds an employee by id.",
+        "description": "Finds an employee by ID.",
         "security": [
           {
             "BearerAuth": [
@@ -367,7 +367,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -417,7 +417,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -477,7 +477,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -501,11 +501,11 @@
         }
       }
     },
-    "/v1/employees/{employeeId}/timeEntries": {
+    "/v1/employees/{employeeId}/workEvents": {
       "get": {
-        "operationId": "listEmployeeTimeEntries",
+        "operationId": "listEmployeeWorkEvents",
         "summary": "List Employees Time Entries.",
-        "description": "Lists Employees Time Entries. Sort by start time, latest first.",
+        "description": "Lists Employees Work Events. Sort by time, latest first.",
         "security": [
           {
             "BearerAuth": [
@@ -516,7 +516,7 @@
           }
         ],
         "tags": [
-          "TimeEntries",
+          "WorkEvents",
           "SpecApp",
           "SpecManagementUI"
         ],
@@ -525,25 +525,25 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
             }
           },
           {
-            "name": "start",
+            "name": "after",
             "in": "query",
-            "description": "Start time for time entries.",
+            "description": "Filter work events after specified date.",
             "schema": {
               "type": "string",
               "format": "date-time"
             }
           },
           {
-            "name": "end",
+            "name": "before",
             "in": "query",
-            "description": "End time for time entries.",
+            "description": "Filter work events before specified date.",
             "schema": {
               "type": "string",
               "format": "date-time"
@@ -570,13 +570,13 @@
         ],
         "responses": {
           "200": {
-            "description": "List of time entries",
+            "description": "List of work events",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TimeEntry"
+                    "$ref": "#/components/schemas/WorkEvent"
                   }
                 }
               }
@@ -595,9 +595,9 @@
         }
       },
       "post": {
-        "operationId": "createEmployeeTimeEntry",
-        "summary": "Create Employees Time Entry.",
-        "description": "Creates Employees Time Entry.\n\nAttempt to create new time entry should fail if:\n  1) New time entry does not have endTime but there is already one time entry without endTime for the same employee. This is because time entries without endTime are considered to be running timers and only one is allowed at a time.\n  2) If time new entry intersects with an existing time entry.\n",
+        "operationId": "createEmployeeWorkEvent",
+        "summary": "Create Employees Work Event.",
+        "description": "Creates Employees Work Event.",
         "security": [
           {
             "BearerAuth": [
@@ -608,7 +608,7 @@
           }
         ],
         "tags": [
-          "TimeEntries",
+          "WorkEvents",
           "SpecApp",
           "SpecManagementUI"
         ],
@@ -617,7 +617,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -629,18 +629,18 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TimeEntry"
+                "$ref": "#/components/schemas/WorkEvent"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Created time entry",
+            "description": "Created work event",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TimeEntry"
+                  "$ref": "#/components/schemas/WorkEvent"
                 }
               }
             }
@@ -658,11 +658,11 @@
         }
       }
     },
-    "/v1/employees/{employeeId}/timeEntries/{timeEntryId}": {
+    "/v1/employees/{employeeId}/workEvents/{workEventId}": {
       "get": {
-        "operationId": "findEmployeeTimeEntry",
-        "summary": "Find an employee's time entry.",
-        "description": "Finds an employee's time entry by id.",
+        "operationId": "findEmployeeWorkEvent",
+        "summary": "Find an employee's work event.",
+        "description": "Finds an employee's work event by ID.",
         "security": [
           {
             "BearerAuth": [
@@ -673,7 +673,7 @@
           }
         ],
         "tags": [
-          "TimeEntries",
+          "WorkEvents",
           "SpecApp",
           "SpecManagementUI"
         ],
@@ -682,17 +682,17 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
             }
           },
           {
-            "name": "timeEntryId",
+            "name": "workEventId",
             "required": true,
             "in": "path",
-            "description": "time entry's id",
+            "description": "work event's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -701,11 +701,11 @@
         ],
         "responses": {
           "200": {
-            "description": "Found time entry",
+            "description": "Found work event",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TimeEntry"
+                  "$ref": "#/components/schemas/WorkEvent"
                 }
               }
             }
@@ -723,9 +723,9 @@
         }
       },
       "put": {
-        "operationId": "updateEmployeeTimeEntry",
-        "summary": "Update Employee's Time Entry.",
-        "description": "Updates Employee's Time Entry.\n\nUpdate should fail, when:\n1) Modified entry does not have endTime but there is already another entry without endTime present in the system for same employee.  This is because time entries without endTime are considered to be running timers and only one is allowed at a time.\n2) If modifying the entry would lead it to intersect with another time entry.\n",
+        "operationId": "updateEmployeeWorkEvent",
+        "summary": "Update Employee's Work Event.",
+        "description": "Updates Employee's Work Event.",
         "security": [
           {
             "BearerAuth": [
@@ -735,7 +735,7 @@
           }
         ],
         "tags": [
-          "TimeEntries",
+          "WorkEvents",
           "SpecApp",
           "SpecManagementUI"
         ],
@@ -744,17 +744,17 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
             }
           },
           {
-            "name": "timeEntryId",
+            "name": "workEventId",
             "required": true,
             "in": "path",
-            "description": "time entry's id",
+            "description": "work event's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -766,7 +766,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TimeEntry"
+                "$ref": "#/components/schemas/WorkEvent"
               }
             }
           }
@@ -777,7 +777,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TimeEntry"
+                  "$ref": "#/components/schemas/WorkEvent"
                 }
               }
             }
@@ -795,9 +795,9 @@
         }
       },
       "delete": {
-        "operationId": "deleteEmployeeTimeEntry",
-        "summary": "Delete Employee's Time Entry.",
-        "description": "Deletes Employee's Time Entry. Only accessible by managers.",
+        "operationId": "deleteEmployeeWorkEvent",
+        "summary": "Delete Employee's Work Event.",
+        "description": "Deletes Employee's Work Event. Only accessible by managers.",
         "security": [
           {
             "BearerAuth": [
@@ -806,7 +806,7 @@
           }
         ],
         "tags": [
-          "TimeEntries",
+          "WorkEvents",
           "SpecManagementUI"
         ],
         "parameters": [
@@ -814,17 +814,17 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
             }
           },
           {
-            "name": "timeEntryId",
+            "name": "workEventId",
             "required": true,
             "in": "path",
-            "description": "time entry's id",
+            "description": "work event's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -869,7 +869,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -966,7 +966,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -989,7 +989,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TimeEntry"
+                  "$ref": "#/components/schemas/WorkEvent"
                 }
               }
             }
@@ -1011,7 +1011,7 @@
       "get": {
         "operationId": "findEmployeeDailyTimeEntry",
         "summary": "Find an employee's daily time entry.",
-        "description": "Finds an employee's daily time entry by id.",
+        "description": "Finds an employee's daily time entry by ID.",
         "security": [
           {
             "BearerAuth": [
@@ -1028,7 +1028,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1038,7 +1038,7 @@
             "name": "dailyTimeEntryId",
             "required": true,
             "in": "path",
-            "description": "daily time entry's id",
+            "description": "daily time entry's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1088,7 +1088,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1098,7 +1098,7 @@
             "name": "dailyTimeEntryId",
             "required": true,
             "in": "path",
-            "description": "daily time entry's id",
+            "description": "daily time entry's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1158,7 +1158,7 @@
             "name": "employeeId",
             "required": true,
             "in": "path",
-            "description": "employee's id",
+            "description": "employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1168,7 +1168,7 @@
             "name": "dailyTimeEntryId",
             "required": true,
             "in": "path",
-            "description": "daily time entry's id",
+            "description": "daily time entry's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1315,7 +1315,7 @@
       "get": {
         "operationId": "findHoliday",
         "summary": "Find an Holiday.",
-        "description": "Finds an Holiday by id.",
+        "description": "Finds an Holiday by ID.",
         "security": [
           {
             "BearerAuth": [
@@ -1332,7 +1332,7 @@
             "name": "holidayId",
             "required": true,
             "in": "path",
-            "description": "Holiday's id",
+            "description": "Holiday's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1382,7 +1382,7 @@
             "name": "holidayId",
             "required": true,
             "in": "path",
-            "description": "Holidays's id",
+            "description": "Holidays's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1442,7 +1442,7 @@
             "name": "holidayId",
             "required": true,
             "in": "path",
-            "description": "Holiday's id",
+            "description": "Holiday's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1622,12 +1622,12 @@
           "RAUHA"
         ]
       },
-      "TimeEntry": {
+      "WorkEvent": {
         "type": "object",
-        "description": "Represents single time entry",
+        "description": "Represents single work event",
         "required": [
           "employeeId",
-          "startTime",
+          "time",
           "workEventType"
         ],
         "properties": {
@@ -1639,17 +1639,12 @@
           "employeeId": {
             "type": "string",
             "format": "uuid",
-            "description": "Employee's id"
+            "description": "Employee's ID"
           },
-          "startTime": {
+          "time": {
             "type": "string",
             "format": "date-time",
-            "description": "Time entry start time"
-          },
-          "endTime": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Time entry end time. End time is not required for time entries that are still running.\nIf an employee has an existing time entry without an end time and the new entry is missing end time,\nthe new time entry should not be created and instead a bad request is to be returned.\nWhen a new entry is created with both start and end times, the existing entry is ignored.\n"
+            "description": "Work event time"
           },
           "workEventType": {
             "$ref": "#/components/schemas/WorkEventType"
@@ -1675,7 +1670,7 @@
           "employeeId": {
             "type": "string",
             "format": "uuid",
-            "description": "Employee's id"
+            "description": "Employee's ID"
           },
           "date": {
             "type": "string",
@@ -1751,12 +1746,12 @@
           "creatorId": {
             "type": "string",
             "format": "uuid",
-            "description": "Creator's id"
+            "description": "Creator's ID"
           },
           "lastModifierId": {
             "type": "string",
             "format": "uuid",
-            "description": "Last modifier's id"
+            "description": "Last modifier's ID"
           },
           "createdAt": {
             "type": "string",

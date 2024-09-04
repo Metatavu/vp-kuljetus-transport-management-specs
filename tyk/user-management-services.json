@@ -241,7 +241,7 @@
             },
             {
               "disabled": false,
-              "path": "/v1/employees/{employeeId}/timeEntries",
+              "path": "/v1/employees/{employeeId}/workEvents",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -261,7 +261,7 @@
             },
             {
               "disabled": false,
-              "path": "/v1/employees/{employeeId}/timeEntries/{timeEntryId}",
+              "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -396,23 +396,23 @@
               "method": "PUT"
             },
             {
-              "path": "/v1/employees/{employeeId}/timeEntries",
+              "path": "/v1/employees/{employeeId}/workEvents",
               "method": "GET"
             },
             {
-              "path": "/v1/employees/{employeeId}/timeEntries",
+              "path": "/v1/employees/{employeeId}/workEvents",
               "method": "POST"
             },
             {
-              "path": "/v1/employees/{employeeId}/timeEntries/{timeEntryId}",
+              "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
               "method": "DELETE"
             },
             {
-              "path": "/v1/employees/{employeeId}/timeEntries/{timeEntryId}",
+              "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
               "method": "GET"
             },
             {
-              "path": "/v1/employees/{employeeId}/timeEntries/{timeEntryId}",
+              "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
               "method": "PUT"
             },
             {

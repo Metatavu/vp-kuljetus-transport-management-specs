@@ -90,7 +90,7 @@ paths:
     get:
       operationId: findDriver
       summary: Find a driver.
-      description: Finds a driver by id.
+      description: Finds a driver by ID.
       security:
         - BearerAuth: [driver, manager]
       tags:
@@ -101,7 +101,7 @@ paths:
         - name: driverId
           required: true
           in: path
-          description: driver's id
+          description: driver's ID
           schema:
             type: string
             format: uuid
@@ -215,7 +215,7 @@ paths:
     get:
       operationId: findEmployee
       summary: Find an employee.
-      description: Finds an employee by id.
+      description: Finds an employee by ID.
       security:
         - BearerAuth: [manager]
       tags:
@@ -225,7 +225,7 @@ paths:
         - name: employeeId
           required: true
           in: path
-          description: employee's id
+          description: employee's ID
           schema:
             type: string
             format: uuid
@@ -255,7 +255,7 @@ paths:
         - name: employeeId
           required: true
           in: path
-          description: employee's id
+          description: employee's ID
           schema:
             type: string
             format: uuid
@@ -293,7 +293,7 @@ paths:
         - name: employeeId
           required: true
           in: path
-          description: employee's id
+          description: employee's ID
           schema:
             type: string
             format: uuid
@@ -307,34 +307,34 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  "/v1/employees/{employeeId}/timeEntries":
+  "/v1/employees/{employeeId}/workEvents":
     get:
-      operationId: listEmployeeTimeEntries
+      operationId: listEmployeeWorkEvents
       summary: List Employees Time Entries.
-      description: Lists Employees Time Entries. Sort by start time, latest first.
+      description: Lists Employees Work Events. Sort by time, latest first.
       security:
         - BearerAuth: [manager, driver, employee]
       tags:
-        - TimeEntries
+        - WorkEvents
         - SpecApp
         - SpecManagementUI
       parameters:
         - name: employeeId
           required: true
           in: path
-          description: employee's id
+          description: employee's ID
           schema:
             type: string
             format: uuid
-        - name: start
+        - name: after
           in: query
-          description: Start time for time entries.
+          description: Filter work events after specified date.
           schema:
             type: string
             format: date-time
-        - name: end
+        - name: before
           in: query
-          description: End time for time entries.
+          description: Filter work events before specified date.
           schema:
             type: string
             format: date-time
@@ -352,13 +352,13 @@ paths:
             default: 10
       responses:
         "200":
-          description: List of time entries
+          description: List of work events
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/TimeEntry"
+                  $ref: "#/components/schemas/WorkEvent"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -367,25 +367,20 @@ paths:
                 $ref: "#/components/schemas/Error"
 
     post:
-      operationId: createEmployeeTimeEntry
-      summary: Create Employees Time Entry.
-      description: |
-        Creates Employees Time Entry.
-
-        Attempt to create new time entry should fail if:
-          1) New time entry does not have endTime but there is already one time entry without endTime for the same employee. This is because time entries without endTime are considered to be running timers and only one is allowed at a time.
-          2) If time new entry intersects with an existing time entry.
+      operationId: createEmployeeWorkEvent
+      summary: Create Employees Work Event.
+      description: Creates Employees Work Event.
       security:
         - BearerAuth: [manager, driver, employee]
       tags:
-        - TimeEntries
+        - WorkEvents
         - SpecApp
         - SpecManagementUI
       parameters:
         - name: employeeId
           required: true
           in: path
-          description: employee's id
+          description: employee's ID
           schema:
             type: string
             format: uuid
@@ -394,14 +389,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TimeEntry"
+              $ref: "#/components/schemas/WorkEvent"
       responses:
         "201":
-          description: Created time entry
+          description: Created work event
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TimeEntry"
+                $ref: "#/components/schemas/WorkEvent"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -409,39 +404,39 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  "/v1/employees/{employeeId}/timeEntries/{timeEntryId}":
+  "/v1/employees/{employeeId}/workEvents/{workEventId}":
     get:
-      operationId: findEmployeeTimeEntry
-      summary: Find an employee's time entry.
-      description: Finds an employee's time entry by id.
+      operationId: findEmployeeWorkEvent
+      summary: Find an employee's work event.
+      description: Finds an employee's work event by ID.
       security:
         - BearerAuth: [manager, driver, employee]
       tags:
-        - TimeEntries
+        - WorkEvents
         - SpecApp
         - SpecManagementUI
       parameters:
         - name: employeeId
           required: true
           in: path
-          description: employee's id
+          description: employee's ID
           schema:
             type: string
             format: uuid
-        - name: timeEntryId
+        - name: workEventId
           required: true
           in: path
-          description: time entry's id
+          description: work event's ID
           schema:
             type: string
             format: uuid
       responses:
         "200":
-          description: Found time entry
+          description: Found work event
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TimeEntry"
+                $ref: "#/components/schemas/WorkEvent"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -450,32 +445,27 @@ paths:
                 $ref: "#/components/schemas/Error"
 
     put:
-      operationId: updateEmployeeTimeEntry
-      summary: Update Employee's Time Entry.
-      description: |
-        Updates Employee's Time Entry.
-
-        Update should fail, when:
-        1) Modified entry does not have endTime but there is already another entry without endTime present in the system for same employee.  This is because time entries without endTime are considered to be running timers and only one is allowed at a time.
-        2) If modifying the entry would lead it to intersect with another time entry.
+      operationId: updateEmployeeWorkEvent
+      summary: Update Employee's Work Event.
+      description: Updates Employee's Work Event.
       security:
         - BearerAuth: [manager, employee]
       tags:
-        - TimeEntries
+        - WorkEvents
         - SpecApp
         - SpecManagementUI
       parameters:
         - name: employeeId
           required: true
           in: path
-          description: employee's id
+          description: employee's ID
           schema:
             type: string
             format: uuid
-        - name: timeEntryId
+        - name: workEventId
           required: true
           in: path
-          description: time entry's id
+          description: work event's ID
           schema:
             type: string
             format: uuid
@@ -484,14 +474,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TimeEntry"
+              $ref: "#/components/schemas/WorkEvent"
       responses:
         "200":
           description: Updated time entry
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TimeEntry"
+                $ref: "#/components/schemas/WorkEvent"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -500,26 +490,26 @@ paths:
                 $ref: "#/components/schemas/Error"
 
     delete:
-      operationId: deleteEmployeeTimeEntry
-      summary: Delete Employee's Time Entry.
-      description: Deletes Employee's Time Entry. Only accessible by managers.
+      operationId: deleteEmployeeWorkEvent
+      summary: Delete Employee's Work Event.
+      description: Deletes Employee's Work Event. Only accessible by managers.
       security:
         - BearerAuth: [manager]
       tags:
-        - TimeEntries
+        - WorkEvents
         - SpecManagementUI
       parameters:
         - name: employeeId
           required: true
           in: path
-          description: employee's id
+          description: employee's ID
           schema:
             type: string
             format: uuid
-        - name: timeEntryId
+        - name: workEventId
           required: true
           in: path
-          description: time entry's id
+          description: work event's ID
           schema:
             type: string
             format: uuid
@@ -547,7 +537,7 @@ paths:
         - name: employeeId
           required: true
           in: path
-          description: employee's id
+          description: employee's ID
           schema:
             type: string
             format: uuid
@@ -612,7 +602,7 @@ paths:
         - name: employeeId
           required: true
           in: path
-          description: employee's id
+          description: employee's ID
           schema:
             type: string
             format: uuid
@@ -628,7 +618,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TimeEntry"
+                $ref: "#/components/schemas/WorkEvent"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -640,7 +630,7 @@ paths:
     get:
       operationId: findEmployeeDailyTimeEntry
       summary: Find an employee's daily time entry.
-      description: Finds an employee's daily time entry by id.
+      description: Finds an employee's daily time entry by ID.
       security:
         - BearerAuth: [manager]
       tags:
@@ -650,14 +640,14 @@ paths:
         - name: employeeId
           required: true
           in: path
-          description: employee's id
+          description: employee's ID
           schema:
             type: string
             format: uuid
         - name: dailyTimeEntryId
           required: true
           in: path
-          description: daily time entry's id
+          description: daily time entry's ID
           schema:
             type: string
             format: uuid
@@ -692,14 +682,14 @@ paths:
         - name: employeeId
           required: true
           in: path
-          description: employee's id
+          description: employee's ID
           schema:
             type: string
             format: uuid
         - name: dailyTimeEntryId
           required: true
           in: path
-          description: daily time entry's id
+          description: daily time entry's ID
           schema:
             type: string
             format: uuid
@@ -736,14 +726,14 @@ paths:
         - name: employeeId
           required: true
           in: path
-          description: employee's id
+          description: employee's ID
           schema:
             type: string
             format: uuid
         - name: dailyTimeEntryId
           required: true
           in: path
-          description: daily time entry's id
+          description: daily time entry's ID
           schema:
             type: string
             format: uuid
@@ -833,7 +823,7 @@ paths:
     get:
       operationId: findHoliday
       summary: Find an Holiday.
-      description: Finds an Holiday by id.
+      description: Finds an Holiday by ID.
       security:
         - BearerAuth: [manager]
       tags:
@@ -843,7 +833,7 @@ paths:
         - name: holidayId
           required: true
           in: path
-          description: Holiday's id
+          description: Holiday's ID
           schema:
             type: string
             format: uuid
@@ -873,7 +863,7 @@ paths:
         - name: holidayId
           required: true
           in: path
-          description: Holidays's id
+          description: Holidays's ID
           schema:
             type: string
             format: uuid
@@ -909,7 +899,7 @@ paths:
         - name: holidayId
           required: true
           in: path
-          description: Holiday's id
+          description: Holiday's ID
           schema:
             type: string
             format: uuid
@@ -1058,12 +1048,12 @@ components:
       description: Employee's office. Salary group should be set to VPLogistics if the office is KOTKA
       enum: [KOTKA, KOUVOLA, RAUHA]
 
-    TimeEntry:
+    WorkEvent:
       type: object
-      description: Represents single time entry
+      description: Represents single work event
       required:
         - employeeId
-        - startTime
+        - time
         - workEventType
       properties:
         id:
@@ -1073,19 +1063,11 @@ components:
         employeeId:
           type: string
           format: uuid
-          description: Employee's id
-        startTime:
+          description: Employee's ID
+        time:
           type: string
           format: date-time
-          description: Time entry start time
-        endTime:
-           type: string
-           format: date-time
-           description: |
-            Time entry end time. End time is not required for time entries that are still running.
-            If an employee has an existing time entry without an end time and the new entry is missing end time,
-            the new time entry should not be created and instead a bad request is to be returned.
-            When a new entry is created with both start and end times, the existing entry is ignored.
+          description: Work event time
         workEventType:
           $ref: "#/components/schemas/WorkEventType"
 
@@ -1111,7 +1093,7 @@ components:
         employeeId:
           type: string
           format: uuid
-          description: Employee's id
+          description: Employee's ID
         date:
           type: string
           format: date
@@ -1205,11 +1187,11 @@ components:
         creatorId:
           type: string
           format: uuid
-          description: Creator's id
+          description: Creator's ID
         lastModifierId:
           type: string
           format: uuid
-          description: Last modifier's id
+          description: Last modifier's ID
         createdAt:
           type: string
           format: date-time
