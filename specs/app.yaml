@@ -1313,10 +1313,15 @@ components:
       type: object
       required:
         - id
+        - timestamp
       properties:
         id:
           type: string
           description: Driver card ID
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp for driver card insertion. Unix timestamp in milliseconds.
     TruckDriveStateEnum:
       type: string
       enum:
@@ -1641,6 +1646,8 @@ components:
 
         - SHIFT_END
 
+        - UNKNOWN
+
 
         *Driver work types*
 
@@ -1670,6 +1677,7 @@ components:
         - BREAK
         - SHIFT_START
         - SHIFT_END
+        - UNKNOWN
         - DRIVE
         - LOADING
         - UNLOADING

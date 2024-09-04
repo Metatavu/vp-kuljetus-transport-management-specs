@@ -1693,7 +1693,7 @@
       },
       "WorkEventType": {
         "type": "string",
-        "description": "Work event types. UI implementations should translate these to more human readable form.\n\n*Office/Terminal work types*\n- VEGETABLE (Hevi)\n- DRY (Kuiva)\n- MEAT_CELLAR (Lihakellari)\n- MEIRA (Meira)\n- FROZEN (Pakaste)\n- PALTE (Palte)\n- BREWERY (Panimo)\n- GREASE (Rasva)\n- LOGIN\n- LOGOUT\n\n*Common work types*\n- OTHER_WORK (Muu työ)\n- BREAK (Tauko)\n- SHIFT_START\n- SHIFT_END\n\n*Driver work types*\n- DRIVE\n- LOADING\n- UNLOADING\n- AVAILABILITY\n- DRIVER_CARD_INSERTED\n- DRIVER_CARD_REMOVED\n",
+        "description": "Work event types. UI implementations should translate these to more human readable form.\n\n*Office/Terminal work types*\n- VEGETABLE (Hevi)\n- DRY (Kuiva)\n- MEAT_CELLAR (Lihakellari)\n- MEIRA (Meira)\n- FROZEN (Pakaste)\n- PALTE (Palte)\n- BREWERY (Panimo)\n- GREASE (Rasva)\n- LOGIN\n- LOGOUT\n\n*Common work types*\n- OTHER_WORK (Muu työ)\n- BREAK (Tauko)\n- SHIFT_START\n- SHIFT_END\n- UNKNOWN\n\n*Driver work types*\n- DRIVE\n- LOADING\n- UNLOADING\n- AVAILABILITY\n- DRIVER_CARD_INSERTED\n- DRIVER_CARD_REMOVED\n",
         "enum": [
           "VEGETABLE",
           "DRY",
@@ -1709,6 +1709,7 @@
           "BREAK",
           "SHIFT_START",
           "SHIFT_END",
+          "UNKNOWN",
           "DRIVE",
           "LOADING",
           "UNLOADING",

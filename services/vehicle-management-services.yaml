@@ -1257,10 +1257,15 @@ components:
       type: object
       required:
         - id
+        - timestamp
       properties:
         id:
           type: string
           description: Driver card ID
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp for driver card insertion. Unix timestamp in milliseconds.
 
     TruckSortByField:
       type: string

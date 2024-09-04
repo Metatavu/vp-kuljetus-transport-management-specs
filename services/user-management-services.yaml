@@ -1132,6 +1132,7 @@ components:
         - BREAK (Tauko)
         - SHIFT_START
         - SHIFT_END
+        - UNKNOWN
 
         *Driver work types*
         - DRIVE
@@ -1156,6 +1157,7 @@ components:
         - BREAK
         - SHIFT_START
         - SHIFT_END
+        - UNKNOWN
         - DRIVE
         - LOADING
         - UNLOADING
