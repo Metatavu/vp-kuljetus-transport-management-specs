@@ -195,7 +195,7 @@
             },
             {
               "disabled": false,
-              "path": "/v1/employees/{employeeId}/dailyTimeEntries",
+              "path": "/v1/employees/{employeeId}/workEvents",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -215,7 +215,7 @@
             },
             {
               "disabled": false,
-              "path": "/v1/employees/{employeeId}/dailyTimeEntries/{dailyTimeEntryId}",
+              "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -241,7 +241,21 @@
             },
             {
               "disabled": false,
-              "path": "/v1/employees/{employeeId}/workEvents",
+              "path": "/v1/employees/{employeeId}/workShifts",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/employees/{employeeId}/workShifts/{workShiftId}/timeEntries",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -261,7 +275,7 @@
             },
             {
               "disabled": false,
-              "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
+              "path": "/v1/employees/{employeeId}/workShifts/{workShiftId}/timeEntries/{timeEntryId}",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -376,43 +390,47 @@
               "method": "PUT"
             },
             {
-              "path": "/v1/employees/{employeeId}/dailyTimeEntries",
+              "path": "/v1/employees/{employeeId}/workEvents",
               "method": "GET"
             },
             {
-              "path": "/v1/employees/{employeeId}/dailyTimeEntries",
+              "path": "/v1/employees/{employeeId}/workEvents",
               "method": "POST"
             },
             {
-              "path": "/v1/employees/{employeeId}/dailyTimeEntries/{dailyTimeEntryId}",
+              "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
               "method": "DELETE"
             },
             {
-              "path": "/v1/employees/{employeeId}/dailyTimeEntries/{dailyTimeEntryId}",
+              "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
               "method": "GET"
             },
             {
-              "path": "/v1/employees/{employeeId}/dailyTimeEntries/{dailyTimeEntryId}",
+              "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
               "method": "PUT"
             },
             {
-              "path": "/v1/employees/{employeeId}/workEvents",
+              "path": "/v1/employees/{employeeId}/workShifts",
               "method": "GET"
             },
             {
-              "path": "/v1/employees/{employeeId}/workEvents",
+              "path": "/v1/employees/{employeeId}/workShifts/{workShiftId}/timeEntries",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/employees/{employeeId}/workShifts/{workShiftId}/timeEntries",
               "method": "POST"
             },
             {
-              "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
+              "path": "/v1/employees/{employeeId}/workShifts/{workShiftId}/timeEntries/{timeEntryId}",
               "method": "DELETE"
             },
             {
-              "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
+              "path": "/v1/employees/{employeeId}/workShifts/{workShiftId}/timeEntries/{timeEntryId}",
               "method": "GET"
             },
             {
-              "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
+              "path": "/v1/employees/{employeeId}/workShifts/{workShiftId}/timeEntries/{timeEntryId}",
               "method": "PUT"
             },
             {

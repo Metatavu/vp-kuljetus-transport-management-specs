@@ -603,7 +603,7 @@ paths:
   /user-management/v1/employees/{employeeId}/workEvents:
     get:
       operationId: listEmployeeWorkEvents
-      summary: List Employees Time Entries.
+      summary: List Employees Work Events.
       description: Lists Employees Work Events. Sort by time, latest first.
       security:
         - BearerAuth:
@@ -617,6 +617,12 @@ paths:
           required: true
           in: path
           description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: employeeWorkShiftId
+          in: query
+          description: Filter work events by a specific work shift of the employee
           schema:
             type: string
             format: uuid
@@ -662,7 +668,9 @@ paths:
     post:
       operationId: createEmployeeWorkEvent
       summary: Create Employees Work Event.
-      description: Creates Employees Work Event.
+      description: >
+        Creates Employees Work Event. If the work event starts a new shift, a
+        new shift is also created automatically.
       security:
         - BearerAuth:
             - manager
@@ -1596,6 +1604,11 @@ components:
           type: string
           format: uuid
           readOnly: true
+        workShiftId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: employee work shift ID
         employeeId:
           type: string
           format: uuid

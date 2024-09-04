@@ -307,10 +307,302 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  "/v1/employees/{employeeId}/workShifts":
+    get:
+      operationId: listEmployeeWorkShifts
+      summary: List Employees Work Shifts.
+      description: |
+        Lists Employees work Shifts. Sort by time, latest first.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - WorkShifts
+        - SpecManagementUI
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: after
+          in: query
+          description: Filter work shifts started after specified date.
+          schema:
+            type: string
+            format: date-time
+        - name: before
+          in: query
+          description: Filter work shifts started before specified date.
+          schema:
+            type: string
+            format: date-time
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+            default: 0
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: List of employee work shifts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EmployeeWorkShift"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  "/v1/employees/{employeeId}/workShifts/{workShiftId}/timeEntries":
+    get:
+      operationId: listWorkShiftTimeEntries
+      summary: List Work Shift Time Entries.
+      description: Lists Work Shift Time Entries. There can be 0-1 time entries per work type per work shift.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - WorkShiftTimeEntries
+        - SpecManagementUI
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: workShiftId
+          required: true
+          in: path
+          description: work shift's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of work shift time entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WorkShiftTimeEntry"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createWorkShiftTimeEntry
+      summary: Create Work Shift Time Entry.
+      description: |
+        Creates Work Shift Time Entry.
+
+        Attempt to create a new entry should fail if an entry with the same shift and work type already exists.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - WorkShiftTimeEntries
+        - SpecManagementUI
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: workShiftId
+          required: true
+          in: path
+          description: work shift's ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkShiftTimeEntry"
+      responses:
+        "201":
+          description: Created employee work shift time entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkShiftTimeEntry"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  "/v1/employees/{employeeId}/workShifts/{workShiftId}/timeEntries/{timeEntryId}":
+    get:
+      operationId: getWorkShiftTimeEntry
+      summary: Get Work Shift Time Entry.
+      description: Get Work Shift Time Entry.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - WorkShiftTimeEntries
+        - SpecManagementUI
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: workShiftId
+          required: true
+          in: path
+          description: work shift's ID
+          schema:
+            type: string
+            format: uuid
+        - name: timeEntryId
+          required: true
+          in: path
+          description: time entry's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Work shift time entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkShiftTimeEntry"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateWorkShiftTimeEntry
+      summary: Update Work Shift Time Entry.
+      description: |
+        Update Work Shift Time Entry.
+
+        Trying to update other than total hours from an entry should fail, as that could potentially
+        clash with another entry. Instead, incorrect entry should be deleted and new one created.
+
+        Total hours of the entry cannot be updated if the entry has been approved.
+        It needs to be disapproved first.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - WorkShiftTimeEntries
+        - SpecManagementUI
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: workShiftId
+          required: true
+          in: path
+          description: work shift's ID
+          schema:
+            type: string
+            format: uuid
+        - name: timeEntryId
+          required: true
+          in: path
+          description: time entry's ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkShiftTimeEntry"
+      responses:
+        "200":
+          description: Updated work shift time entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkShiftTimeEntry"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteWorkShiftTimeEntry
+      summary: Delete Work Shift Time Entry.
+      description: |
+        Delete Work Shift Time Entry.
+
+        Time entry cannot be deleted if it has been approved. It needs to be disapproved first.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - WorkShiftTimeEntries
+        - SpecManagementUI
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: workShiftId
+          required: true
+          in: path
+          description: work shift's ID
+          schema:
+            type: string
+            format: uuid
+        - name: timeEntryId
+          required: true
+          in: path
+          description: time entry's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Time entry deleted
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   "/v1/employees/{employeeId}/workEvents":
     get:
       operationId: listEmployeeWorkEvents
-      summary: List Employees Time Entries.
+      summary: List Employees Work Events.
       description: Lists Employees Work Events. Sort by time, latest first.
       security:
         - BearerAuth: [manager, driver, employee]
@@ -323,6 +615,12 @@ paths:
           required: true
           in: path
           description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: employeeWorkShiftId
+          in: query
+          description: Filter work events by a specific work shift of the employee
           schema:
             type: string
             format: uuid
@@ -369,7 +667,8 @@ paths:
     post:
       operationId: createEmployeeWorkEvent
       summary: Create Employees Work Event.
-      description: Creates Employees Work Event.
+      description: |
+        Creates Employees Work Event. If the work event starts a new shift, a new shift is also created automatically.
       security:
         - BearerAuth: [manager, driver, employee]
       tags:
@@ -492,7 +791,9 @@ paths:
     delete:
       operationId: deleteEmployeeWorkEvent
       summary: Delete Employee's Work Event.
-      description: Deletes Employee's Work Event. Only accessible by managers.
+      description: |
+        Deletes Employee's Work Event. Only accessible by managers. If deleting the last remaining work
+        event from a work shift, the shift is also deleted.
       security:
         - BearerAuth: [manager]
       tags:
@@ -516,230 +817,6 @@ paths:
       responses:
         "204":
           description: Successfully deleted the time entry
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  "/v1/employees/{employeeId}/dailyTimeEntries":
-    get:
-      operationId: listEmployeeDailyTimeEntries
-      summary: List Employees Daily Time Entries.
-      description: Lists Employees Daily Time Entries. There can be 0-1 daily time entries per work type per day.
-      security:
-        - BearerAuth: [manager]
-      tags:
-        - DailyTimeEntries
-        - SpecManagementUI
-      parameters:
-        - name: employeeId
-          required: true
-          in: path
-          description: employee's ID
-          schema:
-            type: string
-            format: uuid
-        - name: workEventType
-          in: query
-          description: List daily time entries only for specified work type.
-          schema:
-            $ref: "#/components/schemas/WorkEventType"
-        - name: start
-          in: query
-          description: List daily time entries only after specified date.
-          schema:
-            type: string
-            format: date
-        - name: end
-          in: query
-          description: List daily time entries only before specified date.
-          schema:
-            type: string
-            format: date
-        - name: first
-          in: query
-          description: First result.
-          schema:
-            type: integer
-            default: 0
-        - name: max
-          in: query
-          description: Max results.
-          schema:
-            type: integer
-            default: 10
-      responses:
-        "200":
-          description: List of daily time entries
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/DailyTimeEntry"
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-    post:
-      operationId: createEmployeeDailyTimeEntry
-      summary: Create Employees Daily Time Entry.
-      description: |
-        Creates Employees Daily Time Entry.
-
-        Attempt to create new daily time entry should fail if a daily entry with the same date and work type already exists.
-      security:
-        - BearerAuth: [manager]
-      tags:
-        - DailyTimeEntries
-        - SpecManagementUI
-      parameters:
-        - name: employeeId
-          required: true
-          in: path
-          description: employee's ID
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DailyTimeEntry"
-      responses:
-        "201":
-          description: Created daily time entry
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/WorkEvent"
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  "/v1/employees/{employeeId}/dailyTimeEntries/{dailyTimeEntryId}":
-    get:
-      operationId: findEmployeeDailyTimeEntry
-      summary: Find an employee's daily time entry.
-      description: Finds an employee's daily time entry by ID.
-      security:
-        - BearerAuth: [manager]
-      tags:
-        - DailyTimeEntries
-        - SpecManagementUI
-      parameters:
-        - name: employeeId
-          required: true
-          in: path
-          description: employee's ID
-          schema:
-            type: string
-            format: uuid
-        - name: dailyTimeEntryId
-          required: true
-          in: path
-          description: daily time entry's ID
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "200":
-          description: Found daily time entry
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DailyTimeEntry"
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-    put:
-      operationId: updateEmployeeDailyTimeEntry
-      summary: Update Employee's Daily Time Entry.
-      description: |
-        Updates Employee's Daily Time Entry.
-
-        Trying to update other than total hours from an entry should fail, as that could potentially
-        clash with another entry. Instead, incorrect entry should be deleted and new one created.
-      security:
-        - BearerAuth: [manager]
-      tags:
-        - DailyTimeEntries
-        - SpecManagementUI
-      parameters:
-        - name: employeeId
-          required: true
-          in: path
-          description: employee's ID
-          schema:
-            type: string
-            format: uuid
-        - name: dailyTimeEntryId
-          required: true
-          in: path
-          description: daily time entry's ID
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DailyTimeEntry"
-      responses:
-        "200":
-          description: Updated daily time entry
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DailyTimeEntry"
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-    delete:
-      operationId: deleteEmployeeDailyTimeEntry
-      summary: Delete Employee's Daily Time Entry.
-      description: Deletes Employee's Daily Time Entry.
-      security:
-        - BearerAuth: [manager]
-      tags:
-        - DailyTimeEntries
-        - SpecManagementUI
-      parameters:
-        - name: employeeId
-          required: true
-          in: path
-          description: employee's ID
-          schema:
-            type: string
-            format: uuid
-        - name: dailyTimeEntryId
-          required: true
-          in: path
-          description: daily time entry's ID
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "204":
-          description: Successfully deleted the daily time entry
         "default":
           description: Invalid request was sent to the server
           content:
@@ -1048,6 +1125,30 @@ components:
       description: Employee's office. Salary group should be set to VPLogistics if the office is KOTKA
       enum: [KOTKA, KOUVOLA, RAUHA]
 
+    EmployeeWorkShift:
+      type: object
+      description: |
+        Represents single employee work shift. Each work event must always relate to a work shift.
+
+        A new employee work shift is automatically created, when employee starts a new shift. A new
+        shift is started when the last recorded WorkEvent from the employee either is of type SHIFT_END
+        or is of type BREAK and has been going on longer than 3 hours. A new shift is also created if
+        there is no previous work events for the employee.
+
+        Employee work shift always relates to a single date. This is important for calculating the total
+        working hours for employee salaries for a single work period. The date is derived by the start
+        date of the shift, which is the time of the first work event of the shift.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        employeeId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Employee's ID
+
     WorkEvent:
       type: object
       description: Represents single work event
@@ -1060,6 +1161,11 @@ components:
           type: string
           format: uuid
           readOnly: true
+        workShiftId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: employee work shift ID
         employeeId:
           type: string
           format: uuid
@@ -1071,16 +1177,17 @@ components:
         workEventType:
           $ref: "#/components/schemas/WorkEventType"
 
-    DailyTimeEntry:
+    WorkShiftTimeEntry:
       type: object
       description: |
-        Represents a single daily time entry. Daily time entries are created when total working hours
-        of an employee for some work type needs to be manually changed for a specific day. Only a single
-        daily time entry per work type per day is allowed. If one already exists, it should be updated.
-        Daily time entry is always prioritized over calculating the total from the actual time entries
+        Represents a single work shift time entry. Work shift time entries are created when total working hours
+        for some work type needs to be manually changed for a specific employee work shift. Only a single
+        work shift time entry per work type per work shift is allowed. If one already exists, it should be updated.
+        Work shift time entry is always prioritized over calculating the total from the actual work events
         when displaying the aggregated hours and sending the data to payroll.
       required:
         - employeeId
+        - workShiftId
         - date
         - workEventType
         - hours
@@ -1094,20 +1201,24 @@ components:
           type: string
           format: uuid
           description: Employee's ID
+        workShiftId:
+          type: string
+          format: uuid
+          description: Employee work shift ID
         date:
           type: string
           format: date
-          description: Daily time entry date
+          description: Work time entry date
         workEventType:
           $ref: "#/components/schemas/WorkEventType"
         hours:
           type: number
           format: float
-          description: Corrected hours for the day for corresponding work type.
+          description: Corrected hours for the employee work shift for corresponding work type.
         approved:
           type: boolean
           description: |
-            Whether the daily time entry has been approved by a supervisor.
+            Whether the work shift time entry has been approved by a supervisor.
             Hours cannot be updated unless approved is set to false.
 
     WorkEventType:
