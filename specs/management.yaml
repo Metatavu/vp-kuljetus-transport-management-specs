@@ -2813,6 +2813,11 @@ components:
           type: string
           format: uuid
           readOnly: true
+        date:
+          type: string
+          format: date
+          readOnly: true
+          description: Work shift date. Derived from the first work event of the shift.
         employeeId:
           type: string
           format: uuid
