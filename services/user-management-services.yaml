@@ -366,6 +366,88 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  "/v1/employees/{employeeId}/workShifts/{workShiftId}":
+    get:
+      operationId: findEmployeeWorkShift
+      summary: Find Employee Work Shift.
+      description: Finds an employee's work shift by ID.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - EmployeeWorkShifts
+        - SpecManagementUI
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: workShiftId
+          required: true
+          in: path
+          description: work shift's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found employee work shift
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmployeeWorkShift"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateEmployeeWorkShift
+      summary: Update Employee Work Shift.
+      description: Updates Employee Work Shift. Only approved field can be updated.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - EmployeeWorkShifts
+        - SpecManagementUI
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: workShiftId
+          required: true
+          in: path
+          description: work shift's ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmployeeWorkShift"
+      responses:
+        "200":
+          description: Updated employee work shift
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmployeeWorkShift"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   "/v1/employees/{employeeId}/workEvents":
     get:
       operationId: listEmployeeWorkEvents
@@ -721,7 +803,7 @@ paths:
         Updates Work Shift Hours.
 
         Trying to update employeeId, employeeWorkShiftId, or workType from work shift hours should fail.
-        To update actual hours, the work shift hours must not be approved.
+        If the related employee work shift is approved, work shift hours cannot be updated.
       security:
         - BearerAuth: [manager]
       tags:
@@ -1066,9 +1148,16 @@ components:
         or is of type BREAK and has been going on longer than 3 hours. A new shift is also created if
         there is no previous work events for the employee.
 
+        When created, the work shift is not approved. It needs to be approved by a supervisor before the
+        work shift hours can be sent to payroll.
+
         Employee work shift always relates to a single date. This is important for calculating the total
         working hours for employee salaries for a single work period. The date is derived by the start
         date of the shift, which is the time of the first work event of the shift.
+      required:
+        - date
+        - employeeId
+        - approved
       properties:
         id:
           type: string
@@ -1084,6 +1173,11 @@ components:
           format: uuid
           readOnly: true
           description: Employee's ID
+        approved:
+          type: boolean
+          description: |
+            Whether the work shift has been approved by a supervisor. Work shift hours cannot be updated if
+            the work shift is approved.
 
     WorkEvent:
       type: object
@@ -1126,17 +1220,16 @@ components:
         data to payroll.
 
         Work shift hours are created automatically if not present when total working hours for a specific employee, work
-        shift and work type is requested. It can also be created through POST endpoint, in which case the actual hours
-        needs to be filled.
+        shift and work type is requested. It can also be created through createWorkShiftHours, in which case the actual
+        hours needs to be filled.
 
         Only a single work shift hours per employee per work shift per work type is allowed. If one already exists, it
-        should be updated. If the entry has been approved, it needs to be disapproved first to update the actual hours.
+        should be updated.
       required:
         - employeeId
         - employeeWorkShiftId
         - workEventType
         - calculatedHours
-        - approved
       properties:
         id:
           type: string
@@ -1165,11 +1258,6 @@ components:
           description: |
             Actual, manually recorded hours for the employee work shift for corresponding work type. It is null until
             the hours are manually set.
-        approved:
-          type: boolean
-          description: |
-            Whether the work shift time entry has been approved by a supervisor. Actual hours cannot be updated unless
-            approved is set to false.
 
     WorkEventType:
       type: string

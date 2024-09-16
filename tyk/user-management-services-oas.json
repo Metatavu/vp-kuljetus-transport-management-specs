@@ -592,6 +592,138 @@
         }
       }
     },
+    "/v1/employees/{employeeId}/workShifts/{workShiftId}": {
+      "get": {
+        "operationId": "findEmployeeWorkShift",
+        "summary": "Find Employee Work Shift.",
+        "description": "Finds an employee's work shift by ID.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "EmployeeWorkShifts",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "employeeId",
+            "required": true,
+            "in": "path",
+            "description": "employee's ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "workShiftId",
+            "required": true,
+            "in": "path",
+            "description": "work shift's ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found employee work shift",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeWorkShift"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "updateEmployeeWorkShift",
+        "summary": "Update Employee Work Shift.",
+        "description": "Updates Employee Work Shift. Only approved field can be updated.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "EmployeeWorkShifts",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "employeeId",
+            "required": true,
+            "in": "path",
+            "description": "employee's ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "workShiftId",
+            "required": true,
+            "in": "path",
+            "description": "work shift's ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeWorkShift"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated employee work shift",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeWorkShift"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/employees/{employeeId}/workEvents": {
       "get": {
         "operationId": "listEmployeeWorkEvents",
@@ -1139,7 +1271,7 @@
       "put": {
         "operationId": "updateWorkShiftHours",
         "summary": "Update Work Shift Hours.",
-        "description": "Updates Work Shift Hours.\n\nTrying to update employeeId, employeeWorkShiftId, or workType from work shift hours should fail.\nTo update actual hours, the work shift hours must not be approved.\n",
+        "description": "Updates Work Shift Hours.\n\nTrying to update employeeId, employeeWorkShiftId, or workType from work shift hours should fail.\nIf the related employee work shift is approved, work shift hours cannot be updated.\n",
         "security": [
           {
             "BearerAuth": [
@@ -1629,7 +1761,12 @@
       },
       "EmployeeWorkShift": {
         "type": "object",
-        "description": "Represents single employee work shift. Each work event must always relate to a work shift.\n\nA new employee work shift is automatically created, when employee starts a new shift. A new\nshift is started when the last recorded WorkEvent from the employee either is of type SHIFT_END\nor is of type BREAK and has been going on longer than 3 hours. A new shift is also created if\nthere is no previous work events for the employee.\n\nEmployee work shift always relates to a single date. This is important for calculating the total\nworking hours for employee salaries for a single work period. The date is derived by the start\ndate of the shift, which is the time of the first work event of the shift.\n",
+        "description": "Represents single employee work shift. Each work event must always relate to a work shift.\n\nA new employee work shift is automatically created, when employee starts a new shift. A new\nshift is started when the last recorded WorkEvent from the employee either is of type SHIFT_END\nor is of type BREAK and has been going on longer than 3 hours. A new shift is also created if\nthere is no previous work events for the employee.\n\nWhen created, the work shift is not approved. It needs to be approved by a supervisor before the\nwork shift hours can be sent to payroll.\n\nEmployee work shift always relates to a single date. This is important for calculating the total\nworking hours for employee salaries for a single work period. The date is derived by the start\ndate of the shift, which is the time of the first work event of the shift.\n",
+        "required": [
+          "date",
+          "employeeId",
+          "approved"
+        ],
         "properties": {
           "id": {
             "type": "string",
@@ -1647,6 +1784,10 @@
             "format": "uuid",
             "readOnly": true,
             "description": "Employee's ID"
+          },
+          "approved": {
+            "type": "boolean",
+            "description": "Whether the work shift has been approved by a supervisor. Work shift hours cannot be updated if\nthe work shift is approved.\n"
           }
         }
       },
@@ -1687,13 +1828,12 @@
       },
       "WorkShiftHours": {
         "type": "object",
-        "description": "Represents a single work shift hours.\n\nWork shift hours contain the total hours for a specific employee, work shift and work type. The hours are always\ncalculated dynamically during a request.\n\nWork shift hours also contains the actual hours that have been manually set by a supervisor. The actual hours\nshould always be prioritized over the calculated hours when displaying the aggregated hours and sending the\ndata to payroll.\n\nWork shift hours are created automatically if not present when total working hours for a specific employee, work\nshift and work type is requested. It can also be created through POST endpoint, in which case the actual hours\nneeds to be filled.\n\nOnly a single work shift hours per employee per work shift per work type is allowed. If one already exists, it\nshould be updated. If the entry has been approved, it needs to be disapproved first to update the actual hours.\n",
+        "description": "Represents a single work shift hours.\n\nWork shift hours contain the total hours for a specific employee, work shift and work type. The hours are always\ncalculated dynamically during a request.\n\nWork shift hours also contains the actual hours that have been manually set by a supervisor. The actual hours\nshould always be prioritized over the calculated hours when displaying the aggregated hours and sending the\ndata to payroll.\n\nWork shift hours are created automatically if not present when total working hours for a specific employee, work\nshift and work type is requested. It can also be created through createWorkShiftHours, in which case the actual\nhours needs to be filled.\n\nOnly a single work shift hours per employee per work shift per work type is allowed. If one already exists, it\nshould be updated.\n",
         "required": [
           "employeeId",
           "employeeWorkShiftId",
           "workEventType",
-          "calculatedHours",
-          "approved"
+          "calculatedHours"
         ],
         "properties": {
           "id": {
@@ -1724,10 +1864,6 @@
             "type": "number",
             "format": "float",
             "description": "Actual, manually recorded hours for the employee work shift for corresponding work type. It is null until\nthe hours are manually set.\n"
-          },
-          "approved": {
-            "type": "boolean",
-            "description": "Whether the work shift time entry has been approved by a supervisor. Actual hours cannot be updated unless\napproved is set to false.\n"
           }
         }
       },
