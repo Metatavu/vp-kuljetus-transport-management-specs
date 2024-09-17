@@ -447,6 +447,40 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteWorkShift
+      summary: Delete work shift.
+      description: Only for tests.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - EmployeeWorkShifts
+        - SpecManagementUI
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: workShiftId
+          required: true
+          in: path
+          description: work shift's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 
   "/v1/employees/{employeeId}/workEvents":
     get:
@@ -830,6 +864,32 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/WorkShiftHours"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteWorkShiftHours
+      summary: Delete work shift hours.
+      description: Only for tests.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - WorkShiftHours
+        - SpecManagementUI
+      parameters:
+        - name: workShiftHoursId
+          required: true
+          in: path
+          description: ID of work shift hours
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
         "default":
           description: Invalid request was sent to the server
           content:

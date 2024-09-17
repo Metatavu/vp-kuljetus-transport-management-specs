@@ -259,6 +259,12 @@
               "method": "",
               "ignore_case": false,
               "method_actions": {
+                "DELETE": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
                 "GET": {
                   "action": "no_action",
                   "code": 200,
@@ -359,6 +365,12 @@
               "method": "",
               "ignore_case": false,
               "method_actions": {
+                "DELETE": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
                 "GET": {
                   "action": "no_action",
                   "code": 200,
@@ -429,6 +441,10 @@
             },
             {
               "path": "/v1/employees/{employeeId}/workShifts/{workShiftId}",
+              "method": "DELETE"
+            },
+            {
+              "path": "/v1/employees/{employeeId}/workShifts/{workShiftId}",
               "method": "GET"
             },
             {
@@ -466,6 +482,10 @@
             {
               "path": "/v1/workShiftHours",
               "method": "POST"
+            },
+            {
+              "path": "/v1/workShiftHours/{workShiftHoursId}",
+              "method": "DELETE"
             },
             {
               "path": "/v1/workShiftHours/{workShiftHoursId}",
