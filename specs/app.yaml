@@ -781,6 +781,34 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /user-management/v1/clientApps:
+    post:
+      operationId: createClientApp
+      summary: Create a client app.
+      description: Creates a client app. Client app can only be created in the status
+        'PENDING'.
+      security: []
+      tags:
+        - ClientApps
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClientApp"
+      responses:
+        "201":
+          description: Created client app
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClientApp"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /delivery-info/v1/sites:
     get:
       operationId: listSites
@@ -1684,6 +1712,64 @@ components:
         - AVAILABILITY
         - DRIVER_CARD_INSERTED
         - DRIVER_CARD_REMOVED
+    ClientAppStatus:
+      type: string
+      description: Client app status
+      enum:
+        - PENDING
+        - APPROVED
+        - EXPIRED
+    ClientApp:
+      type: object
+      description: >
+        Represents single client app.
+
+
+        Client apps are created when a new client app publishes itself to the system. Apps will be in PENDING status
+
+        until a manager approves them. Three months after its approval a client app will change to EXPIRED status.
+
+        The app will then need to be approved again by a manager.
+
+
+        The device ID of the client app is used together with user PIN code during authentication.
+      required:
+        - deviceId
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        deviceId:
+          type: string
+          description: Device ID
+        name:
+          type: string
+          description: Device name
+        status:
+          $ref: "#/components/schemas/ClientAppStatus"
+        metadata:
+          type: object
+          description: client app metadata, e.g. device OS, device OS version, app version
+          additionalProperties:
+            type: string
+        lastLoginAt:
+          type: string
+          format: date-time
+          description: Last time the client app has logged in to the system
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation time
+        lastModifierId:
+          type: string
+          format: uuid
+          description: Last modifier's ID
+        modifiedAt:
+          type: string
+          format: date-time
+          description: Last modified time
     Site:
       type: object
       description: Represents a single customer site

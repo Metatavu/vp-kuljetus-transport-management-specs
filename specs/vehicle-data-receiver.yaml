@@ -508,6 +508,13 @@ components:
         - AVAILABILITY
         - DRIVER_CARD_INSERTED
         - DRIVER_CARD_REMOVED
+    ClientAppStatus:
+      type: string
+      description: Client app status
+      enum:
+        - PENDING
+        - APPROVED
+        - EXPIRED
     TaskType:
       type: string
       description: Type of the task

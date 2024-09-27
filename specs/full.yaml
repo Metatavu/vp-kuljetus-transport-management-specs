@@ -1902,6 +1902,171 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /user-management/v1/clientApps:
+    get:
+      operationId: listClientApps
+      summary: List client apps.
+      description: Lists client apps.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - ClientApps
+      parameters:
+        - name: status
+          in: query
+          description: Filter client apps by status
+          schema:
+            $ref: "#/components/schemas/ClientAppStatus"
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+            default: 0
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: List of client apps
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ClientApp"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createClientApp
+      summary: Create a client app.
+      description: Creates a client app. Client app can only be created in the status
+        'PENDING'.
+      security: []
+      tags:
+        - ClientApps
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClientApp"
+      responses:
+        "201":
+          description: Created client app
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClientApp"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /user-management/v1/clientApps/{clientAppId}:
+    get:
+      operationId: findClientApp
+      summary: Find a client app.
+      description: Finds a client app by ID.
+      security:
+        - BearerAuth:
+            - manager
+        - ApiKeyAuth: []
+      tags:
+        - ClientApps
+      parameters:
+        - name: clientAppId
+          required: true
+          in: path
+          description: client app's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found client app
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClientApp"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateClientApp
+      summary: Update a client app.
+      description: Updates a client app.
+      security:
+        - BearerAuth:
+            - manager
+        - ApiKeyAuth: []
+      tags:
+        - ClientApps
+      parameters:
+        - name: clientAppId
+          required: true
+          in: path
+          description: Client app's ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClientApp"
+      responses:
+        "200":
+          description: Updated client app
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClientApp"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteClientApp
+      summary: Delete client app.
+      description: Deletes client app.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - ClientApps
+      parameters:
+        - name: clientAppId
+          required: true
+          in: path
+          description: Client app's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /delivery-info/v1/sites:
     get:
       operationId: listSites
@@ -3229,6 +3394,64 @@ components:
           type: string
           format: date-time
           description: Creation time
+        modifiedAt:
+          type: string
+          format: date-time
+          description: Last modified time
+    ClientAppStatus:
+      type: string
+      description: Client app status
+      enum:
+        - PENDING
+        - APPROVED
+        - EXPIRED
+    ClientApp:
+      type: object
+      description: >
+        Represents single client app.
+
+
+        Client apps are created when a new client app publishes itself to the system. Apps will be in PENDING status
+
+        until a manager approves them. Three months after its approval a client app will change to EXPIRED status.
+
+        The app will then need to be approved again by a manager.
+
+
+        The device ID of the client app is used together with user PIN code during authentication.
+      required:
+        - deviceId
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        deviceId:
+          type: string
+          description: Device ID
+        name:
+          type: string
+          description: Device name
+        status:
+          $ref: "#/components/schemas/ClientAppStatus"
+        metadata:
+          type: object
+          description: client app metadata, e.g. device OS, device OS version, app version
+          additionalProperties:
+            type: string
+        lastLoginAt:
+          type: string
+          format: date-time
+          description: Last time the client app has logged in to the system
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation time
+        lastModifierId:
+          type: string
+          format: uuid
+          description: Last modifier's ID
         modifiedAt:
           type: string
           format: date-time
