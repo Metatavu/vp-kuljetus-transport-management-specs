@@ -590,6 +590,66 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "createEmployeeWorkShift",
+        "summary": "Create Employee Work Shift.",
+        "description": "Creates Employee Work Shift.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "EmployeeWorkShifts",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "employeeId",
+            "required": true,
+            "in": "path",
+            "description": "employee's ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeWorkShift"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created employee work shift",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeWorkShift"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/v1/employees/{employeeId}/workShifts/{workShiftId}": {
@@ -724,8 +784,8 @@
         }
       },
       "delete": {
-        "operationId": "deleteWorkShift",
-        "summary": "Delete work shift.",
+        "operationId": "deleteEmployeeWorkShift",
+        "summary": "Delete employee work shift.",
         "description": "Only for tests.",
         "security": [
           {
@@ -1137,7 +1197,7 @@
       "get": {
         "operationId": "listWorkShiftHours",
         "summary": "List Work Shift Hours.",
-        "description": "Lists Work Shift Hours. There can be 0-1 work shift hours per employee per work shift per work type.",
+        "description": "Lists Work Shift Hours. Unique per employee per work shift per work type.",
         "security": [
           {
             "BearerAuth": [
@@ -1205,54 +1265,6 @@
                   "items": {
                     "$ref": "#/components/schemas/WorkShiftHours"
                   }
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Invalid request was sent to the server",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "operationId": "createWorkShiftHours",
-        "summary": "Create Work Shift Hours.",
-        "description": "Creates Work Shift Hours.\n\nAttempt to create a new hours should fail if an hours with the same employee,\nemployee work shift and work type already exists.\n",
-        "security": [
-          {
-            "BearerAuth": [
-              "manager"
-            ]
-          }
-        ],
-        "tags": [
-          "WorkShiftHours",
-          "SpecManagementUI"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/WorkShiftHours"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Created work shift hours",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkShiftHours"
                 }
               }
             }
@@ -1820,7 +1832,6 @@
       },
       "EmployeeType": {
         "type": "string",
-        "description": "Employee's type described as finnish abbreviation. UI implementations should translate these to more human readable form.\nPakettiautonkuljettaja (PA)\nKuorma-auton kuljettaja (KA)\nAlihankkija (AH)\nVuokratyöntekijä (VK)\nTyöharjoittelija (TH)\nTilapäistyöntekijä (TP)\nAjojärjestelijä (AJ)\nEsimies (JH)\nAikatuntipalkka (AP)\nKuukausipalkka (KK)\nEi-aktiivinen (POIS)\nTäysperäkuljettaja (TPK)\n",
         "enum": [
           "PA",
           "KA",
@@ -1834,7 +1845,8 @@
           "KK",
           "POIS",
           "TPK"
-        ]
+        ],
+        "description": "Employee's type described as finnish abbreviation. UI implementations should translate these to more human readable form.\n\n| Abbreviation | finnish name            |\n| ------------ | ----------------------- |\n| PA           | Pakettiautonkuljettaja  |\n| KA           | Kuorma-auton kuljettaja |\n| AH           | Alihankkija             |\n| VK           | Vuokratyöntekijä        |\n| TH           | Työharjoittelija        |\n| TP           | Tilapäistyöntekijä      |\n| AJ           | Ajojärjestelijä         |\n| JH           | Esimies                 |\n| AP           | Aikatuntipalkka         |\n| KK           | Kuukausipalkka          |\n| POIS         | Ei-aktiivinen           |\n| TPK          | Täysperäkuljettaja      |\n"
       },
       "SalaryGroup": {
         "type": "string",
@@ -1857,7 +1869,7 @@
       },
       "EmployeeWorkShift": {
         "type": "object",
-        "description": "Represents single employee work shift. Each work event must always relate to a work shift.\n\nA new employee work shift is automatically created, when employee starts a new shift. A new\nshift is started when the last recorded WorkEvent from the employee either is of type SHIFT_END\nor is of type BREAK and has been going on longer than 3 hours. A new shift is also created if\nthere is no previous work events for the employee.\n\nWhen created, the work shift is not approved. It needs to be approved by a supervisor before the\nwork shift hours can be sent to payroll.\n\nEmployee work shift always relates to a single date. This is important for calculating the total\nworking hours for employee salaries for a single work period. The date is derived by the start\ndate of the shift, which is the time of the first work event of the shift.\n",
+        "description": "Represents single employee work shift. A work event must always relate to an employee work shift.\n\nA new employee work shift is automatically created, when employee starts a new shift. A new\nshift is started when the last recorded WorkEvent from the employee either\n- is of type SHIFT_END or\n- is of type BREAK and has been going on longer than 3 hours.\nA new shift is also created if there is no previous work events for the employee.\n\nWhen created, the work shift is not approved. It needs to be approved by a supervisor before the\nwork shift hours can be sent to payroll.\n\nEmployee work shift always relates to a single date. This is important for calculating the total\nworking hours for employee salaries for a single work period. The date is derived by the start\ndate of the shift, which is the time of the first work event of the shift.\n",
         "required": [
           "date",
           "employeeId",
@@ -1872,14 +1884,28 @@
           "date": {
             "type": "string",
             "format": "date",
-            "readOnly": true,
-            "description": "Work shift date. Derived from the first work event of the shift."
+            "description": "Work shift date."
           },
           "employeeId": {
             "type": "string",
             "format": "uuid",
             "readOnly": true,
             "description": "Employee's ID"
+          },
+          "truckIds": {
+            "readOnly": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "List of truck IDs used during the work shift. Derived from work events in the shift."
+          },
+          "absence": {
+            "$ref": "#/components/schemas/AbsenceType"
+          },
+          "PerDiemAllowance": {
+            "$ref": "#/components/schemas/PerDiemAllowanceType"
           },
           "approved": {
             "type": "boolean",
@@ -1917,6 +1943,11 @@
             "format": "date-time",
             "description": "Work event time"
           },
+          "truckId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ID of truck used during the work event"
+          },
           "workEventType": {
             "$ref": "#/components/schemas/WorkEventType"
           }
@@ -1924,12 +1955,11 @@
       },
       "WorkShiftHours": {
         "type": "object",
-        "description": "Represents a single work shift hours.\n\nWork shift hours contain the total hours for a specific employee, work shift and work type. The hours are always\ncalculated dynamically during a request.\n\nWork shift hours also contains the actual hours that have been manually set by a supervisor. The actual hours\nshould always be prioritized over the calculated hours when displaying the aggregated hours and sending the\ndata to payroll.\n\nWork shift hours are created automatically if not present when total working hours for a specific employee, work\nshift and work type is requested. It can also be created through createWorkShiftHours, in which case the actual\nhours needs to be filled.\n\nOnly a single work shift hours per employee per work shift per work type is allowed. If one already exists, it\nshould be updated.\n",
+        "description": "Represents a single work shift hours.\n\nWork shift hours contain the total hours for a specific employee, work shift and work type. The hours are always\ncalculated dynamically during a request.\n\nWork shift hours also contains the actual hours that have been manually set by a supervisor. The actual hours\nshould always be prioritized over the calculated hours when displaying the aggregated hours and sending the\ndata to payroll.\n\nWork shift hours for all available work types are created automatically when related employee work shift is created.\nOnly a single work shift hours per employee per work shift per work type is allowed. If one already exists, it\nshould be updated.\n\nWork shift hours cannot be updated if the related employee work shift is approved.\n",
         "required": [
           "employeeId",
           "employeeWorkShiftId",
-          "workEventType",
-          "calculatedHours"
+          "workType"
         ],
         "properties": {
           "id": {
@@ -1947,8 +1977,8 @@
             "format": "uuid",
             "description": "Employee work shift's ID"
           },
-          "workEventType": {
-            "$ref": "#/components/schemas/WorkEventType"
+          "workType": {
+            "$ref": "#/components/schemas/WorkType"
           },
           "calculatedHours": {
             "type": "number",
@@ -1965,7 +1995,6 @@
       },
       "WorkEventType": {
         "type": "string",
-        "description": "Work event types. UI implementations should translate these to more human readable form.\n\n*Office/Terminal work types*\n- VEGETABLE (Hevi)\n- DRY (Kuiva)\n- MEAT_CELLAR (Lihakellari)\n- MEIRA (Meira)\n- FROZEN (Pakaste)\n- PALTE (Palte)\n- BREWERY (Panimo)\n- GREASE (Rasva)\n- LOGIN\n- LOGOUT\n\n*Common work types*\n- OTHER_WORK (Muu työ)\n- BREAK (Tauko)\n- SHIFT_START\n- SHIFT_END\n- UNKNOWN\n\n*Driver work types*\n- DRIVE\n- LOADING\n- UNLOADING\n- AVAILABILITY\n- DRIVER_CARD_INSERTED\n- DRIVER_CARD_REMOVED\n",
         "enum": [
           "VEGETABLE",
           "DRY",
@@ -1988,6 +2017,20 @@
           "AVAILABILITY",
           "DRIVER_CARD_INSERTED",
           "DRIVER_CARD_REMOVED"
+        ],
+        "description": "Work event types. UI implementations should translate these to more human readable form.\n\n*Driver work types*\n| name                 | finnish name               |\n| -------------------- | -------------------------- |\n| DRIVE                | Ajo                        |\n| LOADING              | Lastaus                    |\n| UNLOADING            | Purku                      |\n| AVAILABILITY         | Saatavuus                  |\n| DRIVER_CARD_INSERTED | Kuljettajakortti syötetty  |\n| DRIVER_CARD_REMOVED  | Kuljettajakortti poistettu |\n\n*Office/Terminal work types*\n| name        | finnish name         |\n| ----------- | -------------------- |\n| VEGETABLE   | Hevi                 |\n| DRY         | Kuiva                |\n| MEAT_CELLAR | Lihakellari          |\n| MEIRA       | Meira                |\n| FROZEN      | Pakaste              |\n| PALTE       | Palte                |\n| BREWERY     | Panimo               |\n| GREASE      | Rasva                |\n| LOGIN       | Sisäänkirjautuminen  |\n| LOGOUT      | Uloskirjautuminen    |\n\n*Common work types*\n| name        | finnish name         |\n| ----------- | -------------------- |\n| OTHER_WORK  | Muu työ              |\n| BREAK       | Tauko                |\n| SHIFT_START | Työvuoron alku       |\n| SHIFT_END   | Työvuoron loppu      |\n| UNKNOWN     | Tuntematon           |\n"
+      },
+      "WorkType": {
+        "type": "string",
+        "description": "Work type of the work shift hours. A single work type represents aggregated value from\none or more work event types.\n\n| name                   | finnish name         |\n| ---------------------- | -------------------- |\n| PAID_WORK              | Palkallinen työ      |\n| STANDBY                | Odotus               |\n| EVENING_ALLOWANCE      | Iltatyö              |\n| NIGHT_ALLOWANCE        | Yötyö                |\n| HOLIDAY_ALLOWANCE      | Pyhälisä             |\n| JOB_SPECIFIC_ALLOWANCE | Työkohtaisuuslisä    |\n| FROZEN_ALLOWANCE       | Pakastelisä          |\n",
+        "enum": [
+          "PAID_WORK",
+          "STANDBY",
+          "EVENING_ALLOWANCE",
+          "NIGHT_ALLOWANCE",
+          "HOLIDAY_ALLOWANCE",
+          "JOB_SPECIFIC_ALLOWANCE",
+          "FROZEN_ALLOWANCE"
         ]
       },
       "Holiday": {
@@ -2044,6 +2087,25 @@
           "PUBLIC_HOLIDAY_ALLOWANCE",
           "DAY_OFF_WORK_ALLOWANCE"
         ]
+      },
+      "PerDiemAllowanceType": {
+        "type": "string",
+        "description": "Per diem allowance",
+        "enum": [
+          "PARTIAL",
+          "FULL"
+        ]
+      },
+      "AbsenceType": {
+        "type": "string",
+        "enum": [
+          "TRAINING",
+          "VACATION",
+          "OFFICIAL_DUTIES",
+          "COMPENSATORY_LEAVE",
+          "SICK_LEAVE"
+        ],
+        "description": "Absence types are used to mark the absence type of the employee work shift. Absences are taken into account when\ncalculating the total working hours for employee when determining working hours for payroll. They might also\naffect the allowance hours of the work period.\n\nHere are definitions for the absence types:\n\n| name               | abbreviation | finnish name       | work hours | work hours on holiday | affects allowance hours |\n| ------------------ | ------------ | ------------------ | ---------- | --------------------- | ----------------------- |\n| TRAINING           | KO           | Koulutus työajalla | 8h         | 8h                    | no                      |\n| VACATION           | LO           | Loma               | 6.67h      | 0h                    | yes                     |\n| OFFICIAL_DUTIES    | LT           | Luottamustoimet    | 8h         | 8h                    | yes                     |\n| COMPENSATORY_LEAVE | PP           | Pekkanen           | 8h         | 8h                    | yes                     |\n| SICK_LEAVE         | SL           | Sairausloma        | 8h         | 8h                    | yes                     |\n"
       }
     }
   }

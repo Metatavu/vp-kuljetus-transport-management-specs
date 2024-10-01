@@ -382,33 +382,6 @@ components:
         - TERMINAL
     EmployeeType:
       type: string
-      description: >
-        Employee's type described as finnish abbreviation. UI implementations
-        should translate these to more human readable form.
-
-        Pakettiautonkuljettaja (PA)
-
-        Kuorma-auton kuljettaja (KA)
-
-        Alihankkija (AH)
-
-        Vuokratyöntekijä (VK)
-
-        Työharjoittelija (TH)
-
-        Tilapäistyöntekijä (TP)
-
-        Ajojärjestelijä (AJ)
-
-        Esimies (JH)
-
-        Aikatuntipalkka (AP)
-
-        Kuukausipalkka (KK)
-
-        Ei-aktiivinen (POIS)
-
-        Täysperäkuljettaja (TPK)
       enum:
         - PA
         - KA
@@ -422,6 +395,38 @@ components:
         - KK
         - POIS
         - TPK
+      description: >
+        Employee's type described as finnish abbreviation. UI implementations
+        should translate these to more human readable form.
+
+
+        | Abbreviation | finnish name            |
+
+        | ------------ | ----------------------- |
+
+        | PA           | Pakettiautonkuljettaja  |
+
+        | KA           | Kuorma-auton kuljettaja |
+
+        | AH           | Alihankkija             |
+
+        | VK           | Vuokratyöntekijä        |
+
+        | TH           | Työharjoittelija        |
+
+        | TP           | Tilapäistyöntekijä      |
+
+        | AJ           | Ajojärjestelijä         |
+
+        | JH           | Esimies                 |
+
+        | AP           | Aikatuntipalkka         |
+
+        | KK           | Kuukausipalkka          |
+
+        | POIS         | Ei-aktiivinen           |
+
+        | TPK          | Täysperäkuljettaja      |
     Office:
       type: string
       description: Employee's office. Salary group should be set to VPLogistics if the
@@ -432,60 +437,6 @@ components:
         - RAUHA
     WorkEventType:
       type: string
-      description: >
-        Work event types. UI implementations should translate these to more
-        human readable form.
-
-
-        *Office/Terminal work types*
-
-        - VEGETABLE (Hevi)
-
-        - DRY (Kuiva)
-
-        - MEAT_CELLAR (Lihakellari)
-
-        - MEIRA (Meira)
-
-        - FROZEN (Pakaste)
-
-        - PALTE (Palte)
-
-        - BREWERY (Panimo)
-
-        - GREASE (Rasva)
-
-        - LOGIN
-
-        - LOGOUT
-
-
-        *Common work types*
-
-        - OTHER_WORK (Muu työ)
-
-        - BREAK (Tauko)
-
-        - SHIFT_START
-
-        - SHIFT_END
-
-        - UNKNOWN
-
-
-        *Driver work types*
-
-        - DRIVE
-
-        - LOADING
-
-        - UNLOADING
-
-        - AVAILABILITY
-
-        - DRIVER_CARD_INSERTED
-
-        - DRIVER_CARD_REMOVED
       enum:
         - VEGETABLE
         - DRY
@@ -508,6 +459,72 @@ components:
         - AVAILABILITY
         - DRIVER_CARD_INSERTED
         - DRIVER_CARD_REMOVED
+      description: >
+        Work event types. UI implementations should translate these to more
+        human readable form.
+
+
+        *Driver work types*
+
+        | name                 | finnish name               |
+
+        | -------------------- | -------------------------- |
+
+        | DRIVE                | Ajo                        |
+
+        | LOADING              | Lastaus                    |
+
+        | UNLOADING            | Purku                      |
+
+        | AVAILABILITY         | Saatavuus                  |
+
+        | DRIVER_CARD_INSERTED | Kuljettajakortti syötetty  |
+
+        | DRIVER_CARD_REMOVED  | Kuljettajakortti poistettu |
+
+
+        *Office/Terminal work types*
+
+        | name        | finnish name         |
+
+        | ----------- | -------------------- |
+
+        | VEGETABLE   | Hevi                 |
+
+        | DRY         | Kuiva                |
+
+        | MEAT_CELLAR | Lihakellari          |
+
+        | MEIRA       | Meira                |
+
+        | FROZEN      | Pakaste              |
+
+        | PALTE       | Palte                |
+
+        | BREWERY     | Panimo               |
+
+        | GREASE      | Rasva                |
+
+        | LOGIN       | Sisäänkirjautuminen  |
+
+        | LOGOUT      | Uloskirjautuminen    |
+
+
+        *Common work types*
+
+        | name        | finnish name         |
+
+        | ----------- | -------------------- |
+
+        | OTHER_WORK  | Muu työ              |
+
+        | BREAK       | Tauko                |
+
+        | SHIFT_START | Työvuoron alku       |
+
+        | SHIFT_END   | Työvuoron loppu      |
+
+        | UNKNOWN     | Tuntematon           |
     TaskType:
       type: string
       description: Type of the task
