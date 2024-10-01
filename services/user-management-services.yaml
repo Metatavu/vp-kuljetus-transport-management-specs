@@ -1213,7 +1213,7 @@ components:
         A new employee work shift is automatically created, when employee starts a new shift. A new
         shift is started when the last recorded WorkEvent from the employee either
         - is of type SHIFT_END or
-        - is of type BREAK and has been going on longer than 3 hours.
+        - is of type BREAK or UNKNOWN and has been going on longer than 3 hours.
         A new shift is also created if there is no previous work events for the employee.
 
         When created, the work shift is not approved. It needs to be approved by a supervisor before the

@@ -3229,7 +3229,7 @@ components:
 
         - is of type SHIFT_END or
 
-        - is of type BREAK and has been going on longer than 3 hours.
+        - is of type BREAK or UNKNOWN and has been going on longer than 3 hours.
 
         A new shift is also created if there is no previous work events for the employee.
 
