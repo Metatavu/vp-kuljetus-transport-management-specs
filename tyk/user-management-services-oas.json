@@ -1539,8 +1539,12 @@
       "post": {
         "operationId": "createClientApp",
         "summary": "Create a client app.",
-        "description": "Creates a client app. Client app can only be created in the status 'PENDING'.",
-        "security": [],
+        "description": "Creates a client app.\n\nClient app can only be created in the status 'WAITING_FOR_APPROVAL'. If the client app with the same deviceId\nalready exists with status other than 'WAITING_FOR_APPROVAL', the creation fails with conflict. Otherwise,\nthe existing client app is returned with OK response.\n",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
         "tags": [
           "ClientApps",
           "SpecManagementUI",
@@ -1557,12 +1561,32 @@
           }
         },
         "responses": {
+          "200": {
+            "description": "Already existing client app with the same deviceId and status 'WAITING_FOR_APPROVAL'",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientApp"
+                }
+              }
+            }
+          },
           "201": {
             "description": "Created client app",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ClientApp"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict. Client app with the same deviceId already exists with status other than 'WAITING_FOR_APPROVAL'.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
                 }
               }
             }
@@ -2052,7 +2076,7 @@
       },
       "ClientApp": {
         "type": "object",
-        "description": "Represents single client app.\n\nClient apps are created when a new client app publishes itself to the system. Apps will be in PENDING status\nuntil a manager approves them. Three months after its approval a client app will change to EXPIRED status.\nThe app will then need to be approved again by a manager.\n\nThe device ID of the client app is used together with user PIN code during authentication.\n",
+        "description": "Represents single client app.\n\nClient apps are created when a new client app publishes itself to the system. Apps will be in\nWAITING_FOR_APPROVAL status until a manager approves them. Three months after its approval a client app will\nagain change to WAITING_FOR_APPROVAL status. The app will then need to be approved again by a manager.\n\nThe device ID of the client app is used together with user PIN code during authentication.\n",
         "required": [
           "deviceId",
           "status"
@@ -2107,9 +2131,8 @@
         "type": "string",
         "description": "Client app status",
         "enum": [
-          "PENDING",
-          "APPROVED",
-          "EXPIRED"
+          "WAITING_FOR_APPROVAL",
+          "APPROVED"
         ]
       }
     }

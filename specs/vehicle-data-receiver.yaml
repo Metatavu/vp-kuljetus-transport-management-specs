@@ -512,9 +512,8 @@ components:
       type: string
       description: Client app status
       enum:
-        - PENDING
+        - WAITING_FOR_APPROVAL
         - APPROVED
-        - EXPIRED
     TaskType:
       type: string
       description: Type of the task

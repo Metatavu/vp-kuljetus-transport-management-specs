@@ -310,20 +310,19 @@ components:
       type: string
       description: Client app status
       enum:
-        - PENDING
+        - WAITING_FOR_APPROVAL
         - APPROVED
-        - EXPIRED
     ClientApp:
       type: object
       description: >
         Represents single client app.
 
 
-        Client apps are created when a new client app publishes itself to the system. Apps will be in PENDING status
+        Client apps are created when a new client app publishes itself to the system. Apps will be in
 
-        until a manager approves them. Three months after its approval a client app will change to EXPIRED status.
+        WAITING_FOR_APPROVAL status until a manager approves them. Three months after its approval a client app will
 
-        The app will then need to be approved again by a manager.
+        again change to WAITING_FOR_APPROVAL status. The app will then need to be approved again by a manager.
 
 
         The device ID of the client app is used together with user PIN code during authentication.
