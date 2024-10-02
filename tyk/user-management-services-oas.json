@@ -1668,9 +1668,6 @@
             "BearerAuth": [
               "manager"
             ]
-          },
-          {
-            "ApiKeyAuth": []
           }
         ],
         "tags": [
@@ -2079,7 +2076,8 @@
         "description": "Represents single client app.\n\nClient apps are created when a new client app publishes itself to the system. Apps will be in\nWAITING_FOR_APPROVAL status until a manager approves them. Three months after its approval a client app will\nagain change to WAITING_FOR_APPROVAL status. The app will then need to be approved again by a manager.\n\nThe device ID of the client app is used together with user PIN code during authentication.\n",
         "required": [
           "deviceId",
-          "status"
+          "status",
+          "metadata"
         ],
         "properties": {
           "id": {
@@ -2099,11 +2097,7 @@
             "$ref": "#/components/schemas/ClientAppStatus"
           },
           "metadata": {
-            "type": "object",
-            "description": "client app metadata, e.g. device OS, device OS version, app version",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "$ref": "#/components/schemas/ClientAppMetadata"
           },
           "lastLoginAt": {
             "type": "string",
@@ -2134,6 +2128,27 @@
           "WAITING_FOR_APPROVAL",
           "APPROVED"
         ]
+      },
+      "ClientAppMetadata": {
+        "type": "object",
+        "description": "Client app metadata",
+        "properties": {
+          "deviceOS": {
+            "type": "string",
+            "description": "Device OS",
+            "enum": [
+              "ANDROID"
+            ]
+          },
+          "deviceOSVersion": {
+            "type": "string",
+            "description": "Device OS version"
+          },
+          "appVersion": {
+            "type": "string",
+            "description": "App version"
+          }
+        }
       }
     }
   }

@@ -2034,7 +2034,6 @@ paths:
       security:
         - BearerAuth:
             - manager
-        - ApiKeyAuth: []
       tags:
         - ClientApps
       parameters:
@@ -3444,6 +3443,7 @@ components:
       required:
         - deviceId
         - status
+        - metadata
       properties:
         id:
           type: string
@@ -3458,10 +3458,7 @@ components:
         status:
           $ref: "#/components/schemas/ClientAppStatus"
         metadata:
-          type: object
-          description: client app metadata, e.g. device OS, device OS version, app version
-          additionalProperties:
-            type: string
+          $ref: "#/components/schemas/ClientAppMetadata"
         lastLoginAt:
           type: string
           format: date-time
@@ -3483,6 +3480,21 @@ components:
       enum:
         - PUBLIC_HOLIDAY_ALLOWANCE
         - DAY_OFF_WORK_ALLOWANCE
+    ClientAppMetadata:
+      type: object
+      description: Client app metadata
+      properties:
+        deviceOS:
+          type: string
+          description: Device OS
+          enum:
+            - ANDROID
+        deviceOSVersion:
+          type: string
+          description: Device OS version
+        appVersion:
+          type: string
+          description: App version
     Site:
       type: object
       description: Represents a single customer site

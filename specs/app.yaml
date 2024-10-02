@@ -1758,6 +1758,7 @@ components:
       required:
         - deviceId
         - status
+        - metadata
       properties:
         id:
           type: string
@@ -1772,10 +1773,7 @@ components:
         status:
           $ref: "#/components/schemas/ClientAppStatus"
         metadata:
-          type: object
-          description: client app metadata, e.g. device OS, device OS version, app version
-          additionalProperties:
-            type: string
+          $ref: "#/components/schemas/ClientAppMetadata"
         lastLoginAt:
           type: string
           format: date-time
@@ -1792,6 +1790,21 @@ components:
           type: string
           format: date-time
           description: Last modified time
+    ClientAppMetadata:
+      type: object
+      description: Client app metadata
+      properties:
+        deviceOS:
+          type: string
+          description: Device OS
+          enum:
+            - ANDROID
+        deviceOSVersion:
+          type: string
+          description: Device OS version
+        appVersion:
+          type: string
+          description: App version
     Site:
       type: object
       description: Represents a single customer site
