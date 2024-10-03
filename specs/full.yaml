@@ -1767,7 +1767,7 @@ paths:
           in: query
           description: filter work shift hours by work type
           schema:
-            $ref: "#/components/schemas/WorkEventType"
+            $ref: "#/components/schemas/WorkType"
         - name: employeeWorkShiftStartedAfter
           in: query
           description: filter work shift hours by employee work shift started after
@@ -3312,96 +3312,40 @@ components:
           description: The ID of truck used during the work event
         workEventType:
           $ref: "#/components/schemas/WorkEventType"
-    WorkEventType:
+    WorkType:
       type: string
-      enum:
-        - VEGETABLE
-        - DRY
-        - MEAT_CELLAR
-        - MEIRA
-        - FROZEN
-        - PALTE
-        - BREWERY
-        - GREASE
-        - LOGIN
-        - LOGOUT
-        - OTHER_WORK
-        - BREAK
-        - SHIFT_START
-        - SHIFT_END
-        - UNKNOWN
-        - DRIVE
-        - LOADING
-        - UNLOADING
-        - AVAILABILITY
-        - DRIVER_CARD_INSERTED
-        - DRIVER_CARD_REMOVED
       description: >
-        Work event types. UI implementations should translate these to more
-        human readable form.
+        Work type of the work shift hours. A single work type represents
+        aggregated value from
+
+        one or more work event types.
 
 
-        *Driver work types*
+        | name                   | finnish name         |
 
-        | name                 | finnish name               |
+        | ---------------------- | -------------------- |
 
-        | -------------------- | -------------------------- |
+        | PAID_WORK              | Palkallinen työ      |
 
-        | DRIVE                | Ajo                        |
+        | STANDBY                | Odotus               |
 
-        | LOADING              | Lastaus                    |
+        | EVENING_ALLOWANCE      | Iltatyö              |
 
-        | UNLOADING            | Purku                      |
+        | NIGHT_ALLOWANCE        | Yötyö                |
 
-        | AVAILABILITY         | Saatavuus                  |
+        | HOLIDAY_ALLOWANCE      | Pyhälisä             |
 
-        | DRIVER_CARD_INSERTED | Kuljettajakortti syötetty  |
+        | JOB_SPECIFIC_ALLOWANCE | Työkohtaisuuslisä    |
 
-        | DRIVER_CARD_REMOVED  | Kuljettajakortti poistettu |
-
-
-        *Office/Terminal work types*
-
-        | name        | finnish name         |
-
-        | ----------- | -------------------- |
-
-        | VEGETABLE   | Hevi                 |
-
-        | DRY         | Kuiva                |
-
-        | MEAT_CELLAR | Lihakellari          |
-
-        | MEIRA       | Meira                |
-
-        | FROZEN      | Pakaste              |
-
-        | PALTE       | Palte                |
-
-        | BREWERY     | Panimo               |
-
-        | GREASE      | Rasva                |
-
-        | LOGIN       | Sisäänkirjautuminen  |
-
-        | LOGOUT      | Uloskirjautuminen    |
-
-
-        *Common work types*
-
-        | name        | finnish name         |
-
-        | ----------- | -------------------- |
-
-        | OTHER_WORK  | Muu työ              |
-
-        | BREAK       | Tauko                |
-
-        | SHIFT_START | Työvuoron alku       |
-
-        | SHIFT_END   | Työvuoron loppu      |
-
-        | UNKNOWN     | Tuntematon           |
+        | FROZEN_ALLOWANCE       | Pakastelisä          |
+      enum:
+        - PAID_WORK
+        - STANDBY
+        - EVENING_ALLOWANCE
+        - NIGHT_ALLOWANCE
+        - HOLIDAY_ALLOWANCE
+        - JOB_SPECIFIC_ALLOWANCE
+        - FROZEN_ALLOWANCE
     WorkShiftHours:
       type: object
       description: >
@@ -3540,40 +3484,96 @@ components:
       enum:
         - PARTIAL
         - FULL
-    WorkType:
+    WorkEventType:
       type: string
-      description: >
-        Work type of the work shift hours. A single work type represents
-        aggregated value from
-
-        one or more work event types.
-
-
-        | name                   | finnish name         |
-
-        | ---------------------- | -------------------- |
-
-        | PAID_WORK              | Palkallinen työ      |
-
-        | STANDBY                | Odotus               |
-
-        | EVENING_ALLOWANCE      | Iltatyö              |
-
-        | NIGHT_ALLOWANCE        | Yötyö                |
-
-        | HOLIDAY_ALLOWANCE      | Pyhälisä             |
-
-        | JOB_SPECIFIC_ALLOWANCE | Työkohtaisuuslisä    |
-
-        | FROZEN_ALLOWANCE       | Pakastelisä          |
       enum:
-        - PAID_WORK
-        - STANDBY
-        - EVENING_ALLOWANCE
-        - NIGHT_ALLOWANCE
-        - HOLIDAY_ALLOWANCE
-        - JOB_SPECIFIC_ALLOWANCE
-        - FROZEN_ALLOWANCE
+        - VEGETABLE
+        - DRY
+        - MEAT_CELLAR
+        - MEIRA
+        - FROZEN
+        - PALTE
+        - BREWERY
+        - GREASE
+        - LOGIN
+        - LOGOUT
+        - OTHER_WORK
+        - BREAK
+        - SHIFT_START
+        - SHIFT_END
+        - UNKNOWN
+        - DRIVE
+        - LOADING
+        - UNLOADING
+        - AVAILABILITY
+        - DRIVER_CARD_INSERTED
+        - DRIVER_CARD_REMOVED
+      description: >
+        Work event types. UI implementations should translate these to more
+        human readable form.
+
+
+        *Driver work types*
+
+        | name                 | finnish name               |
+
+        | -------------------- | -------------------------- |
+
+        | DRIVE                | Ajo                        |
+
+        | LOADING              | Lastaus                    |
+
+        | UNLOADING            | Purku                      |
+
+        | AVAILABILITY         | Saatavuus                  |
+
+        | DRIVER_CARD_INSERTED | Kuljettajakortti syötetty  |
+
+        | DRIVER_CARD_REMOVED  | Kuljettajakortti poistettu |
+
+
+        *Office/Terminal work types*
+
+        | name        | finnish name         |
+
+        | ----------- | -------------------- |
+
+        | VEGETABLE   | Hevi                 |
+
+        | DRY         | Kuiva                |
+
+        | MEAT_CELLAR | Lihakellari          |
+
+        | MEIRA       | Meira                |
+
+        | FROZEN      | Pakaste              |
+
+        | PALTE       | Palte                |
+
+        | BREWERY     | Panimo               |
+
+        | GREASE      | Rasva                |
+
+        | LOGIN       | Sisäänkirjautuminen  |
+
+        | LOGOUT      | Uloskirjautuminen    |
+
+
+        *Common work types*
+
+        | name        | finnish name         |
+
+        | ----------- | -------------------- |
+
+        | OTHER_WORK  | Muu työ              |
+
+        | BREAK       | Tauko                |
+
+        | SHIFT_START | Työvuoron alku       |
+
+        | SHIFT_END   | Työvuoron loppu      |
+
+        | UNKNOWN     | Tuntematon           |
     CompensationType:
       type: string
       enum:

@@ -1233,7 +1233,7 @@
             "in": "query",
             "description": "filter work shift hours by work type",
             "schema": {
-              "$ref": "#/components/schemas/WorkEventType"
+              "$ref": "#/components/schemas/WorkType"
             }
           },
           {

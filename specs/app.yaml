@@ -1630,6 +1630,40 @@ components:
           description: The ID of truck used during the work event
         workEventType:
           $ref: "#/components/schemas/WorkEventType"
+    WorkType:
+      type: string
+      description: >
+        Work type of the work shift hours. A single work type represents
+        aggregated value from
+
+        one or more work event types.
+
+
+        | name                   | finnish name         |
+
+        | ---------------------- | -------------------- |
+
+        | PAID_WORK              | Palkallinen työ      |
+
+        | STANDBY                | Odotus               |
+
+        | EVENING_ALLOWANCE      | Iltatyö              |
+
+        | NIGHT_ALLOWANCE        | Yötyö                |
+
+        | HOLIDAY_ALLOWANCE      | Pyhälisä             |
+
+        | JOB_SPECIFIC_ALLOWANCE | Työkohtaisuuslisä    |
+
+        | FROZEN_ALLOWANCE       | Pakastelisä          |
+      enum:
+        - PAID_WORK
+        - STANDBY
+        - EVENING_ALLOWANCE
+        - NIGHT_ALLOWANCE
+        - HOLIDAY_ALLOWANCE
+        - JOB_SPECIFIC_ALLOWANCE
+        - FROZEN_ALLOWANCE
     WorkEventType:
       type: string
       enum:

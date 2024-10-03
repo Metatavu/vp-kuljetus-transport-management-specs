@@ -774,7 +774,7 @@ paths:
           in: query
           description: filter work shift hours by work type
           schema:
-            $ref: "#/components/schemas/WorkEventType"
+            $ref: "#/components/schemas/WorkType"
         - name: employeeWorkShiftStartedAfter
           in: query
           description: filter work shift hours by employee work shift started after specified date
