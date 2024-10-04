@@ -3349,7 +3349,6 @@ components:
           type: string
           format: date-time
           description: Last modified time
-<<<<<<< HEAD
     ClientAppStatus:
       type: string
       description: Client app status
@@ -3405,7 +3404,6 @@ components:
           type: string
           format: date-time
           description: Last modified time
-=======
     AbsenceType:
       type: string
       enum:
@@ -3535,7 +3533,6 @@ components:
         | SHIFT_END   | Työvuoron loppu      |
 
         | UNKNOWN     | Tuntematon           |
->>>>>>> 377127c11b3bba69a831ecc6589c878978267399
     CompensationType:
       type: string
       enum:

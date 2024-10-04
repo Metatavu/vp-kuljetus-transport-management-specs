@@ -259,28 +259,13 @@ components:
 
         | FROZEN_ALLOWANCE       | Pakastelisä          |
       enum:
-<<<<<<< HEAD
-        - VEGETABLE
-        - DRY
-        - MEAT_CELLAR
-        - MEIRA
-        - FROZEN
-        - PALTE
-        - BREWERY
-        - GREASE
-        - LOGIN
-        - LOGOUT
-        - OTHER_WORK
-        - BREAK
-        - SHIFT_START
-        - SHIFT_END
-        - UNKNOWN
-        - DRIVE
-        - LOADING
-        - UNLOADING
-        - AVAILABILITY
-        - DRIVER_CARD_INSERTED
-        - DRIVER_CARD_REMOVED
+        - PAID_WORK
+        - STANDBY
+        - EVENING_ALLOWANCE
+        - NIGHT_ALLOWANCE
+        - HOLIDAY_ALLOWANCE
+        - JOB_SPECIFIC_ALLOWANCE
+        - FROZEN_ALLOWANCE
     ClientAppStatus:
       type: string
       description: Client app status
@@ -351,15 +336,6 @@ components:
         appVersion:
           type: string
           description: App version
-=======
-        - PAID_WORK
-        - STANDBY
-        - EVENING_ALLOWANCE
-        - NIGHT_ALLOWANCE
-        - HOLIDAY_ALLOWANCE
-        - JOB_SPECIFIC_ALLOWANCE
-        - FROZEN_ALLOWANCE
->>>>>>> 377127c11b3bba69a831ecc6589c878978267399
     TaskType:
       type: string
       description: Type of the task

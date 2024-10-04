@@ -2386,7 +2386,25 @@
           "DAY_OFF_WORK_ALLOWANCE"
         ]
       },
-<<<<<<< HEAD
+      "PerDiemAllowanceType": {
+        "type": "string",
+        "description": "Per diem allowance",
+        "enum": [
+          "PARTIAL",
+          "FULL"
+        ]
+      },
+      "AbsenceType": {
+        "type": "string",
+        "enum": [
+          "TRAINING",
+          "VACATION",
+          "OFFICIAL_DUTIES",
+          "COMPENSATORY_LEAVE",
+          "SICK_LEAVE"
+        ],
+        "description": "Absence types are used to mark the absence type of the employee work shift. Absences are taken into account when\ncalculating the total working hours for employee when determining working hours for payroll. They might also\naffect the allowance hours of the work period.\n\nHere are definitions for the absence types:\n\n| name               | abbreviation | finnish name       | work hours | work hours on holiday | affects allowance hours |\n| ------------------ | ------------ | ------------------ | ---------- | --------------------- | ----------------------- |\n| TRAINING           | KO           | Koulutus työajalla | 8h         | 8h                    | no                      |\n| VACATION           | LO           | Loma               | 6.67h      | 0h                    | yes                     |\n| OFFICIAL_DUTIES    | LT           | Luottamustoimet    | 8h         | 8h                    | yes                     |\n| COMPENSATORY_LEAVE | PP           | Pekkanen           | 8h         | 8h                    | yes                     |\n| SICK_LEAVE         | SL           | Sairausloma        | 8h         | 8h                    | yes                     |\n"
+      },
       "ClientApp": {
         "type": "object",
         "description": "Represents single client app.\n\nClient apps are created when a new client app publishes itself to the system. Apps will be in\nWAITING_FOR_APPROVAL status until a manager approves them. Three months after its approval a client app will\nagain change to WAITING_FOR_APPROVAL status. The app will then need to be approved again by a manager.\n\nThe device ID of the client app is used together with user PIN code during authentication.\n",
@@ -2465,26 +2483,6 @@
             "description": "App version"
           }
         }
-=======
-      "PerDiemAllowanceType": {
-        "type": "string",
-        "description": "Per diem allowance",
-        "enum": [
-          "PARTIAL",
-          "FULL"
-        ]
-      },
-      "AbsenceType": {
-        "type": "string",
-        "enum": [
-          "TRAINING",
-          "VACATION",
-          "OFFICIAL_DUTIES",
-          "COMPENSATORY_LEAVE",
-          "SICK_LEAVE"
-        ],
-        "description": "Absence types are used to mark the absence type of the employee work shift. Absences are taken into account when\ncalculating the total working hours for employee when determining working hours for payroll. They might also\naffect the allowance hours of the work period.\n\nHere are definitions for the absence types:\n\n| name               | abbreviation | finnish name       | work hours | work hours on holiday | affects allowance hours |\n| ------------------ | ------------ | ------------------ | ---------- | --------------------- | ----------------------- |\n| TRAINING           | KO           | Koulutus työajalla | 8h         | 8h                    | no                      |\n| VACATION           | LO           | Loma               | 6.67h      | 0h                    | yes                     |\n| OFFICIAL_DUTIES    | LT           | Luottamustoimet    | 8h         | 8h                    | yes                     |\n| COMPENSATORY_LEAVE | PP           | Pekkanen           | 8h         | 8h                    | yes                     |\n| SICK_LEAVE         | SL           | Sairausloma        | 8h         | 8h                    | yes                     |\n"
->>>>>>> 377127c11b3bba69a831ecc6589c878978267399
       }
     }
   }
