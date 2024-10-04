@@ -307,10 +307,221 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  "/v1/employees/{employeeId}/workShifts":
+    get:
+      operationId: listEmployeeWorkShifts
+      summary: List Employees Work Shifts.
+      description: |
+        Lists Employees work Shifts. Sort by time, latest first.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - EmployeeWorkShifts
+        - SpecManagementUI
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: startedAfter
+          in: query
+          description: Filter work shifts started after specified date.
+          schema:
+            type: string
+            format: date-time
+        - name: startedBefore
+          in: query
+          description: Filter work shifts started before specified date.
+          schema:
+            type: string
+            format: date-time
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+            default: 0
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: List of employee work shifts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EmployeeWorkShift"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createEmployeeWorkShift
+      summary: Create Employee Work Shift.
+      description: Creates Employee Work Shift.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - EmployeeWorkShifts
+        - SpecManagementUI
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmployeeWorkShift"
+      responses:
+        "201":
+          description: Created employee work shift
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmployeeWorkShift"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  "/v1/employees/{employeeId}/workShifts/{workShiftId}":
+    get:
+      operationId: findEmployeeWorkShift
+      summary: Find Employee Work Shift.
+      description: Finds an employee's work shift by ID.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - EmployeeWorkShifts
+        - SpecManagementUI
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: workShiftId
+          required: true
+          in: path
+          description: work shift's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found employee work shift
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmployeeWorkShift"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateEmployeeWorkShift
+      summary: Update Employee Work Shift.
+      description: Updates Employee Work Shift. Only approved field can be updated.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - EmployeeWorkShifts
+        - SpecManagementUI
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: workShiftId
+          required: true
+          in: path
+          description: work shift's ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmployeeWorkShift"
+      responses:
+        "200":
+          description: Updated employee work shift
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmployeeWorkShift"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteEmployeeWorkShift
+      summary: Delete employee work shift.
+      description: Only for tests.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - EmployeeWorkShifts
+        - SpecManagementUI
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: workShiftId
+          required: true
+          in: path
+          description: work shift's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
   "/v1/employees/{employeeId}/workEvents":
     get:
       operationId: listEmployeeWorkEvents
-      summary: List Employees Time Entries.
+      summary: List Employees Work Events.
       description: Lists Employees Work Events. Sort by time, latest first.
       security:
         - BearerAuth: [manager, driver, employee]
@@ -323,6 +534,12 @@ paths:
           required: true
           in: path
           description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: employeeWorkShiftId
+          in: query
+          description: Filter work events by a specific work shift of the employee
           schema:
             type: string
             format: uuid
@@ -369,7 +586,10 @@ paths:
     post:
       operationId: createEmployeeWorkEvent
       summary: Create Employees Work Event.
-      description: Creates Employees Work Event.
+      description: |
+        Creates Employees Work Event.
+
+        If the work event starts a new shift, a new employee work shift is also created automatically.
       security:
         - BearerAuth: [manager, driver, employee]
       tags:
@@ -492,7 +712,9 @@ paths:
     delete:
       operationId: deleteEmployeeWorkEvent
       summary: Delete Employee's Work Event.
-      description: Deletes Employee's Work Event. Only accessible by managers.
+      description: |
+        Deletes Employee's Work Event. Only accessible by managers. If deleting the last remaining work
+        event from an employee work shift, the shift and its related work shift hours should also be deleted.
       security:
         - BearerAuth: [manager]
       tags:
@@ -523,62 +745,57 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  "/v1/employees/{employeeId}/dailyTimeEntries":
+  "/v1/workShiftHours":
     get:
-      operationId: listEmployeeDailyTimeEntries
-      summary: List Employees Daily Time Entries.
-      description: Lists Employees Daily Time Entries. There can be 0-1 daily time entries per work type per day.
+      operationId: listWorkShiftHours
+      summary: List Work Shift Hours.
+      description: Lists Work Shift Hours. Unique per employee per work shift per work type.
       security:
         - BearerAuth: [manager]
       tags:
-        - DailyTimeEntries
+        - WorkShiftHours
         - SpecManagementUI
       parameters:
         - name: employeeId
-          required: true
-          in: path
-          description: employee's ID
+          in: query
+          description: filter work shift hours by employee's ID
           schema:
             type: string
             format: uuid
-        - name: workEventType
+        - name: employeeWorkShiftId
           in: query
-          description: List daily time entries only for specified work type.
-          schema:
-            $ref: "#/components/schemas/WorkEventType"
-        - name: start
-          in: query
-          description: List daily time entries only after specified date.
+          description: |
+            filter work shift hours by employee work shift's ID.
+            Cannot be used with employeeWorkShiftStartedAfter or employeeWorkShiftStartedBefore.
           schema:
             type: string
-            format: date
-        - name: end
+            format: uuid
+        - name: workType
           in: query
-          description: List daily time entries only before specified date.
+          description: filter work shift hours by work type
+          schema:
+            $ref: "#/components/schemas/WorkType"
+        - name: employeeWorkShiftStartedAfter
+          in: query
+          description: filter work shift hours by employee work shift started after specified date
           schema:
             type: string
-            format: date
-        - name: first
+            format: date-time
+        - name: employeeWorkShiftStartedBefore
           in: query
-          description: First result.
+          description: filter work shift hours by employee work shift started before specified date
           schema:
-            type: integer
-            default: 0
-        - name: max
-          in: query
-          description: Max results.
-          schema:
-            type: integer
-            default: 10
+            type: string
+            format: date-time
       responses:
         "200":
-          description: List of daily time entries
+          description: List of work shift hours
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/DailyTimeEntry"
+                  $ref: "#/components/schemas/WorkShiftHours"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -586,110 +803,55 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-    post:
-      operationId: createEmployeeDailyTimeEntry
-      summary: Create Employees Daily Time Entry.
-      description: |
-        Creates Employees Daily Time Entry.
-
-        Attempt to create new daily time entry should fail if a daily entry with the same date and work type already exists.
-      security:
-        - BearerAuth: [manager]
-      tags:
-        - DailyTimeEntries
-        - SpecManagementUI
-      parameters:
-        - name: employeeId
-          required: true
-          in: path
-          description: employee's ID
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DailyTimeEntry"
-      responses:
-        "201":
-          description: Created daily time entry
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/WorkEvent"
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  "/v1/employees/{employeeId}/dailyTimeEntries/{dailyTimeEntryId}":
+  "/v1/workShiftHours/{workShiftHoursId}":
     get:
-      operationId: findEmployeeDailyTimeEntry
-      summary: Find an employee's daily time entry.
-      description: Finds an employee's daily time entry by ID.
+      operationId: findWorkShiftHours
+      summary: Find Work Shift Hours.
+      description: Finds Work Shift Hours.
       security:
         - BearerAuth: [manager]
       tags:
-        - DailyTimeEntries
+        - WorkShiftHours
         - SpecManagementUI
       parameters:
-        - name: employeeId
+        - name: workShiftHoursId
           required: true
           in: path
-          description: employee's ID
-          schema:
-            type: string
-            format: uuid
-        - name: dailyTimeEntryId
-          required: true
-          in: path
-          description: daily time entry's ID
+          description: ID of work shift hours
           schema:
             type: string
             format: uuid
       responses:
         "200":
-          description: Found daily time entry
+          description: Work shift hours
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DailyTimeEntry"
+                $ref: "#/components/schemas/WorkShiftHours"
         "default":
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
     put:
-      operationId: updateEmployeeDailyTimeEntry
-      summary: Update Employee's Daily Time Entry.
+      operationId: updateWorkShiftHours
+      summary: Update Work Shift Hours.
       description: |
-        Updates Employee's Daily Time Entry.
+        Updates Work Shift Hours.
 
-        Trying to update other than total hours from an entry should fail, as that could potentially
-        clash with another entry. Instead, incorrect entry should be deleted and new one created.
+        Trying to update employeeId, employeeWorkShiftId, or workType from work shift hours should fail.
+        If the related employee work shift is approved, work shift hours cannot be updated.
       security:
         - BearerAuth: [manager]
       tags:
-        - DailyTimeEntries
+        - WorkShiftHours
         - SpecManagementUI
       parameters:
-        - name: employeeId
+        - name: workShiftHoursId
           required: true
           in: path
-          description: employee's ID
-          schema:
-            type: string
-            format: uuid
-        - name: dailyTimeEntryId
-          required: true
-          in: path
-          description: daily time entry's ID
+          description: ID of work shift hours
           schema:
             type: string
             format: uuid
@@ -698,48 +860,40 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DailyTimeEntry"
+              $ref: "#/components/schemas/WorkShiftHours"
       responses:
         "200":
-          description: Updated daily time entry
+          description: Updated work shift hours
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DailyTimeEntry"
+                $ref: "#/components/schemas/WorkShiftHours"
         "default":
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
     delete:
-      operationId: deleteEmployeeDailyTimeEntry
-      summary: Delete Employee's Daily Time Entry.
-      description: Deletes Employee's Daily Time Entry.
+      operationId: deleteWorkShiftHours
+      summary: Delete work shift hours.
+      description: Only for tests.
       security:
         - BearerAuth: [manager]
       tags:
-        - DailyTimeEntries
+        - WorkShiftHours
         - SpecManagementUI
       parameters:
-        - name: employeeId
+        - name: workShiftHoursId
           required: true
           in: path
-          description: employee's ID
-          schema:
-            type: string
-            format: uuid
-        - name: dailyTimeEntryId
-          required: true
-          in: path
-          description: daily time entry's ID
+          description: ID of work shift hours
           schema:
             type: string
             format: uuid
       responses:
         "204":
-          description: Successfully deleted the daily time entry
+          description: Empty response indicating successful removal
         "default":
           description: Invalid request was sent to the server
           content:
@@ -1017,21 +1171,24 @@ components:
 
     EmployeeType:
       type: string
+      enum: [PA, KA, AH, VK, TH, TP, AJ, JH, AP, KK, POIS, TPK]
       description: |
         Employee's type described as finnish abbreviation. UI implementations should translate these to more human readable form.
-        Pakettiautonkuljettaja (PA)
-        Kuorma-auton kuljettaja (KA)
-        Alihankkija (AH)
-        Vuokratyöntekijä (VK)
-        Työharjoittelija (TH)
-        Tilapäistyöntekijä (TP)
-        Ajojärjestelijä (AJ)
-        Esimies (JH)
-        Aikatuntipalkka (AP)
-        Kuukausipalkka (KK)
-        Ei-aktiivinen (POIS)
-        Täysperäkuljettaja (TPK)
-      enum: [PA, KA, AH, VK, TH, TP, AJ, JH, AP, KK, POIS, TPK]
+
+        | Abbreviation | finnish name            |
+        | ------------ | ----------------------- |
+        | PA           | Pakettiautonkuljettaja  |
+        | KA           | Kuorma-auton kuljettaja |
+        | AH           | Alihankkija             |
+        | VK           | Vuokratyöntekijä        |
+        | TH           | Työharjoittelija        |
+        | TP           | Tilapäistyöntekijä      |
+        | AJ           | Ajojärjestelijä         |
+        | JH           | Esimies                 |
+        | AP           | Aikatuntipalkka         |
+        | KK           | Kuukausipalkka          |
+        | POIS         | Ei-aktiivinen           |
+        | TPK          | Täysperäkuljettaja      |
 
     SalaryGroup:
       type: string
@@ -1047,6 +1204,58 @@ components:
       type: string
       description: Employee's office. Salary group should be set to VPLogistics if the office is KOTKA
       enum: [KOTKA, KOUVOLA, RAUHA]
+
+    EmployeeWorkShift:
+      type: object
+      description: |
+        Represents single employee work shift. A work event must always relate to an employee work shift.
+
+        A new employee work shift is automatically created, when employee starts a new shift. A new
+        shift is started when the last recorded WorkEvent from the employee either
+        - is of type SHIFT_END or
+        - is of type BREAK or UNKNOWN and has been going on longer than 3 hours.
+        A new shift is also created if there is no previous work events for the employee.
+
+        When created, the work shift is not approved. It needs to be approved by a supervisor before the
+        work shift hours can be sent to payroll.
+
+        Employee work shift always relates to a single date. This is important for calculating the total
+        working hours for employee salaries for a single work period. The date is derived by the start
+        date of the shift, which is the time of the first work event of the shift.
+      required:
+        - date
+        - employeeId
+        - approved
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        date:
+          type: string
+          format: date
+          description: Work shift date.
+        employeeId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Employee's ID
+        truckIds:
+          readOnly: true
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: List of truck IDs used during the work shift. Derived from work events in the shift.
+        absence:
+          $ref: "#/components/schemas/AbsenceType"
+        PerDiemAllowance:
+          $ref: "#/components/schemas/PerDiemAllowanceType"
+        approved:
+          type: boolean
+          description: |
+            Whether the work shift has been approved by a supervisor. Work shift hours cannot be updated if
+            the work shift is approved.
 
     WorkEvent:
       type: object
@@ -1064,27 +1273,43 @@ components:
           type: string
           format: uuid
           description: Employee's ID
+        employeeWorkShiftId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: employee work shift ID
         time:
           type: string
           format: date-time
           description: Work event time
+        truckId:
+          type: string
+          format: uuid
+          description: The ID of truck used during the work event
         workEventType:
           $ref: "#/components/schemas/WorkEventType"
 
-    DailyTimeEntry:
+    WorkShiftHours:
       type: object
       description: |
-        Represents a single daily time entry. Daily time entries are created when total working hours
-        of an employee for some work type needs to be manually changed for a specific day. Only a single
-        daily time entry per work type per day is allowed. If one already exists, it should be updated.
-        Daily time entry is always prioritized over calculating the total from the actual time entries
-        when displaying the aggregated hours and sending the data to payroll.
+        Represents a single work shift hours.
+
+        Work shift hours contain the total hours for a specific employee, work shift and work type. The hours are always
+        calculated dynamically during a request.
+
+        Work shift hours also contains the actual hours that have been manually set by a supervisor. The actual hours
+        should always be prioritized over the calculated hours when displaying the aggregated hours and sending the
+        data to payroll.
+
+        Work shift hours for all available work types are created automatically when related employee work shift is created.
+        Only a single work shift hours per employee per work shift per work type is allowed. If one already exists, it
+        should be updated.
+
+        Work shift hours cannot be updated if the related employee work shift is approved.
       required:
         - employeeId
-        - date
-        - workEventType
-        - hours
-        - approved
+        - employeeWorkShiftId
+        - workType
       properties:
         id:
           type: string
@@ -1094,54 +1319,28 @@ components:
           type: string
           format: uuid
           description: Employee's ID
-        date:
+        employeeWorkShiftId:
           type: string
-          format: date
-          description: Daily time entry date
-        workEventType:
-          $ref: "#/components/schemas/WorkEventType"
-        hours:
+          format: uuid
+          description: Employee work shift's ID
+        workType:
+          $ref: "#/components/schemas/WorkType"
+        calculatedHours:
           type: number
           format: float
-          description: Corrected hours for the day for corresponding work type.
-        approved:
-          type: boolean
+          readOnly: true
           description: |
-            Whether the daily time entry has been approved by a supervisor.
-            Hours cannot be updated unless approved is set to false.
+            Calculated hours for the employee work shift for corresponding work type. This should always be dynamically
+            calculated from the actual work events in the work shift. Cannot be updated.
+        actualHours:
+          type: number
+          format: float
+          description: |
+            Actual, manually recorded hours for the employee work shift for corresponding work type. It is null until
+            the hours are manually set.
 
     WorkEventType:
       type: string
-      description: |
-        Work event types. UI implementations should translate these to more human readable form.
-
-        *Office/Terminal work types*
-        - VEGETABLE (Hevi)
-        - DRY (Kuiva)
-        - MEAT_CELLAR (Lihakellari)
-        - MEIRA (Meira)
-        - FROZEN (Pakaste)
-        - PALTE (Palte)
-        - BREWERY (Panimo)
-        - GREASE (Rasva)
-        - LOGIN
-        - LOGOUT
-
-        *Common work types*
-        - OTHER_WORK (Muu työ)
-        - BREAK (Tauko)
-        - SHIFT_START
-        - SHIFT_END
-        - UNKNOWN
-
-        *Driver work types*
-        - DRIVE
-        - LOADING
-        - UNLOADING
-        - AVAILABILITY
-        - DRIVER_CARD_INSERTED
-        - DRIVER_CARD_REMOVED
-
       enum:
         - VEGETABLE
         - DRY
@@ -1164,6 +1363,65 @@ components:
         - AVAILABILITY
         - DRIVER_CARD_INSERTED
         - DRIVER_CARD_REMOVED
+      description: |
+        Work event types. UI implementations should translate these to more human readable form.
+
+        *Driver work types*
+        | name                 | finnish name               |
+        | -------------------- | -------------------------- |
+        | DRIVE                | Ajo                        |
+        | LOADING              | Lastaus                    |
+        | UNLOADING            | Purku                      |
+        | AVAILABILITY         | Saatavuus                  |
+        | DRIVER_CARD_INSERTED | Kuljettajakortti syötetty  |
+        | DRIVER_CARD_REMOVED  | Kuljettajakortti poistettu |
+
+        *Office/Terminal work types*
+        | name        | finnish name         |
+        | ----------- | -------------------- |
+        | VEGETABLE   | Hevi                 |
+        | DRY         | Kuiva                |
+        | MEAT_CELLAR | Lihakellari          |
+        | MEIRA       | Meira                |
+        | FROZEN      | Pakaste              |
+        | PALTE       | Palte                |
+        | BREWERY     | Panimo               |
+        | GREASE      | Rasva                |
+        | LOGIN       | Sisäänkirjautuminen  |
+        | LOGOUT      | Uloskirjautuminen    |
+
+        *Common work types*
+        | name        | finnish name         |
+        | ----------- | -------------------- |
+        | OTHER_WORK  | Muu työ              |
+        | BREAK       | Tauko                |
+        | SHIFT_START | Työvuoron alku       |
+        | SHIFT_END   | Työvuoron loppu      |
+        | UNKNOWN     | Tuntematon           |
+
+    WorkType:
+      type: string
+      description: |
+        Work type of the work shift hours. A single work type represents aggregated value from
+        one or more work event types.
+
+        | name                   | finnish name         |
+        | ---------------------- | -------------------- |
+        | PAID_WORK              | Palkallinen työ      |
+        | STANDBY                | Odotus               |
+        | EVENING_ALLOWANCE      | Iltatyö              |
+        | NIGHT_ALLOWANCE        | Yötyö                |
+        | HOLIDAY_ALLOWANCE      | Pyhälisä             |
+        | JOB_SPECIFIC_ALLOWANCE | Työkohtaisuuslisä    |
+        | FROZEN_ALLOWANCE       | Pakastelisä          |
+      enum:
+        - PAID_WORK
+        - STANDBY
+        - EVENING_ALLOWANCE
+        - NIGHT_ALLOWANCE
+        - HOLIDAY_ALLOWANCE
+        - JOB_SPECIFIC_ALLOWANCE
+        - FROZEN_ALLOWANCE
 
     Holiday:
       type: object
@@ -1208,3 +1466,33 @@ components:
       enum:
         - PUBLIC_HOLIDAY_ALLOWANCE
         - DAY_OFF_WORK_ALLOWANCE
+
+    PerDiemAllowanceType:
+      type: string
+      description: Per diem allowance
+      enum:
+        - PARTIAL
+        - FULL
+
+    AbsenceType:
+      type: string
+      enum:
+        - TRAINING
+        - VACATION
+        - OFFICIAL_DUTIES
+        - COMPENSATORY_LEAVE
+        - SICK_LEAVE
+      description: |
+        Absence types are used to mark the absence type of the employee work shift. Absences are taken into account when
+        calculating the total working hours for employee when determining working hours for payroll. They might also
+        affect the allowance hours of the work period.
+
+        Here are definitions for the absence types:
+
+        | name               | abbreviation | finnish name       | work hours | work hours on holiday | affects allowance hours |
+        | ------------------ | ------------ | ------------------ | ---------- | --------------------- | ----------------------- |
+        | TRAINING           | KO           | Koulutus työajalla | 8h         | 8h                    | no                      |
+        | VACATION           | LO           | Loma               | 6.67h      | 0h                    | yes                     |
+        | OFFICIAL_DUTIES    | LT           | Luottamustoimet    | 8h         | 8h                    | yes                     |
+        | COMPENSATORY_LEAVE | PP           | Pekkanen           | 8h         | 8h                    | yes                     |
+        | SICK_LEAVE         | SL           | Sairausloma        | 8h         | 8h                    | yes                     |
