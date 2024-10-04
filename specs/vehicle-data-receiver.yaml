@@ -469,6 +469,12 @@ components:
         - HOLIDAY_ALLOWANCE
         - JOB_SPECIFIC_ALLOWANCE
         - FROZEN_ALLOWANCE
+    ClientAppStatus:
+      type: string
+      description: Client app status
+      enum:
+        - WAITING_FOR_APPROVAL
+        - APPROVED
     TaskType:
       type: string
       description: Type of the task

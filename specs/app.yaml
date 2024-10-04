@@ -791,6 +791,57 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /user-management/v1/clientApps:
+    post:
+      operationId: createClientApp
+      summary: Create a client app.
+      description: >
+        Creates a client app.
+
+
+        Client app can only be created in the status 'WAITING_FOR_APPROVAL'. If the client app with the same deviceId
+
+        already exists with status other than 'WAITING_FOR_APPROVAL', the creation fails with conflict. Otherwise,
+
+        the existing client app is returned with OK response.
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - ClientApps
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClientApp"
+      responses:
+        "200":
+          description: Already existing client app with the same deviceId and status
+            'WAITING_FOR_APPROVAL'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClientApp"
+        "201":
+          description: Created client app
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClientApp"
+        "409":
+          description: >
+            Conflict. Client app with the same deviceId already exists with
+            status other than 'WAITING_FOR_APPROVAL'.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /delivery-info/v1/sites:
     get:
       operationId: listSites
@@ -1664,6 +1715,61 @@ components:
         - HOLIDAY_ALLOWANCE
         - JOB_SPECIFIC_ALLOWANCE
         - FROZEN_ALLOWANCE
+    ClientAppStatus:
+      type: string
+      description: Client app status
+      enum:
+        - WAITING_FOR_APPROVAL
+        - APPROVED
+    ClientApp:
+      type: object
+      description: >
+        Represents single client app.
+
+
+        Client apps are created when a new client app publishes itself to the system. Apps will be in
+
+        WAITING_FOR_APPROVAL status until a manager approves them. Three months after its approval a client app will
+
+        again change to WAITING_FOR_APPROVAL status. The app will then need to be approved again by a manager.
+
+
+        The device ID of the client app is used together with user PIN code during authentication.
+      required:
+        - deviceId
+        - status
+        - metadata
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        deviceId:
+          type: string
+          description: Device ID
+        name:
+          type: string
+          description: Device name
+        status:
+          $ref: "#/components/schemas/ClientAppStatus"
+        metadata:
+          $ref: "#/components/schemas/ClientAppMetadata"
+        lastLoginAt:
+          type: string
+          format: date-time
+          description: Last time the client app has logged in to the system
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation time
+        lastModifierId:
+          type: string
+          format: uuid
+          description: Last modifier's ID
+        modifiedAt:
+          type: string
+          format: date-time
+          description: Last modified time
     WorkEventType:
       type: string
       enum:
@@ -1754,6 +1860,21 @@ components:
         | SHIFT_END   | Työvuoron loppu      |
 
         | UNKNOWN     | Tuntematon           |
+    ClientAppMetadata:
+      type: object
+      description: Client app metadata
+      properties:
+        deviceOS:
+          type: string
+          description: Device OS
+          enum:
+            - ANDROID
+        deviceOSVersion:
+          type: string
+          description: Device OS version
+        appVersion:
+          type: string
+          description: App version
     Site:
       type: object
       description: Represents a single customer site
