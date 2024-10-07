@@ -1645,6 +1645,8 @@ components:
 
         | PAID_WORK              | Palkallinen työ      |
 
+        | BREAK                  | Tauko                |
+
         | STANDBY                | Odotus               |
 
         | EVENING_ALLOWANCE      | Iltatyö              |
@@ -1658,6 +1660,7 @@ components:
         | FROZEN_ALLOWANCE       | Pakastelisä          |
       enum:
         - PAID_WORK
+        - BREAK
         - STANDBY
         - EVENING_ALLOWANCE
         - NIGHT_ALLOWANCE
