@@ -363,6 +363,13 @@ paths:
           description: driver card ID
           schema:
             type: string
+        - name: X-Driver-Card-Removed-At
+          required: true
+          in: header
+          description: Timestamp when the driver card was removed from the truck
+          schema:
+            type: string
+            format: date-time
       responses:
         "204":
           description: Empty response indicating successful removal

@@ -121,6 +121,52 @@
           "white_list": [
             {
               "disabled": false,
+              "path": "/v1/clientApps",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "POST": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/clientApps/{clientAppId}",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "DELETE": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "PUT": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
               "path": "/v1/drivers",
               "method": "",
               "ignore_case": false,
@@ -387,6 +433,26 @@
             }
           ],
           "track_endpoints": [
+            {
+              "path": "/v1/clientApps",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/clientApps",
+              "method": "POST"
+            },
+            {
+              "path": "/v1/clientApps/{clientAppId}",
+              "method": "DELETE"
+            },
+            {
+              "path": "/v1/clientApps/{clientAppId}",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/clientApps/{clientAppId}",
+              "method": "PUT"
+            },
             {
               "path": "/v1/drivers",
               "method": "GET"
