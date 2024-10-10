@@ -2167,7 +2167,7 @@
       },
       "EmployeeWorkShift": {
         "type": "object",
-        "description": "Represents single employee work shift. A work event must always relate to an employee work shift.\n\nA new employee work shift is automatically created, when employee starts a new shift. A new\nshift is started when the last recorded WorkEvent from the employee either\n- is of type SHIFT_END or\n- is of type BREAK or UNKNOWN and has been going on longer than 3 hours.\nA new shift is also created if there is no previous work events for the employee.\n\nWhen created, the work shift is not approved. It needs to be approved by a supervisor before the\nwork shift hours can be sent to payroll.\n\nEmployee work shift always relates to a single date. This is important for calculating the total\nworking hours for employee salaries for a single work period. The date is derived by the start\ndate of the shift, which is the time of the first work event of the shift.\n",
+        "description": "Represents single employee work shift. A work event must always relate to an employee work shift.\n\nA new employee work shift is automatically created, when employee starts a new shift. A new\nshift is started when the last recorded WorkEvent from the employee either\n- is of type SHIFT_END or\n- is of type BREAK or UNKNOWN and has been going on longer than 3 hours.\nA new shift is also created if there is no previous work events for the employee.\n\nWhen created, the work shift is not approved. It needs to be approved by a supervisor before the\nwork shift hours can be sent to payroll.\n\nEmployee work shift always relates to a single date. When work shift is created during the creation of\na work event, the date is derived from the work event. When created manually, the date should also be\nset manually.\n\nEndedAt and startedAt are derived from the work events in the shift. StartedAt is based on SHIFT_START event\nand endedAt is based on SHIFT_END event. When the corresponding event is not found, the time is null.\n\nWhen calculating salaries for a work period, all work shifts started within the period will be included\nin their entirety, even if the events of the shifts would time-wise be outside the period.\n",
         "required": [
           "date",
           "employeeId",
@@ -2183,6 +2183,18 @@
             "type": "string",
             "format": "date",
             "description": "Work shift date."
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date",
+            "readOnly": true,
+            "description": "Work shift start time"
+          },
+          "endedAt": {
+            "type": "string",
+            "format": "date",
+            "readOnly": true,
+            "description": "Work shift end time"
           },
           "employeeId": {
             "type": "string",
@@ -2208,6 +2220,10 @@
           "approved": {
             "type": "boolean",
             "description": "Whether the work shift has been approved by a supervisor. Work shift hours cannot be updated if\nthe work shift is approved.\n"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Additional notes for the work shift. For example, if the employee was sick during the shift."
           }
         }
       },
@@ -2320,9 +2336,10 @@
       },
       "WorkType": {
         "type": "string",
-        "description": "Work type of the work shift hours. A single work type represents aggregated value from\none or more work event types.\n\n| name                   | finnish name         |\n| ---------------------- | -------------------- |\n| PAID_WORK              | Palkallinen työ      |\n| STANDBY                | Odotus               |\n| EVENING_ALLOWANCE      | Iltatyö              |\n| NIGHT_ALLOWANCE        | Yötyö                |\n| HOLIDAY_ALLOWANCE      | Pyhälisä             |\n| JOB_SPECIFIC_ALLOWANCE | Työkohtaisuuslisä    |\n| FROZEN_ALLOWANCE       | Pakastelisä          |\n",
+        "description": "Work type of the work shift hours. A single work type represents aggregated value from\none or more work event types.\n\n| name                   | finnish name         |\n| ---------------------- | -------------------- |\n| PAID_WORK              | Palkallinen työ      |\n| BREAK                  | Tauko                |\n| STANDBY                | Odotus               |\n| EVENING_ALLOWANCE      | Iltatyö              |\n| NIGHT_ALLOWANCE        | Yötyö                |\n| HOLIDAY_ALLOWANCE      | Pyhälisä             |\n| JOB_SPECIFIC_ALLOWANCE | Työkohtaisuuslisä    |\n| FROZEN_ALLOWANCE       | Pakastelisä          |\n",
         "enum": [
           "PAID_WORK",
+          "BREAK",
           "STANDBY",
           "EVENING_ALLOWANCE",
           "NIGHT_ALLOWANCE",

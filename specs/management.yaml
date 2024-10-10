@@ -3143,11 +3143,21 @@ components:
         work shift hours can be sent to payroll.
 
 
-        Employee work shift always relates to a single date. This is important for calculating the total
+        Employee work shift always relates to a single date. When work shift is created during the creation of
 
-        working hours for employee salaries for a single work period. The date is derived by the start
+        a work event, the date is derived from the work event. When created manually, the date should also be
 
-        date of the shift, which is the time of the first work event of the shift.
+        set manually.
+
+
+        EndedAt and startedAt are derived from the work events in the shift. StartedAt is based on SHIFT_START event
+
+        and endedAt is based on SHIFT_END event. When the corresponding event is not found, the time is null.
+
+
+        When calculating salaries for a work period, all work shifts started within the period will be included
+
+        in their entirety, even if the events of the shifts would time-wise be outside the period.
       required:
         - date
         - employeeId
@@ -3161,6 +3171,16 @@ components:
           type: string
           format: date
           description: Work shift date.
+        startedAt:
+          type: string
+          format: date
+          readOnly: true
+          description: Work shift start time
+        endedAt:
+          type: string
+          format: date
+          readOnly: true
+          description: Work shift end time
         employeeId:
           type: string
           format: uuid
@@ -3185,6 +3205,10 @@ components:
             hours cannot be updated if
 
             the work shift is approved.
+        notes:
+          type: string
+          description: Additional notes for the work shift. For example, if the employee
+            was sick during the shift.
     WorkEvent:
       type: object
       description: Represents single work event
@@ -3231,6 +3255,8 @@ components:
 
         | PAID_WORK              | Palkallinen työ      |
 
+        | BREAK                  | Tauko                |
+
         | STANDBY                | Odotus               |
 
         | EVENING_ALLOWANCE      | Iltatyö              |
@@ -3244,6 +3270,7 @@ components:
         | FROZEN_ALLOWANCE       | Pakastelisä          |
       enum:
         - PAID_WORK
+        - BREAK
         - STANDBY
         - EVENING_ALLOWANCE
         - NIGHT_ALLOWANCE
