@@ -121,6 +121,52 @@
           "white_list": [
             {
               "disabled": false,
+              "path": "/v1/clientApps",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "POST": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/clientApps/{clientAppId}",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "DELETE": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "PUT": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
               "path": "/v1/drivers",
               "method": "",
               "ignore_case": false,
@@ -195,7 +241,7 @@
             },
             {
               "disabled": false,
-              "path": "/v1/employees/{employeeId}/dailyTimeEntries",
+              "path": "/v1/employees/{employeeId}/workEvents",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -215,7 +261,7 @@
             },
             {
               "disabled": false,
-              "path": "/v1/employees/{employeeId}/dailyTimeEntries/{dailyTimeEntryId}",
+              "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -241,7 +287,7 @@
             },
             {
               "disabled": false,
-              "path": "/v1/employees/{employeeId}/workEvents",
+              "path": "/v1/employees/{employeeId}/workShifts",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -261,7 +307,7 @@
             },
             {
               "disabled": false,
-              "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
+              "path": "/v1/employees/{employeeId}/workShifts/{workShiftId}",
               "method": "",
               "ignore_case": false,
               "method_actions": {
@@ -338,6 +384,46 @@
               "ignore_case": false,
               "method_actions": {
                 "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/workShiftHours",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/workShiftHours/{workShiftHoursId}",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "DELETE": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "PUT": {
                   "action": "no_action",
                   "code": 200,
                   "data": "",
@@ -348,6 +434,26 @@
           ],
           "track_endpoints": [
             {
+              "path": "/v1/clientApps",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/clientApps",
+              "method": "POST"
+            },
+            {
+              "path": "/v1/clientApps/{clientAppId}",
+              "method": "DELETE"
+            },
+            {
+              "path": "/v1/clientApps/{clientAppId}",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/clientApps/{clientAppId}",
+              "method": "PUT"
+            },
+            {
               "path": "/v1/drivers",
               "method": "GET"
             },
@@ -376,43 +482,43 @@
               "method": "PUT"
             },
             {
-              "path": "/v1/employees/{employeeId}/dailyTimeEntries",
+              "path": "/v1/employees/{employeeId}/workEvents",
               "method": "GET"
             },
             {
-              "path": "/v1/employees/{employeeId}/dailyTimeEntries",
+              "path": "/v1/employees/{employeeId}/workEvents",
               "method": "POST"
             },
             {
-              "path": "/v1/employees/{employeeId}/dailyTimeEntries/{dailyTimeEntryId}",
+              "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
               "method": "DELETE"
             },
             {
-              "path": "/v1/employees/{employeeId}/dailyTimeEntries/{dailyTimeEntryId}",
+              "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
               "method": "GET"
             },
             {
-              "path": "/v1/employees/{employeeId}/dailyTimeEntries/{dailyTimeEntryId}",
+              "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
               "method": "PUT"
             },
             {
-              "path": "/v1/employees/{employeeId}/workEvents",
+              "path": "/v1/employees/{employeeId}/workShifts",
               "method": "GET"
             },
             {
-              "path": "/v1/employees/{employeeId}/workEvents",
+              "path": "/v1/employees/{employeeId}/workShifts",
               "method": "POST"
             },
             {
-              "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
+              "path": "/v1/employees/{employeeId}/workShifts/{workShiftId}",
               "method": "DELETE"
             },
             {
-              "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
+              "path": "/v1/employees/{employeeId}/workShifts/{workShiftId}",
               "method": "GET"
             },
             {
-              "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
+              "path": "/v1/employees/{employeeId}/workShifts/{workShiftId}",
               "method": "PUT"
             },
             {
@@ -438,6 +544,22 @@
             {
               "path": "/v1/system/ping",
               "method": "GET"
+            },
+            {
+              "path": "/v1/workShiftHours",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/workShiftHours/{workShiftHoursId}",
+              "method": "DELETE"
+            },
+            {
+              "path": "/v1/workShiftHours/{workShiftHoursId}",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/workShiftHours/{workShiftHoursId}",
+              "method": "PUT"
             }
           ],
           "persist_graphql": null

@@ -501,10 +501,346 @@
         }
       }
     },
+    "/v1/employees/{employeeId}/workShifts": {
+      "get": {
+        "operationId": "listEmployeeWorkShifts",
+        "summary": "List Employees Work Shifts.",
+        "description": "Lists Employees work Shifts. Sort by time, latest first.\n",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "EmployeeWorkShifts",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "employeeId",
+            "required": true,
+            "in": "path",
+            "description": "employee's ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "startedAfter",
+            "in": "query",
+            "description": "Filter work shifts started after specified date.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "startedBefore",
+            "in": "query",
+            "description": "Filter work shifts started before specified date.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "first",
+            "in": "query",
+            "description": "First result.",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "max",
+            "in": "query",
+            "description": "Max results.",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of employee work shifts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmployeeWorkShift"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createEmployeeWorkShift",
+        "summary": "Create Employee Work Shift.",
+        "description": "Creates Employee Work Shift.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "EmployeeWorkShifts",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "employeeId",
+            "required": true,
+            "in": "path",
+            "description": "employee's ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeWorkShift"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created employee work shift",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeWorkShift"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/employees/{employeeId}/workShifts/{workShiftId}": {
+      "get": {
+        "operationId": "findEmployeeWorkShift",
+        "summary": "Find Employee Work Shift.",
+        "description": "Finds an employee's work shift by ID.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "EmployeeWorkShifts",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "employeeId",
+            "required": true,
+            "in": "path",
+            "description": "employee's ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "workShiftId",
+            "required": true,
+            "in": "path",
+            "description": "work shift's ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found employee work shift",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeWorkShift"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "updateEmployeeWorkShift",
+        "summary": "Update Employee Work Shift.",
+        "description": "Updates Employee Work Shift. Only approved field can be updated.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "EmployeeWorkShifts",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "employeeId",
+            "required": true,
+            "in": "path",
+            "description": "employee's ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "workShiftId",
+            "required": true,
+            "in": "path",
+            "description": "work shift's ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeWorkShift"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated employee work shift",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeWorkShift"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteEmployeeWorkShift",
+        "summary": "Delete employee work shift.",
+        "description": "Only for tests.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "EmployeeWorkShifts",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "employeeId",
+            "required": true,
+            "in": "path",
+            "description": "employee's ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "workShiftId",
+            "required": true,
+            "in": "path",
+            "description": "work shift's ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Empty response indicating successful removal"
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/employees/{employeeId}/workEvents": {
       "get": {
         "operationId": "listEmployeeWorkEvents",
-        "summary": "List Employees Time Entries.",
+        "summary": "List Employees Work Events.",
         "description": "Lists Employees Work Events. Sort by time, latest first.",
         "security": [
           {
@@ -526,6 +862,15 @@
             "required": true,
             "in": "path",
             "description": "employee's ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "employeeWorkShiftId",
+            "in": "query",
+            "description": "Filter work events by a specific work shift of the employee",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -597,7 +942,7 @@
       "post": {
         "operationId": "createEmployeeWorkEvent",
         "summary": "Create Employees Work Event.",
-        "description": "Creates Employees Work Event.",
+        "description": "Creates Employees Work Event.\n\nIf the work event starts a new shift, a new employee work shift is also created automatically.\n",
         "security": [
           {
             "BearerAuth": [
@@ -797,7 +1142,7 @@
       "delete": {
         "operationId": "deleteEmployeeWorkEvent",
         "summary": "Delete Employee's Work Event.",
-        "description": "Deletes Employee's Work Event. Only accessible by managers.",
+        "description": "Deletes Employee's Work Event. Only accessible by managers. If deleting the last remaining work\nevent from an employee work shift, the shift and its related work shift hours should also be deleted.\n",
         "security": [
           {
             "BearerAuth": [
@@ -848,11 +1193,11 @@
         }
       }
     },
-    "/v1/employees/{employeeId}/dailyTimeEntries": {
+    "/v1/workShiftHours": {
       "get": {
-        "operationId": "listEmployeeDailyTimeEntries",
-        "summary": "List Employees Daily Time Entries.",
-        "description": "Lists Employees Daily Time Entries. There can be 0-1 daily time entries per work type per day.",
+        "operationId": "listWorkShiftHours",
+        "summary": "List Work Shift Hours.",
+        "description": "Lists Work Shift Hours. Unique per employee per work shift per work type.",
         "security": [
           {
             "BearerAuth": [
@@ -861,135 +1206,65 @@
           }
         ],
         "tags": [
-          "DailyTimeEntries",
+          "WorkShiftHours",
           "SpecManagementUI"
         ],
         "parameters": [
           {
             "name": "employeeId",
-            "required": true,
-            "in": "path",
-            "description": "employee's ID",
+            "in": "query",
+            "description": "filter work shift hours by employee's ID",
             "schema": {
               "type": "string",
               "format": "uuid"
             }
           },
           {
-            "name": "workEventType",
+            "name": "employeeWorkShiftId",
             "in": "query",
-            "description": "List daily time entries only for specified work type.",
-            "schema": {
-              "$ref": "#/components/schemas/WorkEventType"
-            }
-          },
-          {
-            "name": "start",
-            "in": "query",
-            "description": "List daily time entries only after specified date.",
+            "description": "filter work shift hours by employee work shift's ID.\nCannot be used with employeeWorkShiftStartedAfter or employeeWorkShiftStartedBefore.\n",
             "schema": {
               "type": "string",
-              "format": "date"
+              "format": "uuid"
             }
           },
           {
-            "name": "end",
+            "name": "workType",
             "in": "query",
-            "description": "List daily time entries only before specified date.",
+            "description": "filter work shift hours by work type",
+            "schema": {
+              "$ref": "#/components/schemas/WorkType"
+            }
+          },
+          {
+            "name": "employeeWorkShiftStartedAfter",
+            "in": "query",
+            "description": "filter work shift hours by employee work shift started after specified date",
             "schema": {
               "type": "string",
-              "format": "date"
+              "format": "date-time"
             }
           },
           {
-            "name": "first",
+            "name": "employeeWorkShiftStartedBefore",
             "in": "query",
-            "description": "First result.",
+            "description": "filter work shift hours by employee work shift started before specified date",
             "schema": {
-              "type": "integer",
-              "default": 0
-            }
-          },
-          {
-            "name": "max",
-            "in": "query",
-            "description": "Max results.",
-            "schema": {
-              "type": "integer",
-              "default": 10
+              "type": "string",
+              "format": "date-time"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "List of daily time entries",
+            "description": "List of work shift hours",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/DailyTimeEntry"
+                    "$ref": "#/components/schemas/WorkShiftHours"
                   }
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Invalid request was sent to the server",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "operationId": "createEmployeeDailyTimeEntry",
-        "summary": "Create Employees Daily Time Entry.",
-        "description": "Creates Employees Daily Time Entry.\n\nAttempt to create new daily time entry should fail if a daily entry with the same date and work type already exists.\n",
-        "security": [
-          {
-            "BearerAuth": [
-              "manager"
-            ]
-          }
-        ],
-        "tags": [
-          "DailyTimeEntries",
-          "SpecManagementUI"
-        ],
-        "parameters": [
-          {
-            "name": "employeeId",
-            "required": true,
-            "in": "path",
-            "description": "employee's ID",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DailyTimeEntry"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Created daily time entry",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkEvent"
                 }
               }
             }
@@ -1007,11 +1282,11 @@
         }
       }
     },
-    "/v1/employees/{employeeId}/dailyTimeEntries/{dailyTimeEntryId}": {
+    "/v1/workShiftHours/{workShiftHoursId}": {
       "get": {
-        "operationId": "findEmployeeDailyTimeEntry",
-        "summary": "Find an employee's daily time entry.",
-        "description": "Finds an employee's daily time entry by ID.",
+        "operationId": "findWorkShiftHours",
+        "summary": "Find Work Shift Hours.",
+        "description": "Finds Work Shift Hours.",
         "security": [
           {
             "BearerAuth": [
@@ -1020,25 +1295,15 @@
           }
         ],
         "tags": [
-          "DailyTimeEntries",
+          "WorkShiftHours",
           "SpecManagementUI"
         ],
         "parameters": [
           {
-            "name": "employeeId",
+            "name": "workShiftHoursId",
             "required": true,
             "in": "path",
-            "description": "employee's ID",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          {
-            "name": "dailyTimeEntryId",
-            "required": true,
-            "in": "path",
-            "description": "daily time entry's ID",
+            "description": "ID of work shift hours",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1047,11 +1312,11 @@
         ],
         "responses": {
           "200": {
-            "description": "Found daily time entry",
+            "description": "Work shift hours",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DailyTimeEntry"
+                  "$ref": "#/components/schemas/WorkShiftHours"
                 }
               }
             }
@@ -1069,9 +1334,9 @@
         }
       },
       "put": {
-        "operationId": "updateEmployeeDailyTimeEntry",
-        "summary": "Update Employee's Daily Time Entry.",
-        "description": "Updates Employee's Daily Time Entry.\n\nTrying to update other than total hours from an entry should fail, as that could potentially\nclash with another entry. Instead, incorrect entry should be deleted and new one created.\n",
+        "operationId": "updateWorkShiftHours",
+        "summary": "Update Work Shift Hours.",
+        "description": "Updates Work Shift Hours.\n\nTrying to update employeeId, employeeWorkShiftId, or workType from work shift hours should fail.\nIf the related employee work shift is approved, work shift hours cannot be updated.\n",
         "security": [
           {
             "BearerAuth": [
@@ -1080,25 +1345,15 @@
           }
         ],
         "tags": [
-          "DailyTimeEntries",
+          "WorkShiftHours",
           "SpecManagementUI"
         ],
         "parameters": [
           {
-            "name": "employeeId",
+            "name": "workShiftHoursId",
             "required": true,
             "in": "path",
-            "description": "employee's ID",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          {
-            "name": "dailyTimeEntryId",
-            "required": true,
-            "in": "path",
-            "description": "daily time entry's ID",
+            "description": "ID of work shift hours",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1110,18 +1365,18 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DailyTimeEntry"
+                "$ref": "#/components/schemas/WorkShiftHours"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Updated daily time entry",
+            "description": "Updated work shift hours",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DailyTimeEntry"
+                  "$ref": "#/components/schemas/WorkShiftHours"
                 }
               }
             }
@@ -1139,9 +1394,9 @@
         }
       },
       "delete": {
-        "operationId": "deleteEmployeeDailyTimeEntry",
-        "summary": "Delete Employee's Daily Time Entry.",
-        "description": "Deletes Employee's Daily Time Entry.",
+        "operationId": "deleteWorkShiftHours",
+        "summary": "Delete work shift hours.",
+        "description": "Only for tests.",
         "security": [
           {
             "BearerAuth": [
@@ -1150,25 +1405,15 @@
           }
         ],
         "tags": [
-          "DailyTimeEntries",
+          "WorkShiftHours",
           "SpecManagementUI"
         ],
         "parameters": [
           {
-            "name": "employeeId",
+            "name": "workShiftHoursId",
             "required": true,
             "in": "path",
-            "description": "employee's ID",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          {
-            "name": "dailyTimeEntryId",
-            "required": true,
-            "in": "path",
-            "description": "daily time entry's ID",
+            "description": "ID of work shift hours",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1177,7 +1422,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Successfully deleted the daily time entry"
+            "description": "Empty response indicating successful removal"
           },
           "default": {
             "description": "Invalid request was sent to the server",
@@ -1465,6 +1710,304 @@
           }
         }
       }
+    },
+    "/v1/clientApps": {
+      "get": {
+        "operationId": "listClientApps",
+        "summary": "List client apps.",
+        "description": "Lists client apps.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "ClientApps",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter client apps by status",
+            "schema": {
+              "$ref": "#/components/schemas/ClientAppStatus"
+            }
+          },
+          {
+            "name": "first",
+            "in": "query",
+            "description": "First result.",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "max",
+            "in": "query",
+            "description": "Max results.",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of client apps",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientApp"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createClientApp",
+        "summary": "Create a client app.",
+        "description": "Creates a client app.\n\nClient app can only be created in the status 'WAITING_FOR_APPROVAL'. If the client app with the same deviceId\nalready exists with status other than 'WAITING_FOR_APPROVAL', the creation fails with conflict. Otherwise,\nthe existing client app is returned with OK response.\n",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "tags": [
+          "ClientApps",
+          "SpecManagementUI",
+          "SpecApp"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientApp"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Already existing client app with the same deviceId and status 'WAITING_FOR_APPROVAL'",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientApp"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created client app",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientApp"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict. Client app with the same deviceId already exists with status other than 'WAITING_FOR_APPROVAL'.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/clientApps/{clientAppId}": {
+      "get": {
+        "operationId": "findClientApp",
+        "summary": "Find a client app.",
+        "description": "Finds a client app by ID.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          },
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "tags": [
+          "ClientApps",
+          "SpecManagementUI",
+          "SpecAuth"
+        ],
+        "parameters": [
+          {
+            "name": "clientAppId",
+            "required": true,
+            "in": "path",
+            "description": "client app's ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found client app",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientApp"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "updateClientApp",
+        "summary": "Update a client app.",
+        "description": "Updates a client app.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "ClientApps",
+          "SpecManagementUI",
+          "SpecAuth"
+        ],
+        "parameters": [
+          {
+            "name": "clientAppId",
+            "required": true,
+            "in": "path",
+            "description": "Client app's ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientApp"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated client app",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientApp"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteClientApp",
+        "summary": "Delete client app.",
+        "description": "Deletes client app.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "ClientApps",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "clientAppId",
+            "required": true,
+            "in": "path",
+            "description": "Client app's ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Empty response indicating successful removal"
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1587,7 +2130,6 @@
       },
       "EmployeeType": {
         "type": "string",
-        "description": "Employee's type described as finnish abbreviation. UI implementations should translate these to more human readable form.\nPakettiautonkuljettaja (PA)\nKuorma-auton kuljettaja (KA)\nAlihankkija (AH)\nVuokratyöntekijä (VK)\nTyöharjoittelija (TH)\nTilapäistyöntekijä (TP)\nAjojärjestelijä (AJ)\nEsimies (JH)\nAikatuntipalkka (AP)\nKuukausipalkka (KK)\nEi-aktiivinen (POIS)\nTäysperäkuljettaja (TPK)\n",
         "enum": [
           "PA",
           "KA",
@@ -1601,7 +2143,8 @@
           "KK",
           "POIS",
           "TPK"
-        ]
+        ],
+        "description": "Employee's type described as finnish abbreviation. UI implementations should translate these to more human readable form.\n\n| Abbreviation | finnish name            |\n| ------------ | ----------------------- |\n| PA           | Pakettiautonkuljettaja  |\n| KA           | Kuorma-auton kuljettaja |\n| AH           | Alihankkija             |\n| VK           | Vuokratyöntekijä        |\n| TH           | Työharjoittelija        |\n| TP           | Tilapäistyöntekijä      |\n| AJ           | Ajojärjestelijä         |\n| JH           | Esimies                 |\n| AP           | Aikatuntipalkka         |\n| KK           | Kuukausipalkka          |\n| POIS         | Ei-aktiivinen           |\n| TPK          | Täysperäkuljettaja      |\n"
       },
       "SalaryGroup": {
         "type": "string",
@@ -1622,6 +2165,52 @@
           "RAUHA"
         ]
       },
+      "EmployeeWorkShift": {
+        "type": "object",
+        "description": "Represents single employee work shift. A work event must always relate to an employee work shift.\n\nA new employee work shift is automatically created, when employee starts a new shift. A new\nshift is started when the last recorded WorkEvent from the employee either\n- is of type SHIFT_END or\n- is of type BREAK or UNKNOWN and has been going on longer than 3 hours.\nA new shift is also created if there is no previous work events for the employee.\n\nWhen created, the work shift is not approved. It needs to be approved by a supervisor before the\nwork shift hours can be sent to payroll.\n\nEmployee work shift always relates to a single date. This is important for calculating the total\nworking hours for employee salaries for a single work period. The date is derived by the start\ndate of the shift, which is the time of the first work event of the shift.\n",
+        "required": [
+          "date",
+          "employeeId",
+          "approved"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "Work shift date."
+          },
+          "employeeId": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true,
+            "description": "Employee's ID"
+          },
+          "truckIds": {
+            "readOnly": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "List of truck IDs used during the work shift. Derived from work events in the shift."
+          },
+          "absence": {
+            "$ref": "#/components/schemas/AbsenceType"
+          },
+          "PerDiemAllowance": {
+            "$ref": "#/components/schemas/PerDiemAllowanceType"
+          },
+          "approved": {
+            "type": "boolean",
+            "description": "Whether the work shift has been approved by a supervisor. Work shift hours cannot be updated if\nthe work shift is approved.\n"
+          }
+        }
+      },
       "WorkEvent": {
         "type": "object",
         "description": "Represents single work event",
@@ -1641,25 +2230,34 @@
             "format": "uuid",
             "description": "Employee's ID"
           },
+          "employeeWorkShiftId": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true,
+            "description": "employee work shift ID"
+          },
           "time": {
             "type": "string",
             "format": "date-time",
             "description": "Work event time"
+          },
+          "truckId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ID of truck used during the work event"
           },
           "workEventType": {
             "$ref": "#/components/schemas/WorkEventType"
           }
         }
       },
-      "DailyTimeEntry": {
+      "WorkShiftHours": {
         "type": "object",
-        "description": "Represents a single daily time entry. Daily time entries are created when total working hours\nof an employee for some work type needs to be manually changed for a specific day. Only a single\ndaily time entry per work type per day is allowed. If one already exists, it should be updated.\nDaily time entry is always prioritized over calculating the total from the actual time entries\nwhen displaying the aggregated hours and sending the data to payroll.\n",
+        "description": "Represents a single work shift hours.\n\nWork shift hours contain the total hours for a specific employee, work shift and work type. The hours are always\ncalculated dynamically during a request.\n\nWork shift hours also contains the actual hours that have been manually set by a supervisor. The actual hours\nshould always be prioritized over the calculated hours when displaying the aggregated hours and sending the\ndata to payroll.\n\nWork shift hours for all available work types are created automatically when related employee work shift is created.\nOnly a single work shift hours per employee per work shift per work type is allowed. If one already exists, it\nshould be updated.\n\nWork shift hours cannot be updated if the related employee work shift is approved.\n",
         "required": [
           "employeeId",
-          "date",
-          "workEventType",
-          "hours",
-          "approved"
+          "employeeWorkShiftId",
+          "workType"
         ],
         "properties": {
           "id": {
@@ -1672,28 +2270,29 @@
             "format": "uuid",
             "description": "Employee's ID"
           },
-          "date": {
+          "employeeWorkShiftId": {
             "type": "string",
-            "format": "date",
-            "description": "Daily time entry date"
+            "format": "uuid",
+            "description": "Employee work shift's ID"
           },
-          "workEventType": {
-            "$ref": "#/components/schemas/WorkEventType"
+          "workType": {
+            "$ref": "#/components/schemas/WorkType"
           },
-          "hours": {
+          "calculatedHours": {
             "type": "number",
             "format": "float",
-            "description": "Corrected hours for the day for corresponding work type."
+            "readOnly": true,
+            "description": "Calculated hours for the employee work shift for corresponding work type. This should always be dynamically\ncalculated from the actual work events in the work shift. Cannot be updated.\n"
           },
-          "approved": {
-            "type": "boolean",
-            "description": "Whether the daily time entry has been approved by a supervisor.\nHours cannot be updated unless approved is set to false.\n"
+          "actualHours": {
+            "type": "number",
+            "format": "float",
+            "description": "Actual, manually recorded hours for the employee work shift for corresponding work type. It is null until\nthe hours are manually set.\n"
           }
         }
       },
       "WorkEventType": {
         "type": "string",
-        "description": "Work event types. UI implementations should translate these to more human readable form.\n\n*Office/Terminal work types*\n- VEGETABLE (Hevi)\n- DRY (Kuiva)\n- MEAT_CELLAR (Lihakellari)\n- MEIRA (Meira)\n- FROZEN (Pakaste)\n- PALTE (Palte)\n- BREWERY (Panimo)\n- GREASE (Rasva)\n- LOGIN\n- LOGOUT\n\n*Common work types*\n- OTHER_WORK (Muu työ)\n- BREAK (Tauko)\n- SHIFT_START\n- SHIFT_END\n- UNKNOWN\n\n*Driver work types*\n- DRIVE\n- LOADING\n- UNLOADING\n- AVAILABILITY\n- DRIVER_CARD_INSERTED\n- DRIVER_CARD_REMOVED\n",
         "enum": [
           "VEGETABLE",
           "DRY",
@@ -1716,6 +2315,20 @@
           "AVAILABILITY",
           "DRIVER_CARD_INSERTED",
           "DRIVER_CARD_REMOVED"
+        ],
+        "description": "Work event types. UI implementations should translate these to more human readable form.\n\n*Driver work types*\n| name                 | finnish name               |\n| -------------------- | -------------------------- |\n| DRIVE                | Ajo                        |\n| LOADING              | Lastaus                    |\n| UNLOADING            | Purku                      |\n| AVAILABILITY         | Saatavuus                  |\n| DRIVER_CARD_INSERTED | Kuljettajakortti syötetty  |\n| DRIVER_CARD_REMOVED  | Kuljettajakortti poistettu |\n\n*Office/Terminal work types*\n| name        | finnish name         |\n| ----------- | -------------------- |\n| VEGETABLE   | Hevi                 |\n| DRY         | Kuiva                |\n| MEAT_CELLAR | Lihakellari          |\n| MEIRA       | Meira                |\n| FROZEN      | Pakaste              |\n| PALTE       | Palte                |\n| BREWERY     | Panimo               |\n| GREASE      | Rasva                |\n| LOGIN       | Sisäänkirjautuminen  |\n| LOGOUT      | Uloskirjautuminen    |\n\n*Common work types*\n| name        | finnish name         |\n| ----------- | -------------------- |\n| OTHER_WORK  | Muu työ              |\n| BREAK       | Tauko                |\n| SHIFT_START | Työvuoron alku       |\n| SHIFT_END   | Työvuoron loppu      |\n| UNKNOWN     | Tuntematon           |\n"
+      },
+      "WorkType": {
+        "type": "string",
+        "description": "Work type of the work shift hours. A single work type represents aggregated value from\none or more work event types.\n\n| name                   | finnish name         |\n| ---------------------- | -------------------- |\n| PAID_WORK              | Palkallinen työ      |\n| STANDBY                | Odotus               |\n| EVENING_ALLOWANCE      | Iltatyö              |\n| NIGHT_ALLOWANCE        | Yötyö                |\n| HOLIDAY_ALLOWANCE      | Pyhälisä             |\n| JOB_SPECIFIC_ALLOWANCE | Työkohtaisuuslisä    |\n| FROZEN_ALLOWANCE       | Pakastelisä          |\n",
+        "enum": [
+          "PAID_WORK",
+          "STANDBY",
+          "EVENING_ALLOWANCE",
+          "NIGHT_ALLOWANCE",
+          "HOLIDAY_ALLOWANCE",
+          "JOB_SPECIFIC_ALLOWANCE",
+          "FROZEN_ALLOWANCE"
         ]
       },
       "Holiday": {
@@ -1772,6 +2385,104 @@
           "PUBLIC_HOLIDAY_ALLOWANCE",
           "DAY_OFF_WORK_ALLOWANCE"
         ]
+      },
+      "PerDiemAllowanceType": {
+        "type": "string",
+        "description": "Per diem allowance",
+        "enum": [
+          "PARTIAL",
+          "FULL"
+        ]
+      },
+      "AbsenceType": {
+        "type": "string",
+        "enum": [
+          "TRAINING",
+          "VACATION",
+          "OFFICIAL_DUTIES",
+          "COMPENSATORY_LEAVE",
+          "SICK_LEAVE"
+        ],
+        "description": "Absence types are used to mark the absence type of the employee work shift. Absences are taken into account when\ncalculating the total working hours for employee when determining working hours for payroll. They might also\naffect the allowance hours of the work period.\n\nHere are definitions for the absence types:\n\n| name               | abbreviation | finnish name       | work hours | work hours on holiday | affects allowance hours |\n| ------------------ | ------------ | ------------------ | ---------- | --------------------- | ----------------------- |\n| TRAINING           | KO           | Koulutus työajalla | 8h         | 8h                    | no                      |\n| VACATION           | LO           | Loma               | 6.67h      | 0h                    | yes                     |\n| OFFICIAL_DUTIES    | LT           | Luottamustoimet    | 8h         | 8h                    | yes                     |\n| COMPENSATORY_LEAVE | PP           | Pekkanen           | 8h         | 8h                    | yes                     |\n| SICK_LEAVE         | SL           | Sairausloma        | 8h         | 8h                    | yes                     |\n"
+      },
+      "ClientApp": {
+        "type": "object",
+        "description": "Represents single client app.\n\nClient apps are created when a new client app publishes itself to the system. Apps will be in\nWAITING_FOR_APPROVAL status until a manager approves them. Three months after its approval a client app will\nagain change to WAITING_FOR_APPROVAL status. The app will then need to be approved again by a manager.\n\nThe device ID of the client app is used together with user PIN code during authentication.\n",
+        "required": [
+          "deviceId",
+          "status",
+          "metadata"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "deviceId": {
+            "type": "string",
+            "description": "Device ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "Device name"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ClientAppStatus"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/ClientAppMetadata"
+          },
+          "lastLoginAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last time the client app has logged in to the system"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation time"
+          },
+          "lastModifierId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Last modifier's ID"
+          },
+          "modifiedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last modified time"
+          }
+        }
+      },
+      "ClientAppStatus": {
+        "type": "string",
+        "description": "Client app status",
+        "enum": [
+          "WAITING_FOR_APPROVAL",
+          "APPROVED"
+        ]
+      },
+      "ClientAppMetadata": {
+        "type": "object",
+        "description": "Client app metadata",
+        "properties": {
+          "deviceOS": {
+            "type": "string",
+            "description": "Device OS",
+            "enum": [
+              "ANDROID"
+            ]
+          },
+          "deviceOSVersion": {
+            "type": "string",
+            "description": "Device OS version"
+          },
+          "appVersion": {
+            "type": "string",
+            "description": "App version"
+          }
+        }
       }
     }
   }

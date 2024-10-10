@@ -603,7 +603,7 @@ paths:
   /user-management/v1/employees/{employeeId}/workEvents:
     get:
       operationId: listEmployeeWorkEvents
-      summary: List Employees Time Entries.
+      summary: List Employees Work Events.
       description: Lists Employees Work Events. Sort by time, latest first.
       security:
         - BearerAuth:
@@ -617,6 +617,12 @@ paths:
           required: true
           in: path
           description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: employeeWorkShiftId
+          in: query
+          description: Filter work events by a specific work shift of the employee
           schema:
             type: string
             format: uuid
@@ -662,7 +668,11 @@ paths:
     post:
       operationId: createEmployeeWorkEvent
       summary: Create Employees Work Event.
-      description: Creates Employees Work Event.
+      description: >
+        Creates Employees Work Event.
+
+
+        If the work event starts a new shift, a new employee work shift is also created automatically.
       security:
         - BearerAuth:
             - manager
@@ -775,6 +785,57 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/WorkEvent"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /user-management/v1/clientApps:
+    post:
+      operationId: createClientApp
+      summary: Create a client app.
+      description: >
+        Creates a client app.
+
+
+        Client app can only be created in the status 'WAITING_FOR_APPROVAL'. If the client app with the same deviceId
+
+        already exists with status other than 'WAITING_FOR_APPROVAL', the creation fails with conflict. Otherwise,
+
+        the existing client app is returned with OK response.
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - ClientApps
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClientApp"
+      responses:
+        "200":
+          description: Already existing client app with the same deviceId and status
+            'WAITING_FOR_APPROVAL'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClientApp"
+        "201":
+          description: Created client app
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClientApp"
+        "409":
+          description: >
+            Conflict. Client app with the same deviceId already exists with
+            status other than 'WAITING_FOR_APPROVAL'.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         default:
           description: Invalid request was sent to the server
           content:
@@ -1536,33 +1597,6 @@ components:
         - TERMINAL
     EmployeeType:
       type: string
-      description: >
-        Employee's type described as finnish abbreviation. UI implementations
-        should translate these to more human readable form.
-
-        Pakettiautonkuljettaja (PA)
-
-        Kuorma-auton kuljettaja (KA)
-
-        Alihankkija (AH)
-
-        Vuokratyöntekijä (VK)
-
-        Työharjoittelija (TH)
-
-        Tilapäistyöntekijä (TP)
-
-        Ajojärjestelijä (AJ)
-
-        Esimies (JH)
-
-        Aikatuntipalkka (AP)
-
-        Kuukausipalkka (KK)
-
-        Ei-aktiivinen (POIS)
-
-        Täysperäkuljettaja (TPK)
       enum:
         - PA
         - KA
@@ -1576,6 +1610,38 @@ components:
         - KK
         - POIS
         - TPK
+      description: >
+        Employee's type described as finnish abbreviation. UI implementations
+        should translate these to more human readable form.
+
+
+        | Abbreviation | finnish name            |
+
+        | ------------ | ----------------------- |
+
+        | PA           | Pakettiautonkuljettaja  |
+
+        | KA           | Kuorma-auton kuljettaja |
+
+        | AH           | Alihankkija             |
+
+        | VK           | Vuokratyöntekijä        |
+
+        | TH           | Työharjoittelija        |
+
+        | TP           | Tilapäistyöntekijä      |
+
+        | AJ           | Ajojärjestelijä         |
+
+        | JH           | Esimies                 |
+
+        | AP           | Aikatuntipalkka         |
+
+        | KK           | Kuukausipalkka          |
+
+        | POIS         | Ei-aktiivinen           |
+
+        | TPK          | Täysperäkuljettaja      |
     Office:
       type: string
       description: Employee's office. Salary group should be set to VPLogistics if the
@@ -1600,68 +1666,112 @@ components:
           type: string
           format: uuid
           description: Employee's ID
+        employeeWorkShiftId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: employee work shift ID
         time:
           type: string
           format: date-time
           description: Work event time
+        truckId:
+          type: string
+          format: uuid
+          description: The ID of truck used during the work event
         workEventType:
           $ref: "#/components/schemas/WorkEventType"
-    WorkEventType:
+    WorkType:
       type: string
       description: >
-        Work event types. UI implementations should translate these to more
-        human readable form.
+        Work type of the work shift hours. A single work type represents
+        aggregated value from
+
+        one or more work event types.
 
 
-        *Office/Terminal work types*
+        | name                   | finnish name         |
 
-        - VEGETABLE (Hevi)
+        | ---------------------- | -------------------- |
 
-        - DRY (Kuiva)
+        | PAID_WORK              | Palkallinen työ      |
 
-        - MEAT_CELLAR (Lihakellari)
+        | STANDBY                | Odotus               |
 
-        - MEIRA (Meira)
+        | EVENING_ALLOWANCE      | Iltatyö              |
 
-        - FROZEN (Pakaste)
+        | NIGHT_ALLOWANCE        | Yötyö                |
 
-        - PALTE (Palte)
+        | HOLIDAY_ALLOWANCE      | Pyhälisä             |
 
-        - BREWERY (Panimo)
+        | JOB_SPECIFIC_ALLOWANCE | Työkohtaisuuslisä    |
 
-        - GREASE (Rasva)
+        | FROZEN_ALLOWANCE       | Pakastelisä          |
+      enum:
+        - PAID_WORK
+        - STANDBY
+        - EVENING_ALLOWANCE
+        - NIGHT_ALLOWANCE
+        - HOLIDAY_ALLOWANCE
+        - JOB_SPECIFIC_ALLOWANCE
+        - FROZEN_ALLOWANCE
+    ClientAppStatus:
+      type: string
+      description: Client app status
+      enum:
+        - WAITING_FOR_APPROVAL
+        - APPROVED
+    ClientApp:
+      type: object
+      description: >
+        Represents single client app.
 
-        - LOGIN
 
-        - LOGOUT
+        Client apps are created when a new client app publishes itself to the system. Apps will be in
 
+        WAITING_FOR_APPROVAL status until a manager approves them. Three months after its approval a client app will
 
-        *Common work types*
-
-        - OTHER_WORK (Muu työ)
-
-        - BREAK (Tauko)
-
-        - SHIFT_START
-
-        - SHIFT_END
-
-        - UNKNOWN
+        again change to WAITING_FOR_APPROVAL status. The app will then need to be approved again by a manager.
 
 
-        *Driver work types*
-
-        - DRIVE
-
-        - LOADING
-
-        - UNLOADING
-
-        - AVAILABILITY
-
-        - DRIVER_CARD_INSERTED
-
-        - DRIVER_CARD_REMOVED
+        The device ID of the client app is used together with user PIN code during authentication.
+      required:
+        - deviceId
+        - status
+        - metadata
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        deviceId:
+          type: string
+          description: Device ID
+        name:
+          type: string
+          description: Device name
+        status:
+          $ref: "#/components/schemas/ClientAppStatus"
+        metadata:
+          $ref: "#/components/schemas/ClientAppMetadata"
+        lastLoginAt:
+          type: string
+          format: date-time
+          description: Last time the client app has logged in to the system
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation time
+        lastModifierId:
+          type: string
+          format: uuid
+          description: Last modifier's ID
+        modifiedAt:
+          type: string
+          format: date-time
+          description: Last modified time
+    WorkEventType:
+      type: string
       enum:
         - VEGETABLE
         - DRY
@@ -1684,6 +1794,87 @@ components:
         - AVAILABILITY
         - DRIVER_CARD_INSERTED
         - DRIVER_CARD_REMOVED
+      description: >
+        Work event types. UI implementations should translate these to more
+        human readable form.
+
+
+        *Driver work types*
+
+        | name                 | finnish name               |
+
+        | -------------------- | -------------------------- |
+
+        | DRIVE                | Ajo                        |
+
+        | LOADING              | Lastaus                    |
+
+        | UNLOADING            | Purku                      |
+
+        | AVAILABILITY         | Saatavuus                  |
+
+        | DRIVER_CARD_INSERTED | Kuljettajakortti syötetty  |
+
+        | DRIVER_CARD_REMOVED  | Kuljettajakortti poistettu |
+
+
+        *Office/Terminal work types*
+
+        | name        | finnish name         |
+
+        | ----------- | -------------------- |
+
+        | VEGETABLE   | Hevi                 |
+
+        | DRY         | Kuiva                |
+
+        | MEAT_CELLAR | Lihakellari          |
+
+        | MEIRA       | Meira                |
+
+        | FROZEN      | Pakaste              |
+
+        | PALTE       | Palte                |
+
+        | BREWERY     | Panimo               |
+
+        | GREASE      | Rasva                |
+
+        | LOGIN       | Sisäänkirjautuminen  |
+
+        | LOGOUT      | Uloskirjautuminen    |
+
+
+        *Common work types*
+
+        | name        | finnish name         |
+
+        | ----------- | -------------------- |
+
+        | OTHER_WORK  | Muu työ              |
+
+        | BREAK       | Tauko                |
+
+        | SHIFT_START | Työvuoron alku       |
+
+        | SHIFT_END   | Työvuoron loppu      |
+
+        | UNKNOWN     | Tuntematon           |
+    ClientAppMetadata:
+      type: object
+      description: Client app metadata
+      properties:
+        deviceOS:
+          type: string
+          description: Device OS
+          enum:
+            - ANDROID
+        deviceOSVersion:
+          type: string
+          description: Device OS version
+        appVersion:
+          type: string
+          description: App version
     Site:
       type: object
       description: Represents a single customer site
