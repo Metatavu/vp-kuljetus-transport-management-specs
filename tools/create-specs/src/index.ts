@@ -16,7 +16,7 @@ const ROOT_DIR = path.resolve(process.cwd(), "../../");
  * @returns parsed OpenAPI spec
  */
 const parseOpenApiDocument = (specFile: string): OpenAPISpec => {
-  return yamlParse(fs.readFileSync(path.resolve(ROOT_DIR, "services", specFile), "utf8"));
+  return yamlParse(fs.readFileSync(path.resolve(ROOT_DIR, "input", specFile), "utf8"));
 };
 
 /**
@@ -29,13 +29,34 @@ const validateSpec = async (specFile: string) => {
 }
 
 /**
+ * Writes the service spec file
+ * 
+ * @param specFile OpenAPI spec file
+ */
+const writeServiceSpec = async (specFile: string) => {
+  const spec = { ... parseOpenApiDocument(specFile) };
+  const serviceSpecFile = path.resolve(ROOT_DIR, "services", `${specFile}`);
+  delete spec["x-tyk-api-gateway"];
+  
+  for (const [_path, pathContent] of Object.entries(spec.paths)) {
+    for (const [_method, methodContent] of Object.entries(pathContent)) {
+      methodContent.tags = methodContent.tags.filter(tag => !tag.toLowerCase().startsWith("spec"));
+    }
+  }
+
+  console.log(`Writing ${serviceSpecFile}`);
+
+  fs.writeFileSync(serviceSpecFile, yamlStringify(spec));
+};
+
+/**
  * Adds security schemes to the given OpenAPI spec version file content by given security schemes
  *
  * @param specVersionFileContent spec version file content
  * @param securitySchemes security schemes from spec version configuration
  */
 const addSecuritySchemesToSpecVersionFileContent = (specVersionFileContent: any, securitySchemes: string[]) => {
-  if (securitySchemes.includes("apiKeyAuth")) {
+  if (securitySchemes.includes("ApiKeyAuth")) {
     specVersionFileContent.security.push({ ApiKeyAuth: [] });
     specVersionFileContent.components.securitySchemes.ApiKeyAuth = {
       type: "apiKey",
@@ -44,7 +65,7 @@ const addSecuritySchemesToSpecVersionFileContent = (specVersionFileContent: any,
     }
   }
 
-  if (securitySchemes.includes("bearerAuth")) {
+  if (securitySchemes.includes("BearerAuth")) {
     specVersionFileContent.security.push({ BearerAuth: ["driver", "manager"] });
     specVersionFileContent.components.securitySchemes.BearerAuth = {
       type: "http",
@@ -168,8 +189,9 @@ const main = async () => {
   const skipTyk = process.argv.includes("--skip-tyk");
 
   for (const specFile of SPEC_FILES) {
-    const absoluteSpecFile = path.resolve(ROOT_DIR, "services", specFile);
+    const absoluteSpecFile = path.resolve(ROOT_DIR, "input", specFile);
     await validateSpec(absoluteSpecFile);
+    await writeServiceSpec(specFile);
   }
 
   if (!skipTyk) {
@@ -211,48 +233,46 @@ const main = async () => {
         const prefixedPath = `${prefix}${path}`;
 
         for (const [method, methodContent] of Object.entries(pathContent)) {
-          for (const parameterContent of methodContent.parameters ?? []) {
-            if ("$ref" in parameterContent.schema) {
-              const schemaName = parameterContent.schema.$ref.split("/").pop();
-
-              if (!includedSchemas.includes(schemaName)) {
-                includedSchemas.push(schemaName);
-                specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(spec.components.schemas[schemaName]));
-              }
-            }
-
-            if ("items" in parameterContent.schema && parameterContent.schema.items.$ref) {
-              const schemaName = parameterContent.schema.items.$ref.split("/").pop();
-
-              if (!includedSchemas.includes(schemaName)) {
-                includedSchemas.push(schemaName);
-                specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(spec.components.schemas[schemaName]));
-              }
-            }
-          }
           if (methodContent.tags && methodContent.tags.some(tag => specVersionTags.includes(tag))) {
+            for (const parameterContent of methodContent.parameters ?? []) {
+              if ("$ref" in parameterContent.schema) {
+                const schemaName = parameterContent.schema.$ref.split("/").pop();
+  
+                if (!includedSchemas.includes(schemaName)) {
+                  includedSchemas.push(schemaName);
+                  specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(spec.components.schemas[schemaName]));
+                }
+              }
+  
+              if ("items" in parameterContent.schema && parameterContent.schema.items.$ref) {
+                const schemaName = parameterContent.schema.items.$ref.split("/").pop();
+  
+                if (!includedSchemas.includes(schemaName)) {
+                  includedSchemas.push(schemaName);
+                  specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(spec.components.schemas[schemaName]));
+                }
+              }
+            }
+
             specVersionFileContent.paths[prefixedPath] = specVersionFileContent.paths[prefixedPath] || {};
             specVersionFileContent.paths[prefixedPath][method] = JSON.parse(JSON.stringify({
               ...methodContent,
-              tags: methodContent.tags.filter(tag => !tag.toLowerCase().startsWith("spec"))
+              tags: methodContent.tags.filter(tag => !tag.toLowerCase().startsWith("spec")),
+              security: methodContent.security.filter(security => specVersion.securitySchemes.includes(Object.keys(security)[0]))
             }));
 
             Object.entries(methodContent.responses).forEach(([_responseCode, responseContent]) => {
-              responseContent.content && Object.values(responseContent.content).forEach((contentTypeContent) => {
-                if (!contentTypeContent.schema) return;
+              responseContent.content && Object.entries(responseContent.content).forEach(([_contentType, contentTypeContent]) => {
+                const { schema } = contentTypeContent; 
 
-                if ("$ref" in contentTypeContent.schema) {
-                  const schemaName = contentTypeContent.schema.$ref.split("/").pop();
-
+                if (schema && "$ref" in schema) {
+                  const schemaName = schema.$ref.split("/").pop();
                   if (!includedSchemas.includes(schemaName)) {
                     includedSchemas.push(schemaName);
                     specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(spec.components.schemas[schemaName]));
                   }
-                }
-
-                if ("items" in contentTypeContent.schema && contentTypeContent.schema.items.$ref) {
-                  const schemaName = contentTypeContent.schema.items.$ref.split("/").pop();
-
+                } else if ("items" in schema && schema.items?.$ref) {
+                  const schemaName = schema.items.$ref.split("/").pop();
                   if (!includedSchemas.includes(schemaName)) {
                     includedSchemas.push(schemaName);
                     specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(spec.components.schemas[schemaName]));
@@ -261,21 +281,9 @@ const main = async () => {
               });
             });
 
-            methodContent.requestBody?.content && Object.values(methodContent.requestBody.content).forEach((contentTypeContent) => {
-              if (!contentTypeContent.schema) return;
-
-              if ("$ref" in contentTypeContent.schema) {
+            methodContent.requestBody?.content && Object.entries(methodContent.requestBody.content).forEach(([_contentType, contentTypeContent]) => {
+              if (contentTypeContent.schema && "$ref" in contentTypeContent.schema) {
                 const schemaName = contentTypeContent.schema.$ref.split("/").pop();
-
-                if (!includedSchemas.includes(schemaName)) {
-                  includedSchemas.push(schemaName);
-                  specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(spec.components.schemas[schemaName]));
-                }
-              }
-
-              if ("items" in contentTypeContent.schema && contentTypeContent.schema.items.$ref) {
-                const schemaName = contentTypeContent.schema.items.$ref.split("/").pop();
-
                 if (!includedSchemas.includes(schemaName)) {
                   includedSchemas.push(schemaName);
                   specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(spec.components.schemas[schemaName]));
@@ -285,19 +293,30 @@ const main = async () => {
           }
         }
       }
+      
+      const relatedSchemas = [...Object.entries(spec.components.schemas)];
+
+      while (relatedSchemas.length > 0) {
+        const [schemaName, schemaContent] = relatedSchemas.pop();
+        const { properties } = schemaContent;
+
+        if (includedSchemas.includes(schemaName) && properties) {
+          for (const property of Object.values(properties)) {
+            if (property.$ref) {
+              const schemaName = property.$ref.split("/").pop();
+              includedSchemas.push(schemaName);
+
+              Object.entries(spec.components.schemas)
+                .filter(schemaEntry => schemaEntry[0] === schemaName)
+                .forEach(schemaEntry => relatedSchemas.push(schemaEntry));
+            }
+          }
+        }
+      }
 
       for (const [schemaName, schemaContent] of Object.entries(spec.components.schemas)) {
         if (includedSchemas.includes(schemaName)) {
           specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(schemaContent));
-
-          if (schemaContent.properties) {
-            for (const propertyContent of Object.values(schemaContent.properties)) {
-              if (propertyContent.$ref) {
-                const refSchemaName = propertyContent.$ref.split("/").pop();
-                specVersionFileContent.components.schemas[refSchemaName] = JSON.parse(JSON.stringify(spec.components.schemas[refSchemaName]));
-              }
-            }
-          }
         }
       }
     }
