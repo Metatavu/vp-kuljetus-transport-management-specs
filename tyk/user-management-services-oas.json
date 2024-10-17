@@ -1866,8 +1866,7 @@
         ],
         "tags": [
           "ClientApps",
-          "SpecManagementUI",
-          "SpecAuth"
+          "SpecManagementUI"
         ],
         "parameters": [
           {
@@ -1917,8 +1916,7 @@
         ],
         "tags": [
           "ClientApps",
-          "SpecManagementUI",
-          "SpecAuth"
+          "SpecManagementUI"
         ],
         "parameters": [
           {
