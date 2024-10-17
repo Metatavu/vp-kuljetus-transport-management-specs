@@ -1158,37 +1158,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/clientApps/verifyApproval:
-    post:
-      operationId: verifyClientAppApproval
-      summary: Verifies client app approval.
-      description: Verifies whether client app is approved or not.
-      security:
-        - ApiKeyAuth: []
-      tags:
-        - ClientApps
-        - SpecAuth
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: string
-              description: Device ID
-      responses:
-        "200":
-          description: Whether client app is approved or not
-          content:
-            application/json:
-              schema:
-                type: boolean
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
   "/v1/clientApps/{clientAppId}":
     get:
       operationId: findClientApp
@@ -1279,6 +1248,36 @@ paths:
       responses:
         "204":
           description: Empty response indicating successful removal
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/verifyClientApp:
+    post:
+      operationId: verifyClientApp
+      summary: Verifies that the client app has been approved.
+      description: Verifies that the client app has been approved.
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - ClientApps
+        - SpecAuth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VerifyClientAppRequest"
+      responses:
+        "200":
+          description: Whether client app is approved or not
+          content:
+            application/json:
+              schema:
+                type: boolean
         "default":
           description: Invalid request was sent to the server
           content:
@@ -1808,3 +1807,10 @@ components:
         appVersion:
           type: string
           description: App version
+
+    VerifyClientAppRequest:
+      type: object
+      properties:
+        deviceId:
+          type: string
+          description: device ID

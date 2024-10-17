@@ -167,20 +167,6 @@
             },
             {
               "disabled": false,
-              "path": "/v1/clientApps/verifyApproval",
-              "method": "",
-              "ignore_case": false,
-              "method_actions": {
-                "POST": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                }
-              }
-            },
-            {
-              "disabled": false,
               "path": "/v1/drivers",
               "method": "",
               "ignore_case": false,
@@ -398,6 +384,20 @@
               "ignore_case": false,
               "method_actions": {
                 "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/verifyClientApp",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "POST": {
                   "action": "no_action",
                   "code": 200,
                   "data": "",
@@ -468,10 +468,6 @@
               "method": "PUT"
             },
             {
-              "path": "/v1/clientApps/verifyApproval",
-              "method": "POST"
-            },
-            {
               "path": "/v1/drivers",
               "method": "GET"
             },
@@ -562,6 +558,10 @@
             {
               "path": "/v1/system/ping",
               "method": "GET"
+            },
+            {
+              "path": "/v1/verifyClientApp",
+              "method": "POST"
             },
             {
               "path": "/v1/workShiftHours",
