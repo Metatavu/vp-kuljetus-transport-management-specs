@@ -215,6 +215,7 @@ const main = async () => {
     const specVersionName = specVersion.name;
     const specVersionTags = specVersion.tags.map(tag => `Spec${tag}`);
     const includedSchemas: string[] = [];
+    const interval = specVersion.internal ?? false;
 
     const specVersionFile = path.resolve(ROOT_DIR, "specs", `${specVersion.name}.yaml`);
     const specVersionFileContent = JSON.parse(JSON.stringify(SPEC_TEMPLATE));
@@ -230,7 +231,7 @@ const main = async () => {
       specVersionFileContent.info.description = `${SPEC_TEMPLATE.info.description} (${specVersionName})`;
 
       for (const [path, pathContent] of Object.entries(spec.paths)) {
-        const prefixedPath = `${prefix}${path}`;
+        const prefixedPath = interval ? path : `${prefix}${path}`;
 
         for (const [method, methodContent] of Object.entries(pathContent)) {
           if (methodContent.tags && methodContent.tags.some(tag => specVersionTags.includes(tag))) {
@@ -293,7 +294,7 @@ const main = async () => {
           }
         }
       }
-      
+
       const relatedSchemas = [...Object.entries(spec.components.schemas)];
 
       while (relatedSchemas.length > 0) {

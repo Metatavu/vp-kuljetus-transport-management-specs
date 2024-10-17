@@ -63,7 +63,8 @@ export const SPEC_VERSIONS = [
     name: "auth",
     description: "Auth",
     tags: ["Auth"],
-    securitySchemes: ["ApiKeyAuth"]
+    securitySchemes: ["ApiKeyAuth"],
+    internal: true
   }
 ];
 

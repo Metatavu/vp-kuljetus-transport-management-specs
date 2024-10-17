@@ -6,7 +6,7 @@ info:
 security:
   - ApiKeyAuth: []
 paths:
-  /vehicle-management/v1/trucks/{truckId}/driverCards:
+  /v1/trucks/{truckId}/driverCards:
     get:
       operationId: listTruckDriverCards
       summary: Lists truck driver cards
@@ -39,7 +39,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /user-management/v1/verifyClientApp:
+  /v1/verifyClientApp:
     post:
       operationId: verifyClientApp
       summary: Verifies that the client app has been approved.
