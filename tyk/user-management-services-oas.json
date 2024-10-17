@@ -2008,6 +2008,54 @@
           }
         }
       }
+    },
+    "/v1/verifyClientApp": {
+      "post": {
+        "operationId": "verifyClientApp",
+        "summary": "Verifies that the client app has been approved.",
+        "description": "Verifies that the client app has been approved.",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "tags": [
+          "ClientApps",
+          "SpecAuth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyClientAppRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Whether client app is approved or not",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2089,6 +2137,10 @@
           "driverCardId": {
             "type": "string",
             "description": "Employee's driver card ID."
+          },
+          "pinCode": {
+            "type": "string",
+            "description": "Employee's PIN code."
           },
           "type": {
             "$ref": "#/components/schemas/EmployeeType"
@@ -2498,6 +2550,15 @@
           "appVersion": {
             "type": "string",
             "description": "App version"
+          }
+        }
+      },
+      "VerifyClientAppRequest": {
+        "type": "object",
+        "properties": {
+          "deviceId": {
+            "type": "string",
+            "description": "device ID"
           }
         }
       }
