@@ -1158,6 +1158,37 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/clientApps/verifyApproval:
+    post:
+      operationId: verifyClientAppApproval
+      summary: Verifies client app approval.
+      description: Verifies whether client app is approved or not.
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - ClientApps
+        - SpecAuth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+              description: Device ID
+      responses:
+        "200":
+          description: Whether client app is approved or not
+          content:
+            application/json:
+              schema:
+                type: boolean
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   "/v1/clientApps/{clientAppId}":
     get:
       operationId: findClientApp
@@ -1324,6 +1355,9 @@ components:
         driverCardId:
           type: string
           description: Employee's driver card ID.
+        pinCode:
+          type: string
+          description: Employee's PIN code.
         type:
           $ref: "#/components/schemas/EmployeeType"
         salaryGroup:

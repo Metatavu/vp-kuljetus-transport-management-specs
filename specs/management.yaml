@@ -3085,6 +3085,9 @@ components:
         driverCardId:
           type: string
           description: Employee's driver card ID.
+        pinCode:
+          type: string
+          description: Employee's PIN code.
         type:
           $ref: "#/components/schemas/EmployeeType"
         salaryGroup:

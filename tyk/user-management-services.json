@@ -167,6 +167,20 @@
             },
             {
               "disabled": false,
+              "path": "/v1/clientApps/verifyApproval",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "POST": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
               "path": "/v1/drivers",
               "method": "",
               "ignore_case": false,
@@ -452,6 +466,10 @@
             {
               "path": "/v1/clientApps/{clientAppId}",
               "method": "PUT"
+            },
+            {
+              "path": "/v1/clientApps/verifyApproval",
+              "method": "POST"
             },
             {
               "path": "/v1/drivers",
