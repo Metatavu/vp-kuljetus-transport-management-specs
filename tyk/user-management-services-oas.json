@@ -2219,7 +2219,7 @@
       },
       "EmployeeWorkShift": {
         "type": "object",
-        "description": "Represents single employee work shift. A work event must always relate to an employee work shift.\n\nA new employee work shift is automatically created, when employee starts a new shift. A new\nshift is started when the last recorded WorkEvent from the employee either\n- is of type SHIFT_END or\n- is of type BREAK or UNKNOWN and has been going on longer than 3 hours.\nA new shift is also created if there is no previous work events for the employee.\n\nWhen created, the work shift is not approved. It needs to be approved by a supervisor before the\nwork shift hours can be sent to payroll.\n\nEmployee work shift always relates to a single date. When work shift is created during the creation of\na work event, the date is derived from the work event. When created manually, the date should also be\nset manually.\n\nEndedAt and startedAt are derived from the work events in the shift. StartedAt is based on SHIFT_START event\nand endedAt is based on SHIFT_END event. When the corresponding event is not found, the time is null.\n\nWhen calculating salaries for a work period, all work shifts started within the period will be included\nin their entirety, even if the events of the shifts would time-wise be outside the period.\n",
+        "description": "Represents single employee work shift. A work event must always relate to an employee work shift.\n\nWhen created, the work shift is not approved. It needs to be approved by a supervisor before the\nwork shift hours can be sent to payroll.\n\nEmployee work shift always relates to a single date. When work shift is created during the creation of\na work event, the date is derived from the work event. When created manually, the date should also be\nset manually.\n\nEndedAt and startedAt are derived from the work events in the shift. StartedAt is based on SHIFT_START event\nand endedAt is based on SHIFT_END event. When the corresponding event is not found, the time is null.\n\nWhen calculating salaries for a work period, all work shifts started within the period will be included\nin their entirety, even if the events of the shifts would time-wise be outside the period.\n",
         "required": [
           "date",
           "employeeId",
@@ -2263,6 +2263,10 @@
             },
             "description": "List of truck IDs used during the work shift. Derived from work events in the shift."
           },
+          "dayOffWorkAllowance": {
+            "type": "boolean",
+            "description": "Day off work allowance is used to mark the day when the work shift started as a day off for the employee.\nThis means that all the work hours done during that day will be also added to the HOLIDAY_ALLOWANCE work\ntype during work shift hours calculation.\n"
+          },
           "absence": {
             "$ref": "#/components/schemas/AbsenceType"
           },
@@ -2281,7 +2285,7 @@
       },
       "WorkEvent": {
         "type": "object",
-        "description": "Represents single work event",
+        "description": "Represents single work event.\n\nWhenever employee tracks a new work event, it is determined, whether a new work shift should be created for\nthe event, or if the event should be added to the shift of the last work event recorded.\n\nA new work shift should be created, if either\n- There are no previous work events for the employee, or\n- The last work event is of type SHIFT_END, or\n- The last work event is of type BREAK or UNKNOWN and has been going on longer than 3 hours\n\nA work shift might already exist for the current day with _no_ events. This can happen, if a shift has been\ncreated manually by the manager in advance. In this case, whenever a new shift would be created, the event\nshould be added to this existing work shift instead.\n",
         "required": [
           "employeeId",
           "time",
@@ -2321,7 +2325,7 @@
       },
       "WorkShiftHours": {
         "type": "object",
-        "description": "Represents a single work shift hours.\n\nWork shift hours contain the total hours for a specific employee, work shift and work type. The hours are always\ncalculated dynamically during a request.\n\nWork shift hours also contains the actual hours that have been manually set by a supervisor. The actual hours\nshould always be prioritized over the calculated hours when displaying the aggregated hours and sending the\ndata to payroll.\n\nWork shift hours for all available work types are created automatically when related employee work shift is created.\nOnly a single work shift hours per employee per work shift per work type is allowed. If one already exists, it\nshould be updated.\n\nWork shift hours cannot be updated if the related employee work shift is approved.\n",
+        "description": "Represents a single work shift hours.\n\nWork shift hours contain the total hours for a specific employee, work shift and work type. The hours are always\ncalculated dynamically during a request.\n\nWork shift hours also contains the actual hours that have been manually set by a supervisor. The actual hours\nshould always be prioritized over the calculated hours when displaying the aggregated hours and sending the\ndata to payroll.\n\nWork shift hours for all available work types are created automatically when related employee work shift is created.\nOnly a single work shift hours per employee per work shift per work type is allowed. If one already exists, it\nshould be updated.\n\nWork shift hours cannot be updated if the related employee work shift is approved.\n\n#### Work shift hours calculation\n\nFollowing work event types are only used to track the life cycle of the employee work shift. Hence, these types\nare not used in calculations at all.\n- SHIFT_START\n- SHIFT_END\n- LOGIN\n- LOGOUT\n- DRIVER_CARD_INSERTED\n- DRIVER_CARD_REMOVED\n- UNKNOWN\n\n##### Work shift hours for all of the work types are calculated as follows\n\n###### PAID_WORK\nEverything else apart from work event type BREAK.\n\n###### BREAK\nOnly work event type BREAK.\n\n###### STANDBY\nNot calculated at all. It can only be added manually from the management.\n\n###### EVENING_ALLOWANCE\nAll hours from the PAID_WORK that are recorded between 18.00 and 20.00.\n\n###### NIGHT_ALLOWANCE\nAll hours from the PAID_WORK that are recorded between 20.00 and 06.00.\n\n###### HOLIDAY_ALLOWANCE\nAll hours from the PAID_WORK that are recorded during one of the following\n- Sunday\n- Public holiday\n  - a corresponding date is found from holidays table with type PUBLIC_HOLIDAY_ALLOWANCE\n- Day off work\n  - either\n    - a corresponding date is found from holidays table with type DAY_OFF_WORK_ALLOWANCE, or\n    - any of the shifts, which started during the day, is marked as dayOffWorkAllowance\n\n###### JOB_SPECIFIC_ALLOWANCE\nNot calculated at all. It can only be added manually from the management.\n\n###### FROZEN_ALLOWANCE\nAll hours from the PAID_WORK that are recorded from the frozen section.\n",
         "required": [
           "employeeId",
           "employeeWorkShiftId",
