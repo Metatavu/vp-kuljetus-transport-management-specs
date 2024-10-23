@@ -30,14 +30,14 @@ const validateSpec = async (specFile: string) => {
 
 /**
  * Writes the service spec file
- * 
+ *
  * @param specFile OpenAPI spec file
  */
 const writeServiceSpec = async (specFile: string) => {
   const spec = { ... parseOpenApiDocument(specFile) };
   const serviceSpecFile = path.resolve(ROOT_DIR, "services", `${specFile}`);
   delete spec["x-tyk-api-gateway"];
-  
+
   for (const [_path, pathContent] of Object.entries(spec.paths)) {
     for (const [_method, methodContent] of Object.entries(pathContent)) {
       methodContent.tags = methodContent.tags.filter(tag => !tag.toLowerCase().startsWith("spec"));
@@ -215,7 +215,7 @@ const main = async () => {
     const specVersionName = specVersion.name;
     const specVersionTags = specVersion.tags.map(tag => `Spec${tag}`);
     const includedSchemas: string[] = [];
-    const interval = specVersion.internal ?? false;
+    const internal = specVersion.internal ?? false;
 
     const specVersionFile = path.resolve(ROOT_DIR, "specs", `${specVersion.name}.yaml`);
     const specVersionFileContent = JSON.parse(JSON.stringify(SPEC_TEMPLATE));
@@ -231,23 +231,23 @@ const main = async () => {
       specVersionFileContent.info.description = `${SPEC_TEMPLATE.info.description} (${specVersionName})`;
 
       for (const [path, pathContent] of Object.entries(spec.paths)) {
-        const prefixedPath = interval ? path : `${prefix}${path}`;
+        const prefixedPath = internal ? path : `${prefix}${path}`;
 
         for (const [method, methodContent] of Object.entries(pathContent)) {
           if (methodContent.tags && methodContent.tags.some(tag => specVersionTags.includes(tag))) {
             for (const parameterContent of methodContent.parameters ?? []) {
               if ("$ref" in parameterContent.schema) {
                 const schemaName = parameterContent.schema.$ref.split("/").pop();
-  
+
                 if (!includedSchemas.includes(schemaName)) {
                   includedSchemas.push(schemaName);
                   specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(spec.components.schemas[schemaName]));
                 }
               }
-  
+
               if ("items" in parameterContent.schema && parameterContent.schema.items.$ref) {
                 const schemaName = parameterContent.schema.items.$ref.split("/").pop();
-  
+
                 if (!includedSchemas.includes(schemaName)) {
                   includedSchemas.push(schemaName);
                   specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(spec.components.schemas[schemaName]));
@@ -264,7 +264,7 @@ const main = async () => {
 
             Object.entries(methodContent.responses).forEach(([_responseCode, responseContent]) => {
               responseContent.content && Object.entries(responseContent.content).forEach(([_contentType, contentTypeContent]) => {
-                const { schema } = contentTypeContent; 
+                const { schema } = contentTypeContent;
 
                 if (schema && "$ref" in schema) {
                   const schemaName = schema.$ref.split("/").pop();
