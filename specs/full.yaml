@@ -3851,45 +3851,6 @@ components:
         deviceId:
           type: string
           description: device ID
-    AbsenceType:
-      type: string
-      enum:
-        - TRAINING
-        - VACATION
-        - OFFICIAL_DUTIES
-        - COMPENSATORY_LEAVE
-        - SICK_LEAVE
-      description: >
-        Absence types are used to mark the absence type of the employee work
-        shift. Absences are taken into account when
-
-        calculating the total working hours for employee when determining working hours for payroll. They might also
-
-        affect the allowance hours of the work period.
-
-
-        Here are definitions for the absence types:
-
-
-        | name               | abbreviation | finnish name       | work hours | work hours on holiday | affects allowance hours |
-
-        | ------------------ | ------------ | ------------------ | ---------- | --------------------- | ----------------------- |
-
-        | TRAINING           | KO           | Koulutus työajalla | 8h         | 8h                    | no                      |
-
-        | VACATION           | LO           | Loma               | 6.67h      | 0h                    | yes                     |
-
-        | OFFICIAL_DUTIES    | LT           | Luottamustoimet    | 8h         | 8h                    | yes                     |
-
-        | COMPENSATORY_LEAVE | PP           | Pekkanen           | 8h         | 8h                    | yes                     |
-
-        | SICK_LEAVE         | SL           | Sairausloma        | 8h         | 8h                    | yes                     |
-    PerDiemAllowanceType:
-      type: string
-      description: Per diem allowance
-      enum:
-        - PARTIAL
-        - FULL
     WorkEventType:
       type: string
       enum:
@@ -3985,6 +3946,45 @@ components:
       enum:
         - PUBLIC_HOLIDAY_ALLOWANCE
         - DAY_OFF_WORK_ALLOWANCE
+    PerDiemAllowanceType:
+      type: string
+      description: Per diem allowance
+      enum:
+        - PARTIAL
+        - FULL
+    AbsenceType:
+      type: string
+      enum:
+        - TRAINING
+        - VACATION
+        - OFFICIAL_DUTIES
+        - COMPENSATORY_LEAVE
+        - SICK_LEAVE
+      description: >
+        Absence types are used to mark the absence type of the employee work
+        shift. Absences are taken into account when
+
+        calculating the total working hours for employee when determining working hours for payroll. They might also
+
+        affect the allowance hours of the work period.
+
+
+        Here are definitions for the absence types:
+
+
+        | name               | abbreviation | finnish name       | work hours | work hours on holiday | affects allowance hours |
+
+        | ------------------ | ------------ | ------------------ | ---------- | --------------------- | ----------------------- |
+
+        | TRAINING           | KO           | Koulutus työajalla | 8h         | 8h                    | no                      |
+
+        | VACATION           | LO           | Loma               | 6.67h      | 0h                    | yes                     |
+
+        | OFFICIAL_DUTIES    | LT           | Luottamustoimet    | 8h         | 8h                    | yes                     |
+
+        | COMPENSATORY_LEAVE | PP           | Pekkanen           | 8h         | 8h                    | yes                     |
+
+        | SICK_LEAVE         | SL           | Sairausloma        | 8h         | 8h                    | yes                     |
     ClientAppMetadata:
       type: object
       description: Client app metadata

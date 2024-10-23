@@ -2,10 +2,24 @@ openapi: 3.0.3
 info:
   version: 1.0.0
   title: VP-Kuljetus Work Planning Services
+
 security:
-  - bearerAuth:
-      - driver
-      - manager
+  - bearerAuth: [driver, manager]
+
+x-tyk-api-gateway:
+  info:
+    id: work-planning-services
+    orgId: vp
+    name: Work Planning Services
+    state:
+      active: true
+  upstream:
+    url: http://work-planning
+  server:
+    listenPath:
+      value: /work-planning/
+      strip: true
+
 paths:
   /v1/system/ping:
     get:
@@ -22,17 +36,18 @@ paths:
             text/plain:
               schema:
                 type: string
+
   /v1/routes:
     get:
       operationId: listRoutes
       summary: List Routes.
       description: Lists Routes.
       security:
-        - BearerAuth:
-            - driver
-            - manager
+        - BearerAuth: [driver, manager]
       tags:
         - Routes
+        - SpecManagementUI
+        - SpecApp
       parameters:
         - name: truckId
           in: query
@@ -77,7 +92,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Route"
-        default:
+        "default":
           description: Invalid request was sent to the server
           content:
             application/json:
@@ -88,10 +103,10 @@ paths:
       summary: Create route
       description: Create new route
       security:
-        - BearerAuth:
-            - manager
+        - BearerAuth: [manager]
       tags:
         - Routes
+        - SpecManagementUI
       requestBody:
         content:
           application/json:
@@ -106,23 +121,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Route"
-        default:
+        "default":
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /v1/routes/{routeId}:
+
+  "/v1/routes/{routeId}":
     get:
       operationId: findRoute
       summary: Find a route.
       description: Finds a route by id.
       security:
-        - BearerAuth:
-            - driver
-            - manager
+        - BearerAuth: [driver, manager]
       tags:
         - Routes
+        - SpecApp
+        - SpecManagementUI
       parameters:
         - name: routeId
           required: true
@@ -138,7 +154,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Route"
-        default:
+        "default":
           description: Invalid request was sent to the server
           content:
             application/json:
@@ -149,11 +165,11 @@ paths:
       summary: Updates routes
       description: Updates single route
       security:
-        - BearerAuth:
-            - driver
-            - manager
+        - BearerAuth: [driver, manager]
       tags:
         - Routes
+        - SpecApp
+        - SpecManagementUI
       requestBody:
         content:
           application/json:
@@ -176,21 +192,22 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Route"
-        default:
+        "default":
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+
     delete:
       operationId: deleteRoute
       summary: Deletes route
       description: Deletes route
       security:
-        - BearerAuth:
-            - manager
+        - BearerAuth: [manager]
       tags:
         - Routes
+        - SpecManagementUI
       parameters:
         - name: routeId
           required: true
@@ -202,18 +219,20 @@ paths:
       responses:
         "204":
           description: Empty response indicating successful removal
-        default:
+        "default":
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
   schemas:
     Error:
       type: object
@@ -227,6 +246,7 @@ components:
           format: int32
         message:
           type: string
+
     Route:
       type: object
       description: Represent single planned route for single truck driver

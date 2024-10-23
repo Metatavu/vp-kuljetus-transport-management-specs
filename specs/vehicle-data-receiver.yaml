@@ -13,9 +13,6 @@ paths:
       description: Lists public info about each truck.
       security:
         - ApiKeyAuth: []
-        - BearerAuth:
-            - driver
-            - manager
       tags:
         - PublicTrucks
       parameters:
@@ -266,16 +263,6 @@ components:
           format: int32
         message:
           type: string
-    TruckSortByField:
-      type: string
-      enum:
-        - NAME
-        - PLATE_NUMBER
-    SortOrder:
-      type: string
-      enum:
-        - ASCENDING
-        - DESCENDING
     TruckDriverCard:
       type: object
       required:
@@ -335,15 +322,6 @@ components:
         speed:
           type: number
           format: float
-    TruckDriveStateEnum:
-      type: string
-      enum:
-        - REST
-        - DRIVER_AVAILABLE
-        - WORK
-        - DRIVE
-        - ERROR
-        - NOT_AVAILABLE
     TruckDriveState:
       type: object
       required:
@@ -370,124 +348,12 @@ components:
           type: string
           description: Driver card ID. This is used to identify the driver when creating a
             new drive state.
-    SalaryGroup:
-      type: string
-      description: >
-        Employee's salary group
-
-        Kuljettaja (Driver) - Should be default IF the employees office is not KOTKA
-
-        VP-Logistics (VPlogistics)
-
-        Office
-
-        Terminal
-      enum:
-        - DRIVER
-        - VPLOGISTICS
-        - OFFICE
-        - TERMINAL
-    EmployeeType:
+    TruckDriveStateEnum:
       type: string
       enum:
-        - PA
-        - KA
-        - AH
-        - VK
-        - TH
-        - TP
-        - AJ
-        - JH
-        - AP
-        - KK
-        - POIS
-        - TPK
-      description: >
-        Employee's type described as finnish abbreviation. UI implementations
-        should translate these to more human readable form.
-
-
-        | Abbreviation | finnish name            |
-
-        | ------------ | ----------------------- |
-
-        | PA           | Pakettiautonkuljettaja  |
-
-        | KA           | Kuorma-auton kuljettaja |
-
-        | AH           | Alihankkija             |
-
-        | VK           | Vuokratyöntekijä        |
-
-        | TH           | Työharjoittelija        |
-
-        | TP           | Tilapäistyöntekijä      |
-
-        | AJ           | Ajojärjestelijä         |
-
-        | JH           | Esimies                 |
-
-        | AP           | Aikatuntipalkka         |
-
-        | KK           | Kuukausipalkka          |
-
-        | POIS         | Ei-aktiivinen           |
-
-        | TPK          | Täysperäkuljettaja      |
-    Office:
-      type: string
-      description: Employee's office. Salary group should be set to VPLogistics if the
-        office is KOTKA
-      enum:
-        - KOTKA
-        - KOUVOLA
-        - RAUHA
-    WorkType:
-      type: string
-      description: >
-        Work type of the work shift hours. A single work type represents
-        aggregated value from
-
-        one or more work event types.
-
-
-        | name                   | finnish name         |
-
-        | ---------------------- | -------------------- |
-
-        | PAID_WORK              | Palkallinen työ      |
-
-        | BREAK                  | Tauko                |
-
-        | STANDBY                | Odotus               |
-
-        | EVENING_ALLOWANCE      | Iltatyö              |
-
-        | NIGHT_ALLOWANCE        | Yötyö                |
-
-        | HOLIDAY_ALLOWANCE      | Pyhälisä             |
-
-        | JOB_SPECIFIC_ALLOWANCE | Työkohtaisuuslisä    |
-
-        | FROZEN_ALLOWANCE       | Pakastelisä          |
-      enum:
-        - PAID_WORK
-        - BREAK
-        - STANDBY
-        - EVENING_ALLOWANCE
-        - NIGHT_ALLOWANCE
-        - HOLIDAY_ALLOWANCE
-        - JOB_SPECIFIC_ALLOWANCE
-        - FROZEN_ALLOWANCE
-    ClientAppStatus:
-      type: string
-      description: Client app status
-      enum:
-        - WAITING_FOR_APPROVAL
-        - APPROVED
-    TaskType:
-      type: string
-      description: Type of the task
-      enum:
-        - UNLOAD
-        - LOAD
+        - REST
+        - DRIVER_AVAILABLE
+        - WORK
+        - DRIVE
+        - ERROR
+        - NOT_AVAILABLE

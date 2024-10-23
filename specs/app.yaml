@@ -14,7 +14,6 @@ paths:
       summary: List PublicTrucks.
       description: Lists public info about each truck.
       security:
-        - ApiKeyAuth: []
         - BearerAuth:
             - driver
             - manager
@@ -147,7 +146,6 @@ paths:
       description: Lists truck driver cards. Used to check if a truck has a driver
         card inserted.
       security:
-        - ApiKeyAuth: []
         - BearerAuth:
             - driver
       tags:
@@ -804,8 +802,7 @@ paths:
         already exists with status other than 'WAITING_FOR_APPROVAL', the creation fails with conflict. Otherwise,
 
         the existing client app is returned with OK response.
-      security:
-        - ApiKeyAuth: []
+      security: []
       tags:
         - ClientApps
       requestBody:
@@ -1578,78 +1575,6 @@ components:
             marked as archived will not appear in list requests unless archived
             filter is set to true. Archived driver cannot be updated, unless
             archivedAt is first set to null.
-    SalaryGroup:
-      type: string
-      description: >
-        Employee's salary group
-
-        Kuljettaja (Driver) - Should be default IF the employees office is not KOTKA
-
-        VP-Logistics (VPlogistics)
-
-        Office
-
-        Terminal
-      enum:
-        - DRIVER
-        - VPLOGISTICS
-        - OFFICE
-        - TERMINAL
-    EmployeeType:
-      type: string
-      enum:
-        - PA
-        - KA
-        - AH
-        - VK
-        - TH
-        - TP
-        - AJ
-        - JH
-        - AP
-        - KK
-        - POIS
-        - TPK
-      description: >
-        Employee's type described as finnish abbreviation. UI implementations
-        should translate these to more human readable form.
-
-
-        | Abbreviation | finnish name            |
-
-        | ------------ | ----------------------- |
-
-        | PA           | Pakettiautonkuljettaja  |
-
-        | KA           | Kuorma-auton kuljettaja |
-
-        | AH           | Alihankkija             |
-
-        | VK           | Vuokratyöntekijä        |
-
-        | TH           | Työharjoittelija        |
-
-        | TP           | Tilapäistyöntekijä      |
-
-        | AJ           | Ajojärjestelijä         |
-
-        | JH           | Esimies                 |
-
-        | AP           | Aikatuntipalkka         |
-
-        | KK           | Kuukausipalkka          |
-
-        | POIS         | Ei-aktiivinen           |
-
-        | TPK          | Täysperäkuljettaja      |
-    Office:
-      type: string
-      description: Employee's office. Salary group should be set to VPLogistics if the
-        office is KOTKA
-      enum:
-        - KOTKA
-        - KOUVOLA
-        - RAUHA
     WorkEvent:
       type: object
       description: >
@@ -1703,49 +1628,6 @@ components:
           description: The ID of truck used during the work event
         workEventType:
           $ref: "#/components/schemas/WorkEventType"
-    WorkType:
-      type: string
-      description: >
-        Work type of the work shift hours. A single work type represents
-        aggregated value from
-
-        one or more work event types.
-
-
-        | name                   | finnish name         |
-
-        | ---------------------- | -------------------- |
-
-        | PAID_WORK              | Palkallinen työ      |
-
-        | BREAK                  | Tauko                |
-
-        | STANDBY                | Odotus               |
-
-        | EVENING_ALLOWANCE      | Iltatyö              |
-
-        | NIGHT_ALLOWANCE        | Yötyö                |
-
-        | HOLIDAY_ALLOWANCE      | Pyhälisä             |
-
-        | JOB_SPECIFIC_ALLOWANCE | Työkohtaisuuslisä    |
-
-        | FROZEN_ALLOWANCE       | Pakastelisä          |
-      enum:
-        - PAID_WORK
-        - BREAK
-        - STANDBY
-        - EVENING_ALLOWANCE
-        - NIGHT_ALLOWANCE
-        - HOLIDAY_ALLOWANCE
-        - JOB_SPECIFIC_ALLOWANCE
-        - FROZEN_ALLOWANCE
-    ClientAppStatus:
-      type: string
-      description: Client app status
-      enum:
-        - WAITING_FOR_APPROVAL
-        - APPROVED
     ClientApp:
       type: object
       description: >
@@ -1885,6 +1767,12 @@ components:
         | SHIFT_END   | Työvuoron loppu      |
 
         | UNKNOWN     | Tuntematon           |
+    ClientAppStatus:
+      type: string
+      description: Client app status
+      enum:
+        - WAITING_FOR_APPROVAL
+        - APPROVED
     ClientAppMetadata:
       type: object
       description: Client app metadata
