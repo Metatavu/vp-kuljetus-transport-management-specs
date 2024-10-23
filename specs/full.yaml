@@ -3448,17 +3448,6 @@ components:
         to an employee work shift.
 
 
-        A new employee work shift is automatically created, when employee starts a new shift. A new
-
-        shift is started when the last recorded WorkEvent from the employee either
-
-        - is of type SHIFT_END or
-
-        - is of type BREAK or UNKNOWN and has been going on longer than 3 hours.
-
-        A new shift is also created if there is no previous work events for the employee.
-
-
         When created, the work shift is not approved. It needs to be approved by a supervisor before the
 
         work shift hours can be sent to payroll.
@@ -3515,6 +3504,15 @@ components:
             format: uuid
           description: List of truck IDs used during the work shift. Derived from work
             events in the shift.
+        dayOffWorkAllowance:
+          type: boolean
+          description: >
+            Day off work allowance is used to mark the day when the work shift
+            started as a day off for the employee.
+
+            This means that all the work hours done during that day will be also added to the HOLIDAY_ALLOWANCE work
+
+            type during work shift hours calculation.
         absence:
           $ref: "#/components/schemas/AbsenceType"
         PerDiemAllowance:
@@ -3532,7 +3530,29 @@ components:
             was sick during the shift.
     WorkEvent:
       type: object
-      description: Represents single work event
+      description: >
+        Represents single work event.
+
+
+        Whenever employee tracks a new work event, it is determined, whether a new work shift should be created for
+
+        the event, or if the event should be added to the shift of the last work event recorded.
+
+
+        A new work shift should be created, if either
+
+        - There are no previous work events for the employee, or
+
+        - The last work event is of type SHIFT_END, or
+
+        - The last work event is of type BREAK or UNKNOWN and has been going on longer than 3 hours
+
+
+        A work shift might already exist for the current day with _no_ events. This can happen, if a shift has been
+
+        created manually by the manager in advance. In this case, whenever a new shift would be created, the event
+
+        should be added to this existing work shift instead.
       required:
         - employeeId
         - time
@@ -3624,6 +3644,79 @@ components:
 
 
         Work shift hours cannot be updated if the related employee work shift is approved.
+
+
+        #### Work shift hours calculation
+
+
+        Following work event types are only used to track the life cycle of the employee work shift. Hence, these types
+
+        are not used in calculations at all.
+
+        - SHIFT_START
+
+        - SHIFT_END
+
+        - LOGIN
+
+        - LOGOUT
+
+        - DRIVER_CARD_INSERTED
+
+        - DRIVER_CARD_REMOVED
+
+        - UNKNOWN
+
+
+        ##### Work shift hours for all of the work types are calculated as follows
+
+
+        ###### PAID_WORK
+
+        Everything else apart from work event type BREAK.
+
+
+        ###### BREAK
+
+        Only work event type BREAK.
+
+
+        ###### STANDBY
+
+        Not calculated at all. It can only be added manually from the management.
+
+
+        ###### EVENING_ALLOWANCE
+
+        All hours from the PAID_WORK that are recorded between 18.00 and 20.00.
+
+
+        ###### NIGHT_ALLOWANCE
+
+        All hours from the PAID_WORK that are recorded between 20.00 and 06.00.
+
+
+        ###### HOLIDAY_ALLOWANCE
+
+        All hours from the PAID_WORK that are recorded during one of the following
+
+        - Sunday
+
+        - Public holiday
+          - a corresponding date is found from holidays table with type PUBLIC_HOLIDAY_ALLOWANCE
+        - Day off work
+          - either
+            - a corresponding date is found from holidays table with type DAY_OFF_WORK_ALLOWANCE, or
+            - any of the shifts, which started during the day, is marked as dayOffWorkAllowance
+
+        ###### JOB_SPECIFIC_ALLOWANCE
+
+        Not calculated at all. It can only be added manually from the management.
+
+
+        ###### FROZEN_ALLOWANCE
+
+        All hours from the PAID_WORK that are recorded from the frozen section.
       required:
         - employeeId
         - employeeWorkShiftId
