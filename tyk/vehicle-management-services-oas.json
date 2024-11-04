@@ -497,7 +497,7 @@
       "post": {
         "operationId": "createTruckDriverCard",
         "summary": "Create truck driver card",
-        "description": "Create new truck driver card",
+        "description": "Create new truck driver card.\n\nIf a card with same truck ID and card ID is already found with removedAt set, the existing card is restored.\nIf a card with different truck ID and card ID is already found with removedAt set, the previous card is\nimmediately deleted and the new card is created. If a card with the same truck ID and card ID is found with\nremovedAt not set, the request is rejected with a 409 Conflict response.\n",
         "security": [
           {
             "ApiKeyAuth": []
@@ -558,7 +558,7 @@
       "delete": {
         "operationId": "deleteTruckDriverCard",
         "summary": "Deletes truck driver card",
-        "description": "Deletes single truck driver card. Cards are deleted when they are removed from the truck.",
+        "description": "Deletes single truck driver card. Driver cards are deleted when they are removed from the truck.\n\nThe card is first soft-deleted by setting removedAt to value sent in X-Removed-At header. A background process\nthen checks frequently for driver cards removed over a configurable grace period ago and deletes them\npermanently. This is done to prevent false positive driver card states coming in from telematics device.\n",
         "security": [
           {
             "ApiKeyAuth": []
@@ -589,7 +589,7 @@
             }
           },
           {
-            "name": "X-Driver-Card-Removed-At",
+            "name": "X-Removed-At",
             "required": true,
             "in": "header",
             "description": "Timestamp when the driver card was removed from the truck",
@@ -1925,6 +1925,11 @@
             "type": "integer",
             "format": "int64",
             "description": "Timestamp for driver card insertion. Unix timestamp in milliseconds."
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Deleted at. Used to check for grace period for driver card removal."
           }
         }
       },

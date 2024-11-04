@@ -1380,6 +1380,10 @@ components:
           type: integer
           format: int64
           description: Timestamp for driver card insertion. Unix timestamp in milliseconds.
+        deletedAt:
+          type: string
+          format: date-time
+          description: Deleted at. Used to check for grace period for driver card removal.
     TruckDriveStateEnum:
       type: string
       enum:
