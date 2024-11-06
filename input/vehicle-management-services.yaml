@@ -304,7 +304,13 @@ paths:
     post:
       operationId: createTruckDriverCard
       summary: Create truck driver card
-      description: Create new truck driver card
+      description: |
+        Create new truck driver card.
+
+        If a card with same truck ID and card ID is already found with removedAt set, the existing card is restored.
+        If a card with different truck ID and card ID is already found with removedAt set, the previous card is
+        immediately deleted and the new card is created. If a card with the same truck ID and card ID is found with
+        removedAt not set, the request is rejected with a 409 Conflict response.
       security:
         - ApiKeyAuth: []
       tags:
@@ -343,7 +349,12 @@ paths:
     delete:
       operationId: deleteTruckDriverCard
       summary: Deletes truck driver card
-      description: Deletes single truck driver card. Cards are deleted when they are removed from the truck.
+      description: |
+        Deletes single truck driver card. Driver cards are deleted when they are removed from the truck.
+
+        The card is first soft-deleted by setting removedAt to value sent in X-Removed-At header. A background process
+        then checks frequently for driver cards removed over a configurable grace period ago and deletes them
+        permanently. This is done to prevent false positive driver card states coming in from telematics device.
       security:
         - ApiKeyAuth: []
       tags:
@@ -363,7 +374,7 @@ paths:
           description: driver card ID
           schema:
             type: string
-        - name: X-Driver-Card-Removed-At
+        - name: X-Removed-At
           required: true
           in: header
           description: Timestamp when the driver card was removed from the truck
@@ -1273,6 +1284,10 @@ components:
           type: integer
           format: int64
           description: Timestamp for driver card insertion. Unix timestamp in milliseconds.
+        removedAt:
+          type: string
+          format: date-time
+          description: Removed at. Used to check for grace period for driver card removal.
 
     TruckSortByField:
       type: string
