@@ -3516,7 +3516,6 @@ components:
         employeeId:
           type: string
           format: uuid
-          readOnly: true
           description: Employee's ID
         truckIds:
           readOnly: true

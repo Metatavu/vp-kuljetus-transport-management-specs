@@ -2251,7 +2251,6 @@
           "employeeId": {
             "type": "string",
             "format": "uuid",
-            "readOnly": true,
             "description": "Employee's ID"
           },
           "truckIds": {
