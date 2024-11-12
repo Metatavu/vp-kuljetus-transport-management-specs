@@ -505,17 +505,19 @@
       "get": {
         "operationId": "listEmployeeWorkShifts",
         "summary": "List Employees Work Shifts.",
-        "description": "Lists Employees work Shifts. Sort by time, latest first.\n",
+        "description": "Lists Employees work Shifts. Sort by time, latest first.\n\nEmployees can only see their own work shifts. Managers can see all employees' work shifts.\n",
         "security": [
           {
             "BearerAuth": [
-              "manager"
+              "manager",
+              "employee"
             ]
           }
         ],
         "tags": [
           "EmployeeWorkShifts",
-          "SpecManagementUI"
+          "SpecManagementUI",
+          "SpecApp"
         ],
         "parameters": [
           {

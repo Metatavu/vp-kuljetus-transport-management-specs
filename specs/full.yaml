@@ -1330,11 +1330,15 @@ paths:
     get:
       operationId: listEmployeeWorkShifts
       summary: List Employees Work Shifts.
-      description: |
+      description: >
         Lists Employees work Shifts. Sort by time, latest first.
+
+
+        Employees can only see their own work shifts. Managers can see all employees' work shifts.
       security:
         - BearerAuth:
             - manager
+            - employee
       tags:
         - EmployeeWorkShifts
       parameters:
