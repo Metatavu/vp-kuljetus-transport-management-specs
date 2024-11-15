@@ -313,11 +313,14 @@ paths:
       summary: List Employees Work Shifts.
       description: |
         Lists Employees work Shifts. Sort by time, latest first.
+
+        Employees can only see their own work shifts. Managers can see all employees' work shifts.
       security:
-        - BearerAuth: [manager]
+        - BearerAuth: [manager, employee]
       tags:
         - EmployeeWorkShifts
         - SpecManagementUI
+        - SpecApp
       parameters:
         - name: employeeId
           required: true
