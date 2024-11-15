@@ -2240,13 +2240,13 @@
           },
           "startedAt": {
             "type": "string",
-            "format": "date",
+            "format": "date-time",
             "readOnly": true,
             "description": "Work shift start time"
           },
           "endedAt": {
             "type": "string",
-            "format": "date",
+            "format": "date-time",
             "readOnly": true,
             "description": "Work shift end time"
           },
@@ -2271,7 +2271,7 @@
           "absence": {
             "$ref": "#/components/schemas/AbsenceType"
           },
-          "PerDiemAllowance": {
+          "perDiemAllowance": {
             "$ref": "#/components/schemas/PerDiemAllowanceType"
           },
           "approved": {
@@ -2375,6 +2375,7 @@
           "PALTE",
           "BREWERY",
           "GREASE",
+          "OFFICE",
           "LOGIN",
           "LOGOUT",
           "OTHER_WORK",
@@ -2389,7 +2390,7 @@
           "DRIVER_CARD_INSERTED",
           "DRIVER_CARD_REMOVED"
         ],
-        "description": "Work event types. UI implementations should translate these to more human readable form.\n\n*Driver work types*\n| name                 | finnish name               |\n| -------------------- | -------------------------- |\n| DRIVE                | Ajo                        |\n| LOADING              | Lastaus                    |\n| UNLOADING            | Purku                      |\n| AVAILABILITY         | Saatavuus                  |\n| DRIVER_CARD_INSERTED | Kuljettajakortti syötetty  |\n| DRIVER_CARD_REMOVED  | Kuljettajakortti poistettu |\n\n*Office/Terminal work types*\n| name        | finnish name         |\n| ----------- | -------------------- |\n| VEGETABLE   | Hevi                 |\n| DRY         | Kuiva                |\n| MEAT_CELLAR | Lihakellari          |\n| MEIRA       | Meira                |\n| FROZEN      | Pakaste              |\n| PALTE       | Palte                |\n| BREWERY     | Panimo               |\n| GREASE      | Rasva                |\n| LOGIN       | Sisäänkirjautuminen  |\n| LOGOUT      | Uloskirjautuminen    |\n\n*Common work types*\n| name        | finnish name         |\n| ----------- | -------------------- |\n| OTHER_WORK  | Muu työ              |\n| BREAK       | Tauko                |\n| SHIFT_START | Työvuoron alku       |\n| SHIFT_END   | Työvuoron loppu      |\n| UNKNOWN     | Tuntematon           |\n"
+        "description": "Work event types. UI implementations should translate these to more human readable form.\n\n*Driver work types*\n| name                 | finnish name               |\n| -------------------- | -------------------------- |\n| DRIVE                | Ajo                        |\n| LOADING              | Lastaus                    |\n| UNLOADING            | Purku                      |\n| AVAILABILITY         | Saatavuus                  |\n| DRIVER_CARD_INSERTED | Kuljettajakortti syötetty  |\n| DRIVER_CARD_REMOVED  | Kuljettajakortti poistettu |\n\n*Office/Terminal work types*\n| name        | finnish name         |\n| ----------- | -------------------- |\n| VEGETABLE   | Hevi                 |\n| DRY         | Kuiva                |\n| MEAT_CELLAR | Lihakellari          |\n| MEIRA       | Meira                |\n| FROZEN      | Pakaste              |\n| PALTE       | Palte                |\n| BREWERY     | Panimo               |\n| GREASE      | Rasva                |\n| OFFICE      | Toimisto             |\n| LOGIN       | Sisäänkirjautuminen  |\n| LOGOUT      | Uloskirjautuminen    |\n\n*Common work types*\n| name        | finnish name         |\n| ----------- | -------------------- |\n| OTHER_WORK  | Muu työ              |\n| BREAK       | Tauko                |\n| SHIFT_START | Työvuoron alku       |\n| SHIFT_END   | Työvuoron loppu      |\n| UNKNOWN     | Tuntematon           |\n"
       },
       "WorkType": {
         "type": "string",
