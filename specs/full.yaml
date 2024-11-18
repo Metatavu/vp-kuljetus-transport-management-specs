@@ -3509,12 +3509,12 @@ components:
           description: Work shift date.
         startedAt:
           type: string
-          format: date
+          format: date-time
           readOnly: true
           description: Work shift start time
         endedAt:
           type: string
-          format: date
+          format: date-time
           readOnly: true
           description: Work shift end time
         employeeId:
@@ -3540,7 +3540,7 @@ components:
             type during work shift hours calculation.
         absence:
           $ref: "#/components/schemas/AbsenceType"
-        PerDiemAllowance:
+        perDiemAllowance:
           $ref: "#/components/schemas/PerDiemAllowanceType"
         approved:
           type: boolean
@@ -3887,6 +3887,7 @@ components:
         - PALTE
         - BREWERY
         - GREASE
+        - OFFICE
         - LOGIN
         - LOGOUT
         - OTHER_WORK
@@ -3945,6 +3946,8 @@ components:
         | BREWERY     | Panimo               |
 
         | GREASE      | Rasva                |
+
+        | OFFICE      | Toimisto             |
 
         | LOGIN       | Sisäänkirjautuminen  |
 
