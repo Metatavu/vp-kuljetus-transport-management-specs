@@ -379,6 +379,40 @@
             },
             {
               "disabled": false,
+              "path": "/v1/payrollExports",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "POST": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/payrollExports/{payrollExportId}",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
               "path": "/v1/system/ping",
               "method": "",
               "ignore_case": false,
@@ -554,6 +588,18 @@
             {
               "path": "/v1/holidays/{holidayId}",
               "method": "PUT"
+            },
+            {
+              "path": "/v1/payrollExports",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/payrollExports",
+              "method": "POST"
+            },
+            {
+              "path": "/v1/payrollExports/{payrollExportId}",
+              "method": "GET"
             },
             {
               "path": "/v1/system/ping",

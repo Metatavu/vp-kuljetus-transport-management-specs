@@ -1727,6 +1727,15 @@ components:
           type: string
           description: Additional notes for the work shift. For example, if the employee
             was sick during the shift.
+        payrollExportId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: >
+            Payroll export ID. This is filled when work shift is linked to a
+            payroll export. Work shift cannot be
+
+            included in another payroll export if it is already linked to one.
     WorkEvent:
       type: object
       description: >
