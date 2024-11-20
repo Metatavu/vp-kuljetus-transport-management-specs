@@ -1061,6 +1061,147 @@
         }
       }
     },
+    "/v1/trucks/{truckId}/odometerReadings": {
+      "get": {
+        "operationId": "listTruckOdometerReadings",
+        "summary": "List truck odometer readings",
+        "description": "Lists truck odometer readings.",
+        "security": [
+          {
+            "BearerAuth": [
+              "manager"
+            ]
+          }
+        ],
+        "tags": [
+          "Trucks",
+          "SpecManagementUI"
+        ],
+        "parameters": [
+          {
+            "name": "truckId",
+            "required": true,
+            "in": "path",
+            "description": "truck id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "description": "Filter results after given date-time",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "description": "Filter results before given date-time",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "first",
+            "in": "query",
+            "description": "First result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "max",
+            "in": "query",
+            "description": "Max results.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of truck odometer readings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TruckOdometerReading"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createTruckOdometerReading",
+        "summary": "Create truck odometer reading",
+        "description": "Create new truck odometer reading. Used by vehicle data receiver to send truck odometer reading data.",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "tags": [
+          "Trucks",
+          "SpecVehicleDataReceiver"
+        ],
+        "parameters": [
+          {
+            "name": "truckId",
+            "required": true,
+            "in": "path",
+            "description": "truck id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TruckOdometerReading"
+              }
+            }
+          },
+          "description": "Payload",
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Received data"
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/towables": {
       "get": {
         "operationId": "listTowables",
@@ -1946,6 +2087,31 @@
           "ASCENDING",
           "DESCENDING"
         ]
+      },
+      "TruckOdometerReading": {
+        "type": "object",
+        "required": [
+          "timestamp",
+          "odometer"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true,
+            "description": "Truck odometer ID"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Timestamp for truck odometer."
+          },
+          "odometer": {
+            "type": "number",
+            "format": "int32",
+            "description": "Odometer reading in meters. See [Teltonika FMC650 Data Sending Parameters ID - Tachograph Data Elements](https://wiki.teltonika-gps.com/view/FMC650_Teltonika_Data_Sending_Parameters_ID#Tachograph_data_elements)"
+          }
+        }
       }
     }
   }
