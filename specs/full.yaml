@@ -3276,7 +3276,7 @@ components:
           type: integer
           format: int64
           description: Timestamp for truck odometer.
-        odometer:
+        odometerReading:
           type: number
           format: int32
           description: Odometer reading in meters. See [Teltonika FMC650 Data Sending
