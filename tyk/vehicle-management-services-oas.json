@@ -454,7 +454,8 @@
         "tags": [
           "Trucks",
           "SpecAuth",
-          "SpecApp"
+          "SpecApp",
+          "SpecVehicleDataReceiver"
         ],
         "parameters": [
           {
