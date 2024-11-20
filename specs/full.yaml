@@ -3265,7 +3265,7 @@ components:
       type: object
       required:
         - timestamp
-        - odometer
+        - odometerReading
       properties:
         id:
           type: string
