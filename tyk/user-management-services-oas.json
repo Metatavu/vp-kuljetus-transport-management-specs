@@ -13,6 +13,9 @@
     },
     {
       "ApiKeyAuth": []
+    },
+    {
+      "CronKeyAuth": []
     }
   ],
   "x-tyk-api-gateway": {
@@ -57,6 +60,33 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/v1/cron/recalculateWorkHours": {
+      "get": {
+        "operationId": "recalculateWorkHours",
+        "parameters": [
+          {
+            "name": "count",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "security": [
+          {
+            "CronKeyAuth": []
+          }
+        ],
+        "tags": [
+          "EmployeeWorkShifts"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -2071,6 +2101,11 @@
         "type": "apiKey",
         "in": "header",
         "name": "X-API-Key"
+      },
+      "CronKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-CRON-Key"
       }
     },
     "schemas": {

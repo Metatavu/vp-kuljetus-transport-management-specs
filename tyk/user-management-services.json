@@ -167,6 +167,20 @@
             },
             {
               "disabled": false,
+              "path": "/v1/cron/recalculateWorkHours",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
               "path": "/v1/drivers",
               "method": "",
               "ignore_case": false,
@@ -466,6 +480,10 @@
             {
               "path": "/v1/clientApps/{clientAppId}",
               "method": "PUT"
+            },
+            {
+              "path": "/v1/cron/recalculateWorkHours",
+              "method": "GET"
             },
             {
               "path": "/v1/drivers",

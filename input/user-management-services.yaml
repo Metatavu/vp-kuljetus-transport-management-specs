@@ -6,6 +6,7 @@ info:
 security:
   - BearerAuth: [driver, manager]
   - ApiKeyAuth: []
+  - CronKeyAuth: []
 
 x-tyk-api-gateway:
   info:
@@ -37,7 +38,21 @@ paths:
             text/plain:
               schema:
                 type: string
-
+  /v1/cron/recalculateWorkHours:
+    get:
+      operationId: recalculateWorkHours
+      parameters:
+        - name: count
+          in: query
+          schema:
+            type: integer
+      security:
+        - CronKeyAuth: [ ]
+      tags:
+        - EmployeeWorkShifts
+      responses:
+        "200":
+          description: OK
   /v1/drivers:
     get:
       operationId: listDrivers
@@ -1299,6 +1314,11 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+
+    CronKeyAuth:
+      type: apiKey
+      in: header
+      name: X-CRON-Key
 
   schemas:
     Error:

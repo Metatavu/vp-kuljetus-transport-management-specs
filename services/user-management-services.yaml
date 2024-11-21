@@ -7,6 +7,7 @@ security:
       - driver
       - manager
   - ApiKeyAuth: []
+  - CronKeyAuth: []
 paths:
   /v1/system/ping:
     get:
@@ -23,6 +24,21 @@ paths:
             text/plain:
               schema:
                 type: string
+  /v1/cron/recalculateWorkHours:
+    get:
+      operationId: recalculateWorkHours
+      parameters:
+        - name: count
+          in: query
+          schema:
+            type: integer
+      security:
+        - CronKeyAuth: []
+      tags:
+        - EmployeeWorkShifts
+      responses:
+        "200":
+          description: OK
   /v1/drivers:
     get:
       operationId: listDrivers
@@ -1279,6 +1295,10 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+    CronKeyAuth:
+      type: apiKey
+      in: header
+      name: X-CRON-Key
   schemas:
     Error:
       type: object
