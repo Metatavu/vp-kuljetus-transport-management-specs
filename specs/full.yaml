@@ -1066,7 +1066,7 @@ paths:
       security:
         - BearerAuth:
             - manager
-        - ApiKeyAuth: []
+            - integrations
       tags:
         - Drivers
       parameters:

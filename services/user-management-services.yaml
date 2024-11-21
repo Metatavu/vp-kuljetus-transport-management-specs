@@ -6,6 +6,7 @@ security:
   - BearerAuth:
       - driver
       - manager
+      - integrations
   - ApiKeyAuth: []
 paths:
   /v1/system/ping:
@@ -31,7 +32,7 @@ paths:
       security:
         - BearerAuth:
             - manager
-        - ApiKeyAuth: []
+            - integrations
       tags:
         - Drivers
       parameters:

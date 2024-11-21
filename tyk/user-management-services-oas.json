@@ -8,7 +8,8 @@
     {
       "BearerAuth": [
         "driver",
-        "manager"
+        "manager",
+        "integrations"
       ]
     },
     {
@@ -69,11 +70,9 @@
         "security": [
           {
             "BearerAuth": [
-              "manager"
+              "manager",
+              "integrations"
             ]
-          },
-          {
-            "ApiKeyAuth": []
           }
         ],
         "tags": [
