@@ -12,8 +12,7 @@ paths:
       summary: Lists truck driver cards
       description: Lists truck driver cards. Used to check if a truck has a driver
         card inserted.
-      security:
-        - ApiKeyAuth: []
+      security: []
       tags:
         - Trucks
       parameters:
@@ -44,8 +43,7 @@ paths:
       operationId: findClientApp
       summary: Find a client app.
       description: Finds a client app by ID.
-      security:
-        - ApiKeyAuth: []
+      security: []
       tags:
         - ClientApps
       parameters:
@@ -108,8 +106,7 @@ paths:
       operationId: verifyClientApp
       summary: Verifies that the client app has been approved.
       description: Verifies that the client app has been approved.
-      security:
-        - ApiKeyAuth: []
+      security: []
       tags:
         - ClientApps
       requestBody:

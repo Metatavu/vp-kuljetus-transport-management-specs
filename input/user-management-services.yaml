@@ -5,7 +5,7 @@ info:
 
 security:
   - BearerAuth: [driver, manager, integrations]
-  - ApiKeyAuth: []
+  - DriverAppApiKeyAuth: []
   - CronKeyAuth: []
 
 x-tyk-api-gateway:
@@ -1137,7 +1137,7 @@ paths:
         already exists with status other than 'WAITING_FOR_APPROVAL', the creation fails with conflict. Otherwise,
         the existing client app is returned with OK response.
       security:
-        - ApiKeyAuth: []
+        - DriverAppApiKeyAuth: []
       tags:
         - ClientApps
         - SpecManagementUI
@@ -1182,7 +1182,7 @@ paths:
       description: Finds a client app by ID.
       security:
         - BearerAuth: [manager]
-        - ApiKeyAuth: []
+        - DriverAppApiKeyAuth: []
       tags:
         - ClientApps
         - SpecManagementUI
@@ -1278,7 +1278,7 @@ paths:
       summary: Verifies that the client app has been approved.
       description: Verifies that the client app has been approved.
       security:
-        - ApiKeyAuth: []
+        - DriverAppApiKeyAuth: []
       tags:
         - ClientApps
         - SpecAuth
@@ -1309,10 +1309,10 @@ components:
       scheme: bearer
       bearerFormat: JWT
 
-    ApiKeyAuth:
+    DriverAppApiKeyAuth:
       type: apiKey
       in: header
-      name: X-API-Key
+      name: X-DriverApp-API-Key
 
     CronKeyAuth:
       type: apiKey

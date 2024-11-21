@@ -11,8 +11,7 @@ paths:
       operationId: listPublicTrucks
       summary: List PublicTrucks.
       description: Lists public info about each truck.
-      security:
-        - ApiKeyAuth: []
+      security: []
       tags:
         - PublicTrucks
       parameters:
@@ -61,8 +60,7 @@ paths:
         immediately deleted and the new card is created. If a card with the same truck ID and card ID is found with
 
         removedAt not set, the request is rejected with a 409 Conflict response.
-      security:
-        - ApiKeyAuth: []
+      security: []
       tags:
         - Trucks
       requestBody:
@@ -107,8 +105,7 @@ paths:
         then checks frequently for driver cards removed over a configurable grace period ago and deletes them
 
         permanently. This is done to prevent false positive driver card states coming in from telematics device.
-      security:
-        - ApiKeyAuth: []
+      security: []
       tags:
         - Trucks
       parameters:
@@ -147,8 +144,7 @@ paths:
       summary: Create truck location
       description: Create new truck location. Used by vehicle data receiver to send
         truck location data.
-      security:
-        - ApiKeyAuth: []
+      security: []
       tags:
         - Trucks
       parameters:
@@ -181,8 +177,7 @@ paths:
       summary: Create truck speed
       description: Create new truck speed. Used by vehicle data receiver to send truck
         speed data.
-      security:
-        - ApiKeyAuth: []
+      security: []
       tags:
         - Trucks
       parameters:

@@ -13,6 +13,12 @@
     },
     {
       "ApiKeyAuth": []
+    },
+    {
+      "DriverAppApiKeyAuth": []
+    },
+    {
+      "DataReceiverApiKeyAuth": []
     }
   ],
   "x-tyk-api-gateway": {
@@ -68,7 +74,7 @@
         "description": "Lists public info about each truck.",
         "security": [
           {
-            "ApiKeyAuth": []
+            "DataReceiverApiKeyAuth": []
           },
           {
             "BearerAuth": [
@@ -443,9 +449,6 @@
         "description": "Lists truck driver cards. Used to check if a truck has a driver card inserted.",
         "security": [
           {
-            "ApiKeyAuth": []
-          },
-          {
             "BearerAuth": [
               "driver"
             ]
@@ -500,7 +503,7 @@
         "description": "Create new truck driver card.\n\nIf a card with same truck ID and card ID is already found with removedAt set, the existing card is restored.\nIf a card with different truck ID and card ID is already found with removedAt set, the previous card is\nimmediately deleted and the new card is created. If a card with the same truck ID and card ID is found with\nremovedAt not set, the request is rejected with a 409 Conflict response.\n",
         "security": [
           {
-            "ApiKeyAuth": []
+            "DataReceiverApiKeyAuth": []
           }
         ],
         "tags": [
@@ -561,7 +564,7 @@
         "description": "Deletes single truck driver card. Driver cards are deleted when they are removed from the truck.\n\nThe card is first soft-deleted by setting removedAt to value sent in X-Removed-At header. A background process\nthen checks frequently for driver cards removed over a configurable grace period ago and deletes them\npermanently. This is done to prevent false positive driver card states coming in from telematics device.\n",
         "security": [
           {
-            "ApiKeyAuth": []
+            "DataReceiverApiKeyAuth": []
           }
         ],
         "tags": [
@@ -623,7 +626,7 @@
         "description": "Create new truck location. Used by vehicle data receiver to send truck location data.",
         "security": [
           {
-            "ApiKeyAuth": []
+            "DataReceiverApiKeyAuth": []
           }
         ],
         "tags": [
@@ -764,7 +767,7 @@
         "description": "Create new truck speed. Used by vehicle data receiver to send truck speed data.",
         "security": [
           {
-            "ApiKeyAuth": []
+            "DataReceiverApiKeyAuth": []
           }
         ],
         "tags": [
@@ -1581,10 +1584,15 @@
         "scheme": "bearer",
         "bearerFormat": "JWT"
       },
-      "ApiKeyAuth": {
+      "DriverAppApiKeyAuth": {
         "type": "apiKey",
         "in": "header",
-        "name": "X-API-Key"
+        "name": "X-DriverApp-API-Key"
+      },
+      "DataReceiverApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-DataReceiver-API-Key"
       }
     },
     "schemas": {
