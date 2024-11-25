@@ -2,25 +2,11 @@ openapi: 3.0.3
 info:
   version: 1.0.0
   title: VP-Kuljetus Vehicle Management Services
-
 security:
-  - BearerAuth: [driver, manager]
+  - BearerAuth:
+      - driver
+      - manager
   - DataReceiverApiKeyAuth: []
-
-x-tyk-api-gateway:
-  info:
-    id: vehicle-management-service
-    orgId: vp
-    name: Vehicle Management Services
-    state:
-      active: true
-  upstream:
-    url: http://vehicle-management
-  server:
-    listenPath:
-      value: /vehicle-management/
-      strip: true
-
 paths:
   /v1/system/ping:
     get:
@@ -37,8 +23,6 @@ paths:
             text/plain:
               schema:
                 type: string
-
-
   /v1/publicTrucks:
     get:
       operationId: listPublicTrucks
@@ -46,11 +30,11 @@ paths:
       description: Lists public info about each truck.
       security:
         - DataReceiverApiKeyAuth: []
-        - BearerAuth: [driver, manager]
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - PublicTrucks
-        - SpecApp
-        - SpecVehicleDataReceiver
       parameters:
         - name: vin
           in: query
@@ -76,24 +60,23 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/PublicTruck"
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
   /v1/trucks:
     get:
       operationId: listTrucks
       summary: List Trucks.
       description: Lists Trucks.
       security:
-        - BearerAuth: [driver, manager]
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Trucks
-        - SpecApp
-        - SpecManagementUI
       parameters:
         - name: plateNumber
           in: query
@@ -134,7 +117,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Truck"
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
@@ -145,10 +128,10 @@ paths:
       summary: Create truck
       description: Create new truck
       security:
-        - BearerAuth: [manager]
+        - BearerAuth:
+            - manager
       tags:
         - Trucks
-        - SpecManagementUI
       requestBody:
         content:
           application/json:
@@ -163,24 +146,23 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Truck"
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
-  "/v1/trucks/{truckId}":
+  /v1/trucks/{truckId}:
     get:
       operationId: findTruck
       summary: Find a truck.
       description: Finds a truck by id.
       security:
-        - BearerAuth: [driver, manager]
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Trucks
-        - SpecApp
-        - SpecManagementUI
       parameters:
         - name: truckId
           required: true
@@ -196,7 +178,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Truck"
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
@@ -207,10 +189,10 @@ paths:
       summary: Updates trucks
       description: Updates single truck
       security:
-        - BearerAuth: [manager]
+        - BearerAuth:
+            - manager
       tags:
         - Trucks
-        - SpecManagementUI
       requestBody:
         content:
           application/json:
@@ -233,19 +215,20 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Truck"
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
     delete:
       operationId: deleteTruck
       summary: Deletes truck
-      description: Deletes truck. For non-production use. Returns forbidden in production environment.
+      description: Deletes truck. For non-production use. Returns forbidden in
+        production environment.
       security:
-        - BearerAuth: [manager]
+        - BearerAuth:
+            - manager
       tags:
         - Trucks
       parameters:
@@ -259,24 +242,23 @@ paths:
       responses:
         "204":
           description: Empty response indicating successful removal
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
   /v1/trucks/{truckId}/driverCards:
     get:
       operationId: listTruckDriverCards
       summary: Lists truck driver cards
-      description: Lists truck driver cards. Used to check if a truck has a driver card inserted.
+      description: Lists truck driver cards. Used to check if a truck has a driver
+        card inserted.
       security:
-        - BearerAuth: [driver]
+        - BearerAuth:
+            - driver
       tags:
         - Trucks
-        - SpecAuth
-        - SpecApp
       parameters:
         - name: truckId
           required: true
@@ -294,7 +276,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/TruckDriverCard"
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
@@ -303,18 +285,21 @@ paths:
     post:
       operationId: createTruckDriverCard
       summary: Create truck driver card
-      description: |
+      description: >
         Create new truck driver card.
 
+
         If a card with same truck ID and card ID is already found with removedAt set, the existing card is restored.
+
         If a card with different truck ID and card ID is already found with removedAt set, the previous card is
+
         immediately deleted and the new card is created. If a card with the same truck ID and card ID is found with
+
         removedAt not set, the request is rejected with a 409 Conflict response.
       security:
         - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
-        - SpecVehicleDataReceiver
       requestBody:
         content:
           application/json:
@@ -337,28 +322,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/TruckDriverCard"
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
   /v1/trucks/{truckId}/driverCards/{driverCardId}:
     delete:
       operationId: deleteTruckDriverCard
       summary: Deletes truck driver card
-      description: |
-        Deletes single truck driver card. Driver cards are deleted when they are removed from the truck.
+      description: >
+        Deletes single truck driver card. Driver cards are deleted when they are
+        removed from the truck.
+
 
         The card is first soft-deleted by setting removedAt to value sent in X-Removed-At header. A background process
+
         then checks frequently for driver cards removed over a configurable grace period ago and deletes them
+
         permanently. This is done to prevent false positive driver card states coming in from telematics device.
       security:
         - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
-        - SpecVehicleDataReceiver
       parameters:
         - name: truckId
           required: true
@@ -383,23 +370,22 @@ paths:
       responses:
         "204":
           description: Empty response indicating successful removal
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
-  "/v1/trucks/{truckId}/locations":
+  /v1/trucks/{truckId}/locations:
     post:
       operationId: createTruckLocation
       summary: Create truck location
-      description: Create new truck location. Used by vehicle data receiver to send truck location data.
+      description: Create new truck location. Used by vehicle data receiver to send
+        truck location data.
       security:
         - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
-        - SpecVehicleDataReceiver
       parameters:
         - name: truckId
           required: true
@@ -418,7 +404,7 @@ paths:
       responses:
         "201":
           description: Received data
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
@@ -429,10 +415,10 @@ paths:
       summary: List Truck locations
       description: Lists Truck locations.
       security:
-        - BearerAuth: [manager]
+        - BearerAuth:
+            - manager
       tags:
         - Trucks
-        - SpecManagementUI
       parameters:
         - name: truckId
           required: true
@@ -472,23 +458,22 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/TruckLocation"
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
-  "/v1/trucks/{truckId}/speeds":
+  /v1/trucks/{truckId}/speeds:
     post:
       operationId: createTruckSpeed
       summary: Create truck speed
-      description: Create new truck speed. Used by vehicle data receiver to send truck speed data.
+      description: Create new truck speed. Used by vehicle data receiver to send truck
+        speed data.
       security:
         - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
-        - SpecVehicleDataReceiver
       parameters:
         - name: truckId
           required: true
@@ -507,7 +492,7 @@ paths:
       responses:
         "201":
           description: Received data
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
@@ -518,10 +503,10 @@ paths:
       summary: List Truck speeds
       description: Lists Truck speeds.
       security:
-        - BearerAuth: [manager]
+        - BearerAuth:
+            - manager
       tags:
         - Trucks
-        - SpecManagementUI
       parameters:
         - name: truckId
           required: true
@@ -561,24 +546,23 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/TruckSpeed"
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
   /v1/trucks/{truckId}/driveStates:
     get:
       operationId: listDriveStates
       summary: List drive states.
       description: Lists drive states for truck.
       security:
-        - BearerAuth: [driver, manager]
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Trucks
-        - SpecApp
-        - SpecManagementUI
       parameters:
         - name: truckId
           required: true
@@ -631,7 +615,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/TruckDriveState"
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
@@ -645,7 +629,6 @@ paths:
         - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
-        - SpecVehicleDataReceiver
       requestBody:
         content:
           application/json:
@@ -664,24 +647,23 @@ paths:
       responses:
         "204":
           description: Created drive state
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
   /v1/towables:
     get:
       operationId: listTowables
       summary: List Towables.
       description: Lists Towables.
       security:
-        - BearerAuth: [driver, manager]
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Towables
-        - SpecApp
-        - SpecManagementUI
       parameters:
         - name: plateNumber
           in: query
@@ -712,7 +694,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Towable"
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
@@ -723,10 +705,10 @@ paths:
       summary: Create towable
       description: Create new towable
       security:
-        - BearerAuth: [manager]
+        - BearerAuth:
+            - manager
       tags:
         - Towables
-        - SpecManagementUI
       requestBody:
         content:
           application/json:
@@ -741,24 +723,23 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Towable"
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
-  "/v1/towables/{towableId}":
+  /v1/towables/{towableId}:
     get:
       operationId: findTowable
       summary: Find a towable.
       description: Finds a towable by id.
       security:
-        - BearerAuth: [driver, manager]
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Towables
-        - SpecApp
-        - SpecManagementUI
       parameters:
         - name: towableId
           required: true
@@ -774,7 +755,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Towable"
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
@@ -785,10 +766,10 @@ paths:
       summary: Updates towables
       description: Updates single towable
       security:
-        - BearerAuth: [manager]
+        - BearerAuth:
+            - manager
       tags:
         - Towables
-        - SpecManagementUI
       requestBody:
         content:
           application/json:
@@ -811,19 +792,20 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Towable"
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
     delete:
       operationId: deleteTowable
       summary: Deletes towable
-      description: Deletes towable. For non-production use. Returns forbidden response in production environment.
+      description: Deletes towable. For non-production use. Returns forbidden response
+        in production environment.
       security:
-        - BearerAuth: [manager]
+        - BearerAuth:
+            - manager
       tags:
         - Towables
       parameters:
@@ -837,24 +819,23 @@ paths:
       responses:
         "204":
           description: Empty response indicating successful removal
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
   /v1/vehicles:
     get:
       operationId: listVehicles
       summary: List Vehicles.
       description: Lists Vehicles.
       security:
-        - BearerAuth: [driver, manager]
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Vehicles
-        - SpecApp
-        - SpecManagementUI
       parameters:
         - name: truckId
           in: query
@@ -886,7 +867,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Vehicle"
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
@@ -896,15 +877,16 @@ paths:
       operationId: createVehicle
       summary: Create vehicle
       description: >
-        Create new vehicle. Vehicles are the history of the combinations of towables behind a truck.
-        When a vehicle structure needs to be updated, a new vehicle with updated structure should be
-        created. This updates the active vehicle for the truck and archives the previous one.
+        Create new vehicle. Vehicles are the history of the combinations of
+        towables behind a truck. When a vehicle structure needs to be updated, a
+        new vehicle with updated structure should be created. This updates the
+        active vehicle for the truck and archives the previous one.
       security:
-        - BearerAuth: [driver, manager]
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Vehicles
-        - SpecApp
-        - SpecManagementUI
       requestBody:
         content:
           application/json:
@@ -919,24 +901,23 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Vehicle"
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
-  "/v1/vehicles/{vehicleId}":
+  /v1/vehicles/{vehicleId}:
     get:
       operationId: findVehicle
       summary: Find a vehicle.
       description: Finds a vehicle by id.
       security:
-        - BearerAuth: [driver, manager]
+        - BearerAuth:
+            - driver
+            - manager
       tags:
         - Vehicles
-        - SpecApp
-        - SpecManagementUI
       parameters:
         - name: vehicleId
           required: true
@@ -952,19 +933,20 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Vehicle"
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
     delete:
       operationId: deleteVehicle
       summary: Deletes vehicle
-      description: Deletes vehicle. For non-production use. Returns forbidden response in production environment.
+      description: Deletes vehicle. For non-production use. Returns forbidden response
+        in production environment.
       security:
-        - BearerAuth: [manager]
+        - BearerAuth:
+            - manager
       tags:
         - Vehicles
       parameters:
@@ -978,25 +960,22 @@ paths:
       responses:
         "204":
           description: Empty response indicating successful removal
-        "default":
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
 components:
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-
     DataReceiverApiKeyAuth:
       type: apiKey
       in: header
       name: X-DataReceiver-API-Key
-
   schemas:
     Error:
       type: object
@@ -1010,7 +989,6 @@ components:
           format: int32
         message:
           type: string
-
     PublicTruck:
       type: object
       description: Represent public info of single truck
@@ -1031,7 +1009,6 @@ components:
           description: >
             Truck identification number. This is unique for each truck and
             should be used as a hardware identifier for this specific truck.
-
     Truck:
       type: object
       description: Represent single truck
@@ -1050,7 +1027,9 @@ components:
           type: string
         type:
           type: string
-          enum: [TRUCK, SEMI_TRUCK]
+          enum:
+            - TRUCK
+            - SEMI_TRUCK
         vin:
           type: string
           description: >
@@ -1061,8 +1040,8 @@ components:
           format: uuid
           readOnly: true
           description: >
-            Active vehicle id. This is the current vehicle that the truck
-            is part of. It updates whenever the vehicle structure is updated.
+            Active vehicle id. This is the current vehicle that the truck is
+            part of. It updates whenever the vehicle structure is updated.
         creatorId:
           type: string
           readOnly: true
@@ -1083,11 +1062,10 @@ components:
           type: string
           format: date-time
           description: >
-            Setting the archivedAt time marks the truck as archived.
-            Trucks marked as archived will not appear in list requests
-            unless archived filter is set to true. Archived truck cannot
-            be updated, unless archivedAt is first set to null.
-
+            Setting the archivedAt time marks the truck as archived. Trucks
+            marked as archived will not appear in list requests unless archived
+            filter is set to true. Archived truck cannot be updated, unless
+            archivedAt is first set to null.
     Towable:
       type: object
       description: Represent single towable
@@ -1106,7 +1084,10 @@ components:
           type: string
         type:
           type: string
-          enum: [TRAILER, SEMI_TRAILER, DOLLY]
+          enum:
+            - TRAILER
+            - SEMI_TRAILER
+            - DOLLY
         vin:
           type: string
           description: >
@@ -1132,11 +1113,10 @@ components:
           type: string
           format: date-time
           description: >
-            Setting the archivedAt time marks the towable as archived.
-            Towables marked as archived will not appear in list requests
-            unless archived filter is set to true. Archived towable cannot
-            be updated, unless archivedAt is first set to null.
-
+            Setting the archivedAt time marks the towable as archived. Towables
+            marked as archived will not appear in list requests unless archived
+            filter is set to true. Archived towable cannot be updated, unless
+            archivedAt is first set to null.
     Vehicle:
       type: object
       description: Represent single vehicle
@@ -1156,8 +1136,8 @@ components:
           type: array
           description: >
             List of attached towables to vehicle. Order of towables should
-            reflect the order of towables in the vehicle where first towable
-            is the closest to the truck.
+            reflect the order of towables in the vehicle where first towable is
+            the closest to the truck.
           items:
             type: string
             format: uuid
@@ -1181,11 +1161,10 @@ components:
           type: string
           format: date-time
           description: >
-            Setting the archivedAt time marks the vehicle as archived.
-            Vehicles marked as archived will not appear in list requests
-            unless archived filter is set to true. Archived vehicle cannot
-            be updated, unless archivedAt is first set to null.
-
+            Setting the archivedAt time marks the vehicle as archived. Vehicles
+            marked as archived will not appear in list requests unless archived
+            filter is set to true. Archived vehicle cannot be updated, unless
+            archivedAt is first set to null.
     TruckDriveState:
       type: object
       required:
@@ -1210,8 +1189,8 @@ components:
           description: Driver ID.
         driverCardId:
           type: string
-          description: Driver card ID. This is used to identify the driver when creating a new drive state.
-
+          description: Driver card ID. This is used to identify the driver when creating a
+            new drive state.
     TruckDriveStateEnum:
       type: string
       enum:
@@ -1221,7 +1200,6 @@ components:
         - DRIVE
         - ERROR
         - NOT_AVAILABLE
-
     TruckLocation:
       type: object
       required:
@@ -1250,7 +1228,6 @@ components:
           type: number
           format: double
           description: heading in degrees.
-
     TruckSpeed:
       type: object
       required:
@@ -1269,7 +1246,6 @@ components:
         speed:
           type: number
           format: float
-
     TruckDriverCard:
       type: object
       required:
@@ -1287,13 +1263,11 @@ components:
           type: string
           format: date-time
           description: Removed at. Used to check for grace period for driver card removal.
-
     TruckSortByField:
       type: string
       enum:
         - NAME
         - PLATE_NUMBER
-
     SortOrder:
       type: string
       enum:

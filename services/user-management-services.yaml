@@ -1,0 +1,2029 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: VP-Kuljetus User Management Services
+security:
+  - BearerAuth:
+      - driver
+      - manager
+      - integrations
+  - DriverAppApiKeyAuth: []
+  - CronKeyAuth: []
+paths:
+  /v1/system/ping:
+    get:
+      operationId: ping
+      summary: Replies with pong
+      description: Replies ping with pong
+      security: []
+      tags:
+        - System
+      responses:
+        "200":
+          description: Pong
+          content:
+            text/plain:
+              schema:
+                type: string
+  /v1/cron/recalculateWorkHours:
+    get:
+      operationId: recalculateWorkHours
+      parameters:
+        - name: count
+          in: query
+          schema:
+            type: integer
+      security:
+        - CronKeyAuth: []
+      tags:
+        - EmployeeWorkShifts
+      responses:
+        "200":
+          description: OK
+  /v1/drivers:
+    get:
+      operationId: listDrivers
+      summary: List Drivers.
+      description: Lists Drivers.
+      security:
+        - BearerAuth:
+            - manager
+            - integrations
+      tags:
+        - Drivers
+      parameters:
+        - name: driverCardId
+          in: query
+          description: Filter drivers by driver card ID. Will return 0 to 1 drivers.
+          schema:
+            type: string
+        - name: archived
+          in: query
+          description: Filter drivers by archived status
+          schema:
+            type: boolean
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of routes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Driver"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/drivers/{driverId}:
+    get:
+      operationId: findDriver
+      summary: Find a driver.
+      description: Finds a driver by ID.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - Drivers
+      parameters:
+        - name: driverId
+          required: true
+          in: path
+          description: driver's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found driver
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Driver"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/employees:
+    get:
+      operationId: listEmployees
+      summary: List Employees.
+      description: Lists Employees. A user is considered an employee if they're given
+        the employee realm role.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Employees
+      parameters:
+        - name: search
+          in: query
+          description: Search string. Should search from first and last names.
+          schema:
+            type: string
+        - name: salaryGroup
+          in: query
+          description: Filter employees by salary group
+          schema:
+            $ref: "#/components/schemas/SalaryGroup"
+        - name: type
+          in: query
+          description: Filter employees by type
+          schema:
+            $ref: "#/components/schemas/EmployeeType"
+        - name: office
+          in: query
+          description: Filter employees by office
+          schema:
+            $ref: "#/components/schemas/Office"
+        - name: archived
+          in: query
+          description: Filter employees by archived status
+          schema:
+            type: boolean
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+            default: 0
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: List of employees
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Employee"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createEmployee
+      summary: Create Employee.
+      description: Creates Employee. All new users created via this endpoint should be
+        given the employee realm role.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Employees
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Employee"
+      responses:
+        "201":
+          description: Created employee
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/employees/{employeeId}:
+    get:
+      operationId: findEmployee
+      summary: Find an employee.
+      description: Finds an employee by ID.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Employees
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found employee
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateEmployee
+      summary: Update Employee.
+      description: Updates Employee.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Employees
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Employee"
+      responses:
+        "200":
+          description: Updated employee
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteEmployee
+      summary: Delete Employee.
+      description: >
+        Deletes Employee.
+
+        This should only be allowed to be used in tests. In production usage the employee should be archived instead.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Employees
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/employees/{employeeId}/workShifts:
+    get:
+      operationId: listEmployeeWorkShifts
+      summary: List Employees Work Shifts.
+      description: >
+        Lists Employees work Shifts. Sort by time, latest first.
+
+
+        Employees can only see their own work shifts. Managers can see all employees' work shifts.
+      security:
+        - BearerAuth:
+            - manager
+            - employee
+      tags:
+        - EmployeeWorkShifts
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: startedAfter
+          in: query
+          description: Filter work shifts started after specified date.
+          schema:
+            type: string
+            format: date-time
+        - name: startedBefore
+          in: query
+          description: Filter work shifts started before specified date.
+          schema:
+            type: string
+            format: date-time
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+            default: 0
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: List of employee work shifts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EmployeeWorkShift"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createEmployeeWorkShift
+      summary: Create Employee Work Shift.
+      description: Creates Employee Work Shift.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - EmployeeWorkShifts
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmployeeWorkShift"
+      responses:
+        "201":
+          description: Created employee work shift
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmployeeWorkShift"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/employees/{employeeId}/workShifts/{workShiftId}:
+    get:
+      operationId: findEmployeeWorkShift
+      summary: Find Employee Work Shift.
+      description: Finds an employee's work shift by ID.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - EmployeeWorkShifts
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: workShiftId
+          required: true
+          in: path
+          description: work shift's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found employee work shift
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmployeeWorkShift"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateEmployeeWorkShift
+      summary: Update Employee Work Shift.
+      description: Updates Employee Work Shift. Only approved field can be updated.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - EmployeeWorkShifts
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: workShiftId
+          required: true
+          in: path
+          description: work shift's ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmployeeWorkShift"
+      responses:
+        "200":
+          description: Updated employee work shift
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmployeeWorkShift"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteEmployeeWorkShift
+      summary: Delete employee work shift.
+      description: Only for tests.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - EmployeeWorkShifts
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: workShiftId
+          required: true
+          in: path
+          description: work shift's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/employees/{employeeId}/workEvents:
+    get:
+      operationId: listEmployeeWorkEvents
+      summary: List Employees Work Events.
+      description: Lists Employees Work Events. Sort by time, latest first.
+      security:
+        - BearerAuth:
+            - manager
+            - driver
+            - employee
+      tags:
+        - WorkEvents
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: employeeWorkShiftId
+          in: query
+          description: Filter work events by a specific work shift of the employee
+          schema:
+            type: string
+            format: uuid
+        - name: after
+          in: query
+          description: Filter work events after specified date.
+          schema:
+            type: string
+            format: date-time
+        - name: before
+          in: query
+          description: Filter work events before specified date.
+          schema:
+            type: string
+            format: date-time
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+            default: 0
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: List of work events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WorkEvent"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createEmployeeWorkEvent
+      summary: Create Employees Work Event.
+      description: >
+        Creates Employees Work Event.
+
+
+        If the work event starts a new shift, a new employee work shift is also created automatically.
+      security:
+        - BearerAuth:
+            - manager
+            - driver
+            - employee
+      tags:
+        - WorkEvents
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkEvent"
+      responses:
+        "201":
+          description: Created work event
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkEvent"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/employees/{employeeId}/workEvents/{workEventId}:
+    get:
+      operationId: findEmployeeWorkEvent
+      summary: Find an employee's work event.
+      description: Finds an employee's work event by ID.
+      security:
+        - BearerAuth:
+            - manager
+            - driver
+            - employee
+      tags:
+        - WorkEvents
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: workEventId
+          required: true
+          in: path
+          description: work event's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found work event
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkEvent"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateEmployeeWorkEvent
+      summary: Update Employee's Work Event.
+      description: Updates Employee's Work Event.
+      security:
+        - BearerAuth:
+            - manager
+            - employee
+      tags:
+        - WorkEvents
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: workEventId
+          required: true
+          in: path
+          description: work event's ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkEvent"
+      responses:
+        "200":
+          description: Updated time entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkEvent"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteEmployeeWorkEvent
+      summary: Delete Employee's Work Event.
+      description: >
+        Deletes Employee's Work Event. Only accessible by managers. If deleting
+        the last remaining work
+
+        event from an employee work shift, the shift and its related work shift hours should also be deleted.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - WorkEvents
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: workEventId
+          required: true
+          in: path
+          description: work event's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Successfully deleted the time entry
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/workShiftHours:
+    get:
+      operationId: listWorkShiftHours
+      summary: List Work Shift Hours.
+      description: Lists Work Shift Hours. Unique per employee per work shift per work type.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - WorkShiftHours
+      parameters:
+        - name: employeeId
+          in: query
+          description: filter work shift hours by employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: employeeWorkShiftId
+          in: query
+          description: >
+            filter work shift hours by employee work shift's ID.
+
+            Cannot be used with employeeWorkShiftStartedAfter or employeeWorkShiftStartedBefore.
+          schema:
+            type: string
+            format: uuid
+        - name: workType
+          in: query
+          description: filter work shift hours by work type
+          schema:
+            $ref: "#/components/schemas/WorkType"
+        - name: employeeWorkShiftStartedAfter
+          in: query
+          description: filter work shift hours by employee work shift started after
+            specified date
+          schema:
+            type: string
+            format: date-time
+        - name: employeeWorkShiftStartedBefore
+          in: query
+          description: filter work shift hours by employee work shift started before
+            specified date
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: List of work shift hours
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WorkShiftHours"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/workShiftHours/{workShiftHoursId}:
+    get:
+      operationId: findWorkShiftHours
+      summary: Find Work Shift Hours.
+      description: Finds Work Shift Hours.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - WorkShiftHours
+      parameters:
+        - name: workShiftHoursId
+          required: true
+          in: path
+          description: ID of work shift hours
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Work shift hours
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkShiftHours"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateWorkShiftHours
+      summary: Update Work Shift Hours.
+      description: >
+        Updates Work Shift Hours.
+
+
+        Trying to update employeeId, employeeWorkShiftId, or workType from work shift hours should fail.
+
+        If the related employee work shift is approved, work shift hours cannot be updated.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - WorkShiftHours
+      parameters:
+        - name: workShiftHoursId
+          required: true
+          in: path
+          description: ID of work shift hours
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkShiftHours"
+      responses:
+        "200":
+          description: Updated work shift hours
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkShiftHours"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteWorkShiftHours
+      summary: Delete work shift hours.
+      description: Only for tests.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - WorkShiftHours
+      parameters:
+        - name: workShiftHoursId
+          required: true
+          in: path
+          description: ID of work shift hours
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/holidays:
+    get:
+      operationId: listHolidays
+      summary: List Holidays.
+      description: Lists holidays.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Holidays
+      parameters:
+        - name: year
+          in: query
+          description: What years holidays to list.
+          schema:
+            type: integer
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+            default: 0
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: List of holidays
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Holiday"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createHoliday
+      summary: Create Holiday.
+      description: Creates Holiday.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Holidays
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Holiday"
+      responses:
+        "201":
+          description: Created Holiday
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Holiday"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/holidays/{holidayId}:
+    get:
+      operationId: findHoliday
+      summary: Find an Holiday.
+      description: Finds an Holiday by ID.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Holidays
+      parameters:
+        - name: holidayId
+          required: true
+          in: path
+          description: Holiday's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found Holiday
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Holiday"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateHoliday
+      summary: Update Holiday.
+      description: Updates Holiday.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Holidays
+      parameters:
+        - name: holidayId
+          required: true
+          in: path
+          description: Holidays's ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Holiday"
+      responses:
+        "200":
+          description: Updated Holiday
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Holiday"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteHoliday
+      summary: Delete Holiday.
+      description: Deletes Holiday.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Holidays
+      parameters:
+        - name: holidayId
+          required: true
+          in: path
+          description: Holiday's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/clientApps:
+    get:
+      operationId: listClientApps
+      summary: List client apps.
+      description: Lists client apps.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - ClientApps
+      parameters:
+        - name: status
+          in: query
+          description: Filter client apps by status
+          schema:
+            $ref: "#/components/schemas/ClientAppStatus"
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+            default: 0
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: List of client apps
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ClientApp"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createClientApp
+      summary: Create a client app.
+      description: >
+        Creates a client app.
+
+
+        Client app can only be created in the status 'WAITING_FOR_APPROVAL'. If the client app with the same deviceId
+
+        already exists with status other than 'WAITING_FOR_APPROVAL', the creation fails with conflict. Otherwise,
+
+        the existing client app is returned with OK response.
+      security:
+        - DriverAppApiKeyAuth: []
+      tags:
+        - ClientApps
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClientApp"
+      responses:
+        "200":
+          description: Already existing client app with the same deviceId and status
+            'WAITING_FOR_APPROVAL'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClientApp"
+        "201":
+          description: Created client app
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClientApp"
+        "409":
+          description: >
+            Conflict. Client app with the same deviceId already exists with
+            status other than 'WAITING_FOR_APPROVAL'.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/clientApps/{clientAppId}:
+    get:
+      operationId: findClientApp
+      summary: Find a client app.
+      description: Finds a client app by ID.
+      security:
+        - BearerAuth:
+            - manager
+        - DriverAppApiKeyAuth: []
+      tags:
+        - ClientApps
+      parameters:
+        - name: clientAppId
+          required: true
+          in: path
+          description: client app's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found client app
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClientApp"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateClientApp
+      summary: Update a client app.
+      description: Updates a client app.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - ClientApps
+      parameters:
+        - name: clientAppId
+          required: true
+          in: path
+          description: Client app's ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClientApp"
+      responses:
+        "200":
+          description: Updated client app
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClientApp"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteClientApp
+      summary: Delete client app.
+      description: Deletes client app.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - ClientApps
+      parameters:
+        - name: clientAppId
+          required: true
+          in: path
+          description: Client app's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/verifyClientApp:
+    post:
+      operationId: verifyClientApp
+      summary: Verifies that the client app has been approved.
+      description: Verifies that the client app has been approved.
+      security:
+        - DriverAppApiKeyAuth: []
+      tags:
+        - ClientApps
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VerifyClientAppRequest"
+      responses:
+        "200":
+          description: Whether client app is approved or not
+          content:
+            application/json:
+              schema:
+                type: boolean
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    DriverAppApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-DriverApp-API-Key
+    CronKeyAuth:
+      type: apiKey
+      in: header
+      name: X-CRON-Key
+  schemas:
+    Error:
+      type: object
+      description: Error object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    Driver:
+      type: object
+      description: Represents single truck driver
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        displayName:
+          type: string
+          description: Driver display name
+        archivedAt:
+          type: string
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the driver as archived. Drivers
+            marked as archived will not appear in list requests unless archived
+            filter is set to true. Archived driver cannot be updated, unless
+            archivedAt is first set to null.
+    Employee:
+      type: object
+      description: Represents single employee
+      required:
+        - firstName
+        - lastName
+        - type
+        - salaryGroup
+        - office
+        - employeeNumber
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        firstName:
+          type: string
+          description: Employee's first name
+        lastName:
+          type: string
+          description: Employee's last name
+        driverCardId:
+          type: string
+          description: Employee's driver card ID.
+        pinCode:
+          type: string
+          description: Employee's PIN code.
+        type:
+          $ref: "#/components/schemas/EmployeeType"
+        salaryGroup:
+          $ref: "#/components/schemas/SalaryGroup"
+        office:
+          $ref: "#/components/schemas/Office"
+        regularWorkingHours:
+          type: number
+          format: float
+          description: >
+            Employee's regular working hours per two weeks. Used for employee's
+            whose salary group is either Driver or VPLogistics.
+        driverCardLastReadOut:
+          type: string
+          format: date-time
+          description: >
+            Last time the driver card was read out. In the beginning this should
+            be set manually but later probably automated.
+        employeeNumber:
+          type: string
+          description: Employee's number. Should be unique.
+        email:
+          type: string
+          description: Employee's email address
+        phoneNumber:
+          type: string
+          description: Employee's phone number
+        archivedAt:
+          type: string
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the employee as archived.
+            Employees marked as archived will not appear in list requests unless
+            archived filter is set to true. Archived employee cannot be updated,
+            unless archivedAt is first set to null.
+    EmployeeType:
+      type: string
+      enum:
+        - PA
+        - KA
+        - AH
+        - VK
+        - TH
+        - TP
+        - AJ
+        - JH
+        - AP
+        - KK
+        - POIS
+        - TPK
+      description: >
+        Employee's type described as finnish abbreviation. UI implementations
+        should translate these to more human readable form.
+
+
+        | Abbreviation | finnish name            |
+
+        | ------------ | ----------------------- |
+
+        | PA           | Pakettiautonkuljettaja  |
+
+        | KA           | Kuorma-auton kuljettaja |
+
+        | AH           | Alihankkija             |
+
+        | VK           | Vuokratyöntekijä        |
+
+        | TH           | Työharjoittelija        |
+
+        | TP           | Tilapäistyöntekijä      |
+
+        | AJ           | Ajojärjestelijä         |
+
+        | JH           | Esimies                 |
+
+        | AP           | Aikatuntipalkka         |
+
+        | KK           | Kuukausipalkka          |
+
+        | POIS         | Ei-aktiivinen           |
+
+        | TPK          | Täysperäkuljettaja      |
+    SalaryGroup:
+      type: string
+      description: >
+        Employee's salary group
+
+        Kuljettaja (Driver) - Should be default IF the employees office is not KOTKA
+
+        VP-Logistics (VPlogistics)
+
+        Office
+
+        Terminal
+      enum:
+        - DRIVER
+        - VPLOGISTICS
+        - OFFICE
+        - TERMINAL
+    Office:
+      type: string
+      description: Employee's office. Salary group should be set to VPLogistics if the
+        office is KOTKA
+      enum:
+        - KOTKA
+        - KOUVOLA
+        - RAUHA
+    EmployeeWorkShift:
+      type: object
+      description: >
+        Represents single employee work shift. A work event must always relate
+        to an employee work shift.
+
+
+        When created, the work shift is not approved. It needs to be approved by a supervisor before the
+
+        work shift hours can be sent to payroll.
+
+
+        Employee work shift always relates to a single date. When work shift is created during the creation of
+
+        a work event, the date is derived from the work event. When created manually, the date should also be
+
+        set manually.
+
+
+        EndedAt and startedAt are derived from the work events in the shift. StartedAt is based on SHIFT_START event
+
+        and endedAt is based on SHIFT_END event. When the corresponding event is not found, the time is null.
+
+
+        When calculating salaries for a work period, all work shifts started within the period will be included
+
+        in their entirety, even if the events of the shifts would time-wise be outside the period.
+      required:
+        - date
+        - employeeId
+        - approved
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        date:
+          type: string
+          format: date
+          description: Work shift date.
+        startedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Work shift start time
+        endedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Work shift end time
+        employeeId:
+          type: string
+          format: uuid
+          description: Employee's ID
+        truckIds:
+          readOnly: true
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: List of truck IDs used during the work shift. Derived from work
+            events in the shift.
+        dayOffWorkAllowance:
+          type: boolean
+          description: >
+            Day off work allowance is used to mark the day when the work shift
+            started as a day off for the employee.
+
+            This means that all the work hours done during that day will be also added to the HOLIDAY_ALLOWANCE work
+
+            type during work shift hours calculation.
+        absence:
+          $ref: "#/components/schemas/AbsenceType"
+        perDiemAllowance:
+          $ref: "#/components/schemas/PerDiemAllowanceType"
+        approved:
+          type: boolean
+          description: >
+            Whether the work shift has been approved by a supervisor. Work shift
+            hours cannot be updated if
+
+            the work shift is approved.
+        notes:
+          type: string
+          description: Additional notes for the work shift. For example, if the employee
+            was sick during the shift.
+    WorkEvent:
+      type: object
+      description: >
+        Represents single work event.
+
+
+        Whenever employee tracks a new work event, it is determined, whether a new work shift should be created for
+
+        the event, or if the event should be added to the shift of the last work event recorded.
+
+
+        A new work shift should be created, if either
+
+        - There are no previous work events for the employee, or
+
+        - The last work event is of type SHIFT_END, or
+
+        - The last work event is of type BREAK or UNKNOWN and has been going on longer than 3 hours
+
+
+        A work shift might already exist for the current day with _no_ events. This can happen, if a shift has been
+
+        created manually by the manager in advance. In this case, whenever a new shift would be created, the event
+
+        should be added to this existing work shift instead.
+      required:
+        - employeeId
+        - time
+        - workEventType
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        employeeId:
+          type: string
+          format: uuid
+          description: Employee's ID
+        employeeWorkShiftId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: employee work shift ID
+        time:
+          type: string
+          format: date-time
+          description: Work event time
+        truckId:
+          type: string
+          format: uuid
+          description: The ID of truck used during the work event
+        workEventType:
+          $ref: "#/components/schemas/WorkEventType"
+    WorkShiftHours:
+      type: object
+      description: >
+        Represents a single work shift hours.
+
+
+        Work shift hours contain the total hours for a specific employee, work shift and work type. The hours are always
+
+        calculated dynamically during a request.
+
+
+        Work shift hours also contains the actual hours that have been manually set by a supervisor. The actual hours
+
+        should always be prioritized over the calculated hours when displaying the aggregated hours and sending the
+
+        data to payroll.
+
+
+        Work shift hours for all available work types are created automatically when related employee work shift is created.
+
+        Only a single work shift hours per employee per work shift per work type is allowed. If one already exists, it
+
+        should be updated.
+
+
+        Work shift hours cannot be updated if the related employee work shift is approved.
+
+
+        #### Work shift hours calculation
+
+
+        Following work event types are only used to track the life cycle of the employee work shift. Hence, these types
+
+        are not used in calculations at all.
+
+        - SHIFT_START
+
+        - SHIFT_END
+
+        - LOGIN
+
+        - LOGOUT
+
+        - DRIVER_CARD_INSERTED
+
+        - DRIVER_CARD_REMOVED
+
+        - UNKNOWN
+
+
+        ##### Work shift hours for all of the work types are calculated as follows
+
+
+        ###### PAID_WORK
+
+        Everything else apart from work event type BREAK.
+
+
+        ###### BREAK
+
+        Only work event type BREAK.
+
+
+        ###### STANDBY
+
+        Not calculated at all. It can only be added manually from the management.
+
+
+        ###### EVENING_ALLOWANCE
+
+        All hours from the PAID_WORK that are recorded between 18.00 and 20.00.
+
+
+        ###### NIGHT_ALLOWANCE
+
+        All hours from the PAID_WORK that are recorded between 20.00 and 06.00.
+
+
+        ###### HOLIDAY_ALLOWANCE
+
+        All hours from the PAID_WORK that are recorded during one of the following
+
+        - Sunday
+
+        - Public holiday
+          - a corresponding date is found from holidays table with type PUBLIC_HOLIDAY_ALLOWANCE
+        - Day off work
+          - either
+            - a corresponding date is found from holidays table with type DAY_OFF_WORK_ALLOWANCE, or
+            - any of the shifts, which started during the day, is marked as dayOffWorkAllowance
+
+        ###### JOB_SPECIFIC_ALLOWANCE
+
+        Not calculated at all. It can only be added manually from the management.
+
+
+        ###### FROZEN_ALLOWANCE
+
+        All hours from the PAID_WORK that are recorded from the frozen section.
+      required:
+        - employeeId
+        - employeeWorkShiftId
+        - workType
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        employeeId:
+          type: string
+          format: uuid
+          description: Employee's ID
+        employeeWorkShiftId:
+          type: string
+          format: uuid
+          description: Employee work shift's ID
+        workType:
+          $ref: "#/components/schemas/WorkType"
+        calculatedHours:
+          type: number
+          format: float
+          readOnly: true
+          description: >
+            Calculated hours for the employee work shift for corresponding work
+            type. This should always be dynamically
+
+            calculated from the actual work events in the work shift. Cannot be updated.
+        actualHours:
+          type: number
+          format: float
+          description: >
+            Actual, manually recorded hours for the employee work shift for
+            corresponding work type. It is null until
+
+            the hours are manually set.
+    WorkEventType:
+      type: string
+      enum:
+        - VEGETABLE
+        - DRY
+        - MEAT_CELLAR
+        - MEIRA
+        - FROZEN
+        - PALTE
+        - BREWERY
+        - GREASE
+        - OFFICE
+        - LOGIN
+        - LOGOUT
+        - OTHER_WORK
+        - BREAK
+        - SHIFT_START
+        - SHIFT_END
+        - UNKNOWN
+        - DRIVE
+        - LOADING
+        - UNLOADING
+        - AVAILABILITY
+        - DRIVER_CARD_INSERTED
+        - DRIVER_CARD_REMOVED
+      description: >
+        Work event types. UI implementations should translate these to more
+        human readable form.
+
+
+        *Driver work types*
+
+        | name                 | finnish name               |
+
+        | -------------------- | -------------------------- |
+
+        | DRIVE                | Ajo                        |
+
+        | LOADING              | Lastaus                    |
+
+        | UNLOADING            | Purku                      |
+
+        | AVAILABILITY         | Saatavuus                  |
+
+        | DRIVER_CARD_INSERTED | Kuljettajakortti syötetty  |
+
+        | DRIVER_CARD_REMOVED  | Kuljettajakortti poistettu |
+
+
+        *Office/Terminal work types*
+
+        | name        | finnish name         |
+
+        | ----------- | -------------------- |
+
+        | VEGETABLE   | Hevi                 |
+
+        | DRY         | Kuiva                |
+
+        | MEAT_CELLAR | Lihakellari          |
+
+        | MEIRA       | Meira                |
+
+        | FROZEN      | Pakaste              |
+
+        | PALTE       | Palte                |
+
+        | BREWERY     | Panimo               |
+
+        | GREASE      | Rasva                |
+
+        | OFFICE      | Toimisto             |
+
+        | LOGIN       | Sisäänkirjautuminen  |
+
+        | LOGOUT      | Uloskirjautuminen    |
+
+
+        *Common work types*
+
+        | name        | finnish name         |
+
+        | ----------- | -------------------- |
+
+        | OTHER_WORK  | Muu työ              |
+
+        | BREAK       | Tauko                |
+
+        | SHIFT_START | Työvuoron alku       |
+
+        | SHIFT_END   | Työvuoron loppu      |
+
+        | UNKNOWN     | Tuntematon           |
+    WorkType:
+      type: string
+      description: >
+        Work type of the work shift hours. A single work type represents
+        aggregated value from
+
+        one or more work event types.
+
+
+        | name                   | finnish name         |
+
+        | ---------------------- | -------------------- |
+
+        | PAID_WORK              | Palkallinen työ      |
+
+        | BREAK                  | Tauko                |
+
+        | STANDBY                | Odotus               |
+
+        | EVENING_ALLOWANCE      | Iltatyö              |
+
+        | NIGHT_ALLOWANCE        | Yötyö                |
+
+        | HOLIDAY_ALLOWANCE      | Pyhälisä             |
+
+        | JOB_SPECIFIC_ALLOWANCE | Työkohtaisuuslisä    |
+
+        | FROZEN_ALLOWANCE       | Pakastelisä          |
+      enum:
+        - PAID_WORK
+        - BREAK
+        - STANDBY
+        - EVENING_ALLOWANCE
+        - NIGHT_ALLOWANCE
+        - HOLIDAY_ALLOWANCE
+        - JOB_SPECIFIC_ALLOWANCE
+        - FROZEN_ALLOWANCE
+    Holiday:
+      type: object
+      description: Represents a single holiday
+      required:
+        - date
+        - name
+        - compensationType
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        date:
+          type: string
+          format: date
+          description: Holiday date
+        name:
+          type: string
+          description: Holiday name
+        compensationType:
+          $ref: "#/components/schemas/CompensationType"
+        creatorId:
+          type: string
+          format: uuid
+          description: Creator's ID
+        lastModifierId:
+          type: string
+          format: uuid
+          description: Last modifier's ID
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation time
+        modifiedAt:
+          type: string
+          format: date-time
+          description: Last modified time
+    CompensationType:
+      type: string
+      enum:
+        - PUBLIC_HOLIDAY_ALLOWANCE
+        - DAY_OFF_WORK_ALLOWANCE
+    PerDiemAllowanceType:
+      type: string
+      description: Per diem allowance
+      enum:
+        - PARTIAL
+        - FULL
+    AbsenceType:
+      type: string
+      enum:
+        - TRAINING
+        - VACATION
+        - OFFICIAL_DUTIES
+        - COMPENSATORY_LEAVE
+        - SICK_LEAVE
+      description: >
+        Absence types are used to mark the absence type of the employee work
+        shift. Absences are taken into account when
+
+        calculating the total working hours for employee when determining working hours for payroll. They might also
+
+        affect the allowance hours of the work period.
+
+
+        Here are definitions for the absence types:
+
+
+        | name               | abbreviation | finnish name       | work hours | work hours on holiday | affects allowance hours |
+
+        | ------------------ | ------------ | ------------------ | ---------- | --------------------- | ----------------------- |
+
+        | TRAINING           | KO           | Koulutus työajalla | 8h         | 8h                    | no                      |
+
+        | VACATION           | LO           | Loma               | 6.67h      | 0h                    | yes                     |
+
+        | OFFICIAL_DUTIES    | LT           | Luottamustoimet    | 8h         | 8h                    | yes                     |
+
+        | COMPENSATORY_LEAVE | PP           | Pekkanen           | 8h         | 8h                    | yes                     |
+
+        | SICK_LEAVE         | SL           | Sairausloma        | 8h         | 8h                    | yes                     |
+    ClientApp:
+      type: object
+      description: >
+        Represents single client app.
+
+
+        Client apps are created when a new client app publishes itself to the system. Apps will be in
+
+        WAITING_FOR_APPROVAL status until a manager approves them. Three months after its approval a client app will
+
+        again change to WAITING_FOR_APPROVAL status. The app will then need to be approved again by a manager.
+
+
+        The device ID of the client app is used together with user PIN code during authentication.
+      required:
+        - deviceId
+        - status
+        - metadata
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        deviceId:
+          type: string
+          description: Device ID
+        name:
+          type: string
+          description: Device name
+        status:
+          $ref: "#/components/schemas/ClientAppStatus"
+        metadata:
+          $ref: "#/components/schemas/ClientAppMetadata"
+        lastLoginAt:
+          type: string
+          format: date-time
+          description: Last time the client app has logged in to the system
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation time
+        lastModifierId:
+          type: string
+          format: uuid
+          description: Last modifier's ID
+        modifiedAt:
+          type: string
+          format: date-time
+          description: Last modified time
+    ClientAppStatus:
+      type: string
+      description: Client app status
+      enum:
+        - WAITING_FOR_APPROVAL
+        - APPROVED
+    ClientAppMetadata:
+      type: object
+      description: Client app metadata
+      properties:
+        deviceOS:
+          type: string
+          description: Device OS
+          enum:
+            - ANDROID
+        deviceOSVersion:
+          type: string
+          description: Device OS version
+        appVersion:
+          type: string
+          description: App version
+    VerifyClientAppRequest:
+      type: object
+      properties:
+        deviceId:
+          type: string
+          description: device ID

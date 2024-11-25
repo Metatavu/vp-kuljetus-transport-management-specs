@@ -12,9 +12,6 @@
       ]
     },
     {
-      "DriverAppApiKeyAuth": []
-    },
-    {
       "DataReceiverApiKeyAuth": []
     }
   ],
@@ -1580,11 +1577,6 @@
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT"
-      },
-      "DriverAppApiKeyAuth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "X-DriverApp-API-Key"
       },
       "DataReceiverApiKeyAuth": {
         "type": "apiKey",

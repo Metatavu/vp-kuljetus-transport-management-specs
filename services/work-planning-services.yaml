@@ -1,0 +1,271 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: VP-Kuljetus Work Planning Services
+security:
+  - bearerAuth:
+      - driver
+      - manager
+paths:
+  /v1/system/ping:
+    get:
+      operationId: ping
+      summary: Replies with pong
+      description: Replies ping with pong
+      security: []
+      tags:
+        - System
+      responses:
+        "200":
+          description: Pong
+          content:
+            text/plain:
+              schema:
+                type: string
+  /v1/routes:
+    get:
+      operationId: listRoutes
+      summary: List Routes.
+      description: Lists Routes.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - Routes
+      parameters:
+        - name: truckId
+          in: query
+          description: Filter results by truck id
+          schema:
+            type: string
+            format: uuid
+        - name: driverId
+          in: query
+          description: Filter results by driver id
+          schema:
+            type: string
+            format: uuid
+        - name: departureAfter
+          in: query
+          description: Filter results by departure time same or after this time
+          schema:
+            type: string
+            format: date-time
+        - name: departureBefore
+          in: query
+          description: Filter results by departure time before this time
+          schema:
+            type: string
+            format: date-time
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of routes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Route"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createRoute
+      summary: Create route
+      description: Create new route
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Routes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Route"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created route
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Route"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/routes/{routeId}:
+    get:
+      operationId: findRoute
+      summary: Find a route.
+      description: Finds a route by id.
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - Routes
+      parameters:
+        - name: routeId
+          required: true
+          in: path
+          description: routes id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found route
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Route"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateRoute
+      summary: Updates routes
+      description: Updates single route
+      security:
+        - BearerAuth:
+            - driver
+            - manager
+      tags:
+        - Routes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Route"
+        description: Payload
+        required: true
+      parameters:
+        - name: routeId
+          required: true
+          in: path
+          description: route id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated route
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Route"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteRoute
+      summary: Deletes route
+      description: Deletes route
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Routes
+      parameters:
+        - name: routeId
+          required: true
+          in: path
+          description: route id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Error:
+      type: object
+      description: Error object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    Route:
+      type: object
+      description: Represent single planned route for single truck driver
+      required:
+        - name
+        - departureTime
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        truckId:
+          type: string
+          format: uuid
+          description: Truck id
+        driverId:
+          type: string
+          format: uuid
+          description: Driver id
+        name:
+          type: string
+          description: Name of the route
+        departureTime:
+          type: string
+          format: date-time
+          description: Departure time of the route
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true

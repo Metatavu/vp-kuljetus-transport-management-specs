@@ -1,0 +1,381 @@
+openapi: 3.0.3
+info:
+  title: Vehicle Management Services (vehicle-data-receiver)
+  description: Vehicle Management Services (vehicle-data-receiver)
+  version: 1.0.0
+security:
+  - DataReceiverApiKeyAuth: []
+paths:
+  /vehicle-management/v1/publicTrucks:
+    get:
+      operationId: listPublicTrucks
+      summary: List PublicTrucks.
+      description: Lists public info about each truck.
+      security:
+        - DataReceiverApiKeyAuth: []
+      tags:
+        - PublicTrucks
+      parameters:
+        - name: vin
+          in: query
+          description: Filter results by vin
+          schema:
+            type: string
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of trucks with only public info
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PublicTruck"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/trucks/{truckId}/driverCards:
+    post:
+      operationId: createTruckDriverCard
+      summary: Create truck driver card
+      description: >
+        Create new truck driver card.
+
+
+        If a card with same truck ID and card ID is already found with removedAt set, the existing card is restored.
+
+        If a card with different truck ID and card ID is already found with removedAt set, the previous card is
+
+        immediately deleted and the new card is created. If a card with the same truck ID and card ID is found with
+
+        removedAt not set, the request is rejected with a 409 Conflict response.
+      security:
+        - DataReceiverApiKeyAuth: []
+      tags:
+        - Trucks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TruckDriverCard"
+        description: Payload
+        required: true
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Created driver card
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TruckDriverCard"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/trucks/{truckId}/driverCards/{driverCardId}:
+    delete:
+      operationId: deleteTruckDriverCard
+      summary: Deletes truck driver card
+      description: >
+        Deletes single truck driver card. Driver cards are deleted when they are
+        removed from the truck.
+
+
+        The card is first soft-deleted by setting removedAt to value sent in X-Removed-At header. A background process
+
+        then checks frequently for driver cards removed over a configurable grace period ago and deletes them
+
+        permanently. This is done to prevent false positive driver card states coming in from telematics device.
+      security:
+        - DataReceiverApiKeyAuth: []
+      tags:
+        - Trucks
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck ID
+          schema:
+            type: string
+            format: uuid
+        - name: driverCardId
+          required: true
+          in: path
+          description: driver card ID
+          schema:
+            type: string
+        - name: X-Removed-At
+          required: true
+          in: header
+          description: Timestamp when the driver card was removed from the truck
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/trucks/{truckId}/locations:
+    post:
+      operationId: createTruckLocation
+      summary: Create truck location
+      description: Create new truck location. Used by vehicle data receiver to send
+        truck location data.
+      security:
+        - DataReceiverApiKeyAuth: []
+      tags:
+        - Trucks
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TruckLocation"
+        description: Payload
+        required: true
+      responses:
+        "201":
+          description: Received data
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/trucks/{truckId}/speeds:
+    post:
+      operationId: createTruckSpeed
+      summary: Create truck speed
+      description: Create new truck speed. Used by vehicle data receiver to send truck
+        speed data.
+      security:
+        - DataReceiverApiKeyAuth: []
+      tags:
+        - Trucks
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TruckSpeed"
+        description: Payload
+        required: true
+      responses:
+        "201":
+          description: Received data
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/trucks/{truckId}/driveStates:
+    post:
+      operationId: createDriveState
+      summary: Create drive state
+      description: Create new drive state for truck
+      security:
+        - DataReceiverApiKeyAuth: []
+      tags:
+        - Trucks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TruckDriveState"
+        description: Payload
+        required: true
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Created drive state
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-DataReceiver-API-Key
+  schemas:
+    PublicTruck:
+      type: object
+      description: Represent public info of single truck
+      required:
+        - plateNumber
+        - vin
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+        plateNumber:
+          type: string
+        vin:
+          type: string
+          description: >
+            Truck identification number. This is unique for each truck and
+            should be used as a hardware identifier for this specific truck.
+    Error:
+      type: object
+      description: Error object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    TruckDriverCard:
+      type: object
+      required:
+        - id
+        - timestamp
+      properties:
+        id:
+          type: string
+          description: Driver card ID
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp for driver card insertion. Unix timestamp in milliseconds.
+        removedAt:
+          type: string
+          format: date-time
+          description: Removed at. Used to check for grace period for driver card removal.
+    TruckLocation:
+      type: object
+      required:
+        - timestamp
+        - latitude
+        - longitude
+        - heading
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp for truck speed
+        latitude:
+          type: number
+          format: double
+          description: Latitude in degrees.
+        longitude:
+          type: number
+          format: double
+          description: Longitude in degrees.
+        heading:
+          type: number
+          format: double
+          description: heading in degrees.
+    TruckSpeed:
+      type: object
+      required:
+        - timestamp
+        - speed
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Truck speed ID
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp for truck speed. Unix timestamp in milliseconds.
+        speed:
+          type: number
+          format: float
+    TruckDriveState:
+      type: object
+      required:
+        - timestamp
+        - state
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Truck drive state ID
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp for truck drive state
+        state:
+          $ref: "#/components/schemas/TruckDriveStateEnum"
+        driverId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Driver ID.
+        driverCardId:
+          type: string
+          description: Driver card ID. This is used to identify the driver when creating a
+            new drive state.
+    TruckDriveStateEnum:
+      type: string
+      enum:
+        - REST
+        - DRIVER_AVAILABLE
+        - WORK
+        - DRIVE
+        - ERROR
+        - NOT_AVAILABLE
