@@ -6,6 +6,7 @@ security:
   - BearerAuth:
       - driver
       - manager
+      - integrations
   - ApiKeyAuth: []
   - CronKeyAuth: []
 paths:
@@ -47,7 +48,7 @@ paths:
       security:
         - BearerAuth:
             - manager
-        - ApiKeyAuth: []
+            - integrations
       tags:
         - Drivers
       parameters:

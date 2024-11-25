@@ -4,7 +4,7 @@ info:
   title: VP-Kuljetus User Management Services
 
 security:
-  - BearerAuth: [driver, manager]
+  - BearerAuth: [driver, manager, integrations]
   - ApiKeyAuth: []
   - CronKeyAuth: []
 
@@ -59,8 +59,7 @@ paths:
       summary: List Drivers.
       description: Lists Drivers.
       security:
-        - BearerAuth: [manager]
-        - ApiKeyAuth: []
+        - BearerAuth: [manager, integrations]
       tags:
         - Drivers
         - SpecManagementUI
