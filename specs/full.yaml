@@ -4,10 +4,13 @@ info:
   description: Vehicle Management Services (full)
   version: 1.0.0
 security:
-  - ApiKeyAuth: []
+  - DriverAppApiKeyAuth: []
+  - DataReceiverApiKeyAuth: []
+  - CronKeyAuth: []
   - BearerAuth:
       - driver
       - manager
+      - integrations
 paths:
   /vehicle-management/v1/publicTrucks:
     get:
@@ -15,6 +18,7 @@ paths:
       summary: List PublicTrucks.
       description: Lists public info about each truck.
       security:
+        - DataReceiverApiKeyAuth: []
         - BearerAuth:
             - driver
             - manager
@@ -254,7 +258,8 @@ paths:
         immediately deleted and the new card is created. If a card with the same truck ID and card ID is found with
 
         removedAt not set, the request is rejected with a 409 Conflict response.
-      security: []
+      security:
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       requestBody:
@@ -299,7 +304,8 @@ paths:
         then checks frequently for driver cards removed over a configurable grace period ago and deletes them
 
         permanently. This is done to prevent false positive driver card states coming in from telematics device.
-      security: []
+      security:
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       parameters:
@@ -338,7 +344,8 @@ paths:
       summary: Create truck location
       description: Create new truck location. Used by vehicle data receiver to send
         truck location data.
-      security: []
+      security:
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       parameters:
@@ -425,7 +432,8 @@ paths:
       summary: Create truck speed
       description: Create new truck speed. Used by vehicle data receiver to send truck
         speed data.
-      security: []
+      security:
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       parameters:
@@ -580,7 +588,7 @@ paths:
       summary: Create drive state
       description: Create new drive state for truck
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       requestBody:
@@ -2138,7 +2146,8 @@ paths:
         already exists with status other than 'WAITING_FOR_APPROVAL', the creation fails with conflict. Otherwise,
 
         the existing client app is returned with OK response.
-      security: []
+      security:
+        - DriverAppApiKeyAuth: []
       tags:
         - ClientApps
       requestBody:
@@ -2183,6 +2192,7 @@ paths:
       security:
         - BearerAuth:
             - manager
+        - DriverAppApiKeyAuth: []
       tags:
         - ClientApps
       parameters:
@@ -2273,7 +2283,8 @@ paths:
       operationId: verifyClientApp
       summary: Verifies that the client app has been approved.
       description: Verifies that the client app has been approved.
-      security: []
+      security:
+        - DriverAppApiKeyAuth: []
       tags:
         - ClientApps
       requestBody:
@@ -2961,7 +2972,7 @@ components:
     ApiKeyAuth:
       type: apiKey
       in: header
-      name: X-API-Key
+      name: X-CRON-Key
     BearerAuth:
       type: http
       scheme: bearer

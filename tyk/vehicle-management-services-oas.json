@@ -12,9 +12,6 @@
       ]
     },
     {
-      "ApiKeyAuth": []
-    },
-    {
       "DriverAppApiKeyAuth": []
     },
     {
@@ -1017,7 +1014,7 @@
         "description": "Create new drive state for truck",
         "security": [
           {
-            "ApiKeyAuth": []
+            "DataReceiverApiKeyAuth": []
           }
         ],
         "tags": [

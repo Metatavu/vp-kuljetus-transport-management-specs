@@ -65,8 +65,35 @@ const addSecuritySchemesToSpecVersionFileContent = (specVersionFileContent: any,
     }
   }
 
+  if (securitySchemes.includes("DriverAppApiKeyAuth")) {
+    specVersionFileContent.security.push({ DriverAppApiKeyAuth: [] });
+    specVersionFileContent.components.securitySchemes.ApiKeyAuth = {
+      type: "apiKey",
+      in: "header",
+      name: "X-DriverApp-API-Key"
+    }
+  }
+
+  if (securitySchemes.includes("DataReceiverApiKeyAuth")) {
+    specVersionFileContent.security.push({ DataReceiverApiKeyAuth: [] });
+    specVersionFileContent.components.securitySchemes.ApiKeyAuth = {
+      type: "apiKey",
+      in: "header",
+      name: "X-DataReceiver-API-Key"
+    }
+  }
+
+  if (securitySchemes.includes("CronKeyAuth")) {
+    specVersionFileContent.security.push({ CronKeyAuth: [] });
+    specVersionFileContent.components.securitySchemes.ApiKeyAuth = {
+      type: "apiKey",
+      in: "header",
+      name: "X-CRON-Key"
+    }
+  }
+
   if (securitySchemes.includes("BearerAuth")) {
-    specVersionFileContent.security.push({ BearerAuth: ["driver", "manager"] });
+    specVersionFileContent.security.push({ BearerAuth: ["driver", "manager", "integrations"] });
     specVersionFileContent.components.securitySchemes.BearerAuth = {
       type: "http",
       scheme: "bearer",
