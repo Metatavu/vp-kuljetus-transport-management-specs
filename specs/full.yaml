@@ -18,7 +18,6 @@ paths:
       summary: List PublicTrucks.
       description: Lists public info about each truck.
       security:
-        - DataReceiverApiKeyAuth: []
         - BearerAuth:
             - driver
             - manager
