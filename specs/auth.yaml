@@ -132,7 +132,7 @@ paths:
                 $ref: "#/components/schemas/Error"
 components:
   securitySchemes:
-    ApiKeyAuth:
+    DriverAppApiKeyAuth:
       type: apiKey
       in: header
       name: X-DriverApp-API-Key

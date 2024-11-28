@@ -243,7 +243,7 @@ paths:
                 $ref: "#/components/schemas/Error"
 components:
   securitySchemes:
-    ApiKeyAuth:
+    DataReceiverApiKeyAuth:
       type: apiKey
       in: header
       name: X-DataReceiver-API-Key

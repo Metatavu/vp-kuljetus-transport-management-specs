@@ -67,7 +67,7 @@ const addSecuritySchemesToSpecVersionFileContent = (specVersionFileContent: any,
 
   if (securitySchemes.includes("DriverAppApiKeyAuth")) {
     specVersionFileContent.security.push({ DriverAppApiKeyAuth: [] });
-    specVersionFileContent.components.securitySchemes.ApiKeyAuth = {
+    specVersionFileContent.components.securitySchemes.DriverAppApiKeyAuth = {
       type: "apiKey",
       in: "header",
       name: "X-DriverApp-API-Key"
@@ -76,7 +76,7 @@ const addSecuritySchemesToSpecVersionFileContent = (specVersionFileContent: any,
 
   if (securitySchemes.includes("DataReceiverApiKeyAuth")) {
     specVersionFileContent.security.push({ DataReceiverApiKeyAuth: [] });
-    specVersionFileContent.components.securitySchemes.ApiKeyAuth = {
+    specVersionFileContent.components.securitySchemes.DataReceiverApiKeyAuth = {
       type: "apiKey",
       in: "header",
       name: "X-DataReceiver-API-Key"
@@ -85,7 +85,7 @@ const addSecuritySchemesToSpecVersionFileContent = (specVersionFileContent: any,
 
   if (securitySchemes.includes("CronKeyAuth")) {
     specVersionFileContent.security.push({ CronKeyAuth: [] });
-    specVersionFileContent.components.securitySchemes.ApiKeyAuth = {
+    specVersionFileContent.components.securitySchemes.CronKeyAuth = {
       type: "apiKey",
       in: "header",
       name: "X-CRON-Key"
