@@ -47,6 +47,38 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   /vehicle-management/v1/trucks/{truckId}/driverCards:
+    get:
+      operationId: listTruckDriverCards
+      summary: Lists truck driver cards
+      description: Lists truck driver cards. Used to check if a truck has a driver
+        card inserted.
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Trucks
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of truck driver cards. Contains either 0 or 1 cards.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TruckDriverCard"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     post:
       operationId: createTruckDriverCard
       summary: Create truck driver card
@@ -242,6 +274,40 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/trucks/{truckId}/odometerReadings:
+    post:
+      operationId: createTruckOdometerReading
+      summary: Create truck odometer reading
+      description: Create new truck odometer reading. Used by vehicle data receiver to
+        send truck odometer reading data.
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Trucks
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TruckOdometerReading"
+        description: Payload
+        required: true
+      responses:
+        "201":
+          description: Received data
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -370,6 +436,27 @@ components:
           type: string
           description: Driver card ID. This is used to identify the driver when creating a
             new drive state.
+    TruckOdometerReading:
+      type: object
+      required:
+        - timestamp
+        - odometerReading
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Truck odometer ID
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp for truck odometer.
+        odometerReading:
+          type: integer
+          format: int32
+          description: Odometer reading in meters. See [Teltonika FMC650 Data Sending
+            Parameters ID - Tachograph Data
+            Elements](https://wiki.teltonika-gps.com/view/FMC650_Teltonika_Data_Sending_Parameters_ID#Tachograph_data_elements)
     TruckDriveStateEnum:
       type: string
       enum:
