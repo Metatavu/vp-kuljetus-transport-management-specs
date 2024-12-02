@@ -730,7 +730,7 @@ paths:
       summary: Create truck odometer reading
       description: Create new truck odometer reading. Used by vehicle data receiver to send truck odometer reading data.
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
         - SpecVehicleDataReceiver
