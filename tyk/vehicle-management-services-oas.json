@@ -13,6 +13,9 @@
     },
     {
       "DataReceiverApiKeyAuth": []
+    },
+    {
+      "KeycloakApiKeyAuth": []
     }
   ],
   "x-tyk-api-gateway": {
@@ -443,6 +446,9 @@
             "BearerAuth": [
               "driver"
             ]
+          },
+          {
+            "KeycloakApiKeyAuth": []
           }
         ],
         "tags": [
@@ -1721,6 +1727,11 @@
         "type": "apiKey",
         "in": "header",
         "name": "X-DataReceiver-API-Key"
+      },
+      "KeycloakApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Keycloak-API-Key"
       }
     },
     "schemas": {

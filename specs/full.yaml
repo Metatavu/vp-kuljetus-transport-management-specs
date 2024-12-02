@@ -6,6 +6,7 @@ info:
 security:
   - DriverAppApiKeyAuth: []
   - DataReceiverApiKeyAuth: []
+  - KeycloakApiKeyAuth: []
   - CronKeyAuth: []
   - BearerAuth:
       - driver
@@ -218,6 +219,7 @@ paths:
       security:
         - BearerAuth:
             - driver
+        - KeycloakApiKeyAuth: []
       tags:
         - Trucks
       parameters:
@@ -2292,6 +2294,7 @@ paths:
         - BearerAuth:
             - manager
         - DriverAppApiKeyAuth: []
+        - KeycloakApiKeyAuth: []
       tags:
         - ClientApps
       parameters:
@@ -2322,6 +2325,7 @@ paths:
       security:
         - BearerAuth:
             - manager
+        - KeycloakApiKeyAuth: []
       tags:
         - ClientApps
       parameters:
@@ -2384,6 +2388,7 @@ paths:
       description: Verifies that the client app has been approved.
       security:
         - DriverAppApiKeyAuth: []
+        - KeycloakApiKeyAuth: []
       tags:
         - ClientApps
       requestBody:
@@ -3076,6 +3081,10 @@ components:
       type: apiKey
       in: header
       name: X-DataReceiver-API-Key
+    KeycloakApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Keycloak-API-Key
     CronKeyAuth:
       type: apiKey
       in: header

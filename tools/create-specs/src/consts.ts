@@ -39,7 +39,7 @@ export const SPEC_VERSIONS = [
     name: "full",
     description: "Full",
     tags: ["App", "ManagementUI", "VehicleDataReceiver", "Auth"],
-    securitySchemes: ["BearerAuth", "DataReceiverApiKeyAuth", "DriverAppApiKeyAuth", "CronKeyAuth"]
+    securitySchemes: ["BearerAuth", "DataReceiverApiKeyAuth", "DriverAppApiKeyAuth", "CronKeyAuth", "KeycloakApiKeyAuth"]
   },
   {
     name: "app",
@@ -63,7 +63,7 @@ export const SPEC_VERSIONS = [
     name: "auth",
     description: "Auth",
     tags: ["Auth"],
-    securitySchemes: ["DriverAppApiKeyAuth"],
+    securitySchemes: ["KeycloakApiKeyAuth"],
     internal: true
   }
 ];

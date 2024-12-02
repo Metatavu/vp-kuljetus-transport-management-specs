@@ -9,6 +9,7 @@ security:
       - integrations
   - DriverAppApiKeyAuth: []
   - CronKeyAuth: []
+  - KeycloakApiKeyAuth: []
 paths:
   /v1/system/ping:
     get:
@@ -1185,6 +1186,7 @@ paths:
         - BearerAuth:
             - manager
         - DriverAppApiKeyAuth: []
+        - KeycloakApiKeyAuth: []
       tags:
         - ClientApps
       parameters:
@@ -1215,6 +1217,7 @@ paths:
       security:
         - BearerAuth:
             - manager
+        - KeycloakApiKeyAuth: []
       tags:
         - ClientApps
       parameters:
@@ -1277,6 +1280,7 @@ paths:
       description: Verifies that the client app has been approved.
       security:
         - DriverAppApiKeyAuth: []
+        - KeycloakApiKeyAuth: []
       tags:
         - ClientApps
       requestBody:
@@ -1312,6 +1316,10 @@ components:
       type: apiKey
       in: header
       name: X-CRON-Key
+    KeycloakApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Keycloak-API-Key
   schemas:
     Error:
       type: object

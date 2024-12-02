@@ -7,6 +7,7 @@ security:
   - BearerAuth: [driver, manager, integrations]
   - DriverAppApiKeyAuth: []
   - CronKeyAuth: []
+  - KeycloakApiKeyAuth: []
 
 x-tyk-api-gateway:
   info:
@@ -1195,6 +1196,7 @@ paths:
       security:
         - BearerAuth: [manager]
         - DriverAppApiKeyAuth: []
+        - KeycloakApiKeyAuth: []
       tags:
         - ClientApps
         - SpecManagementUI
@@ -1226,6 +1228,7 @@ paths:
       description: Updates a client app.
       security:
         - BearerAuth: [manager]
+        - KeycloakApiKeyAuth: []
       tags:
         - ClientApps
         - SpecManagementUI
@@ -1291,6 +1294,7 @@ paths:
       description: Verifies that the client app has been approved.
       security:
         - DriverAppApiKeyAuth: []
+        - KeycloakApiKeyAuth: []
       tags:
         - ClientApps
         - SpecAuth
@@ -1330,6 +1334,11 @@ components:
       type: apiKey
       in: header
       name: X-CRON-Key
+
+    KeycloakApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Keycloak-API-Key
 
   schemas:
     Error:

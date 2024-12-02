@@ -7,6 +7,7 @@ security:
       - driver
       - manager
   - DataReceiverApiKeyAuth: []
+  - KeycloakApiKeyAuth: []
 paths:
   /v1/system/ping:
     get:
@@ -256,6 +257,7 @@ paths:
       security:
         - BearerAuth:
             - driver
+        - KeycloakApiKeyAuth: []
       tags:
         - Trucks
       parameters:
@@ -1063,6 +1065,10 @@ components:
       type: apiKey
       in: header
       name: X-DataReceiver-API-Key
+    KeycloakApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Keycloak-API-Key
   schemas:
     Error:
       type: object

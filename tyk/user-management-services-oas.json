@@ -17,6 +17,9 @@
     },
     {
       "CronKeyAuth": []
+    },
+    {
+      "KeycloakApiKeyAuth": []
     }
   ],
   "x-tyk-api-gateway": {
@@ -1911,6 +1914,9 @@
           },
           {
             "DriverAppApiKeyAuth": []
+          },
+          {
+            "KeycloakApiKeyAuth": []
           }
         ],
         "tags": [
@@ -1962,6 +1968,9 @@
             "BearerAuth": [
               "manager"
             ]
+          },
+          {
+            "KeycloakApiKeyAuth": []
           }
         ],
         "tags": [
@@ -2066,6 +2075,9 @@
         "security": [
           {
             "DriverAppApiKeyAuth": []
+          },
+          {
+            "KeycloakApiKeyAuth": []
           }
         ],
         "tags": [
@@ -2123,6 +2135,11 @@
         "type": "apiKey",
         "in": "header",
         "name": "X-CRON-Key"
+      },
+      "KeycloakApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Keycloak-API-Key"
       }
     },
     "schemas": {

@@ -6,6 +6,7 @@ info:
 security:
   - BearerAuth: [driver, manager]
   - DataReceiverApiKeyAuth: []
+  - KeycloakApiKeyAuth: []
 
 x-tyk-api-gateway:
   info:
@@ -272,6 +273,7 @@ paths:
       description: Lists truck driver cards. Used to check if a truck has a driver card inserted.
       security:
         - BearerAuth: [driver]
+        - KeycloakApiKeyAuth: []
       tags:
         - Trucks
         - SpecAuth
@@ -1083,6 +1085,11 @@ components:
       type: apiKey
       in: header
       name: X-DataReceiver-API-Key
+
+    KeycloakApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Keycloak-API-Key
 
   schemas:
     Error:

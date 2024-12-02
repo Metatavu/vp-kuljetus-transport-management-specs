@@ -83,6 +83,15 @@ const addSecuritySchemesToSpecVersionFileContent = (specVersionFileContent: any,
     }
   }
 
+  if (securitySchemes.includes("KeycloakApiKeyAuth")) {
+    specVersionFileContent.security.push({ KeycloakApiKeyAuth: [] });
+    specVersionFileContent.components.securitySchemes.KeycloakApiKeyAuth = {
+      type: "apiKey",
+      in: "header",
+      name: "X-Keycloak-API-Key"
+    }
+  }
+
   if (securitySchemes.includes("CronKeyAuth")) {
     specVersionFileContent.security.push({ CronKeyAuth: [] });
     specVersionFileContent.components.securitySchemes.CronKeyAuth = {
