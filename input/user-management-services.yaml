@@ -1195,8 +1195,6 @@ paths:
       description: Finds a client app by ID.
       security:
         - BearerAuth: [manager]
-        - DriverAppApiKeyAuth: []
-        - KeycloakApiKeyAuth: []
       tags:
         - ClientApps
         - SpecManagementUI
@@ -1228,7 +1226,6 @@ paths:
       description: Updates a client app.
       security:
         - BearerAuth: [manager]
-        - KeycloakApiKeyAuth: []
       tags:
         - ClientApps
         - SpecManagementUI
@@ -1293,7 +1290,6 @@ paths:
       summary: Verifies that the client app has been approved.
       description: Verifies that the client app has been approved.
       security:
-        - DriverAppApiKeyAuth: []
         - KeycloakApiKeyAuth: []
       tags:
         - ClientApps

@@ -44,8 +44,7 @@ paths:
       operationId: findClientApp
       summary: Find a client app.
       description: Finds a client app by ID.
-      security:
-        - KeycloakApiKeyAuth: []
+      security: []
       tags:
         - ClientApps
       parameters:
@@ -73,8 +72,7 @@ paths:
       operationId: updateClientApp
       summary: Update a client app.
       description: Updates a client app.
-      security:
-        - KeycloakApiKeyAuth: []
+      security: []
       tags:
         - ClientApps
       parameters:

@@ -1185,8 +1185,6 @@ paths:
       security:
         - BearerAuth:
             - manager
-        - DriverAppApiKeyAuth: []
-        - KeycloakApiKeyAuth: []
       tags:
         - ClientApps
       parameters:
@@ -1217,7 +1215,6 @@ paths:
       security:
         - BearerAuth:
             - manager
-        - KeycloakApiKeyAuth: []
       tags:
         - ClientApps
       parameters:
@@ -1279,7 +1276,6 @@ paths:
       summary: Verifies that the client app has been approved.
       description: Verifies that the client app has been approved.
       security:
-        - DriverAppApiKeyAuth: []
         - KeycloakApiKeyAuth: []
       tags:
         - ClientApps

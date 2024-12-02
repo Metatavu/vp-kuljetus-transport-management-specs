@@ -1911,12 +1911,6 @@
             "BearerAuth": [
               "manager"
             ]
-          },
-          {
-            "DriverAppApiKeyAuth": []
-          },
-          {
-            "KeycloakApiKeyAuth": []
           }
         ],
         "tags": [
@@ -1968,9 +1962,6 @@
             "BearerAuth": [
               "manager"
             ]
-          },
-          {
-            "KeycloakApiKeyAuth": []
           }
         ],
         "tags": [
@@ -2073,9 +2064,6 @@
         "summary": "Verifies that the client app has been approved.",
         "description": "Verifies that the client app has been approved.",
         "security": [
-          {
-            "DriverAppApiKeyAuth": []
-          },
           {
             "KeycloakApiKeyAuth": []
           }
