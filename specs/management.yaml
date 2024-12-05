@@ -401,12 +401,13 @@ paths:
     get:
       operationId: listTemperatureReadingsByTruck
       summary: List temperature readings by truck, including archived thermometers
-      description: Retrieve all temperature readings for a specific truck, including data from thermometers that have been archived
+      description: Retrieve all temperature readings for a specific truck, including
+        data from thermometers that have been archived
       security:
         - BearerAuth:
             - manager
       tags:
-        - Temperature Readings
+        - Trucks
       parameters:
         - name: truckId
           required: true
@@ -595,12 +596,13 @@ paths:
     get:
       operationId: listTemperatureReadingsByTowable
       summary: List temperature readings by towable, including archived thermometers
-      description: Retrieve all temperature readings for a specific towable, including data from thermometers that have been archived
+      description: Retrieve all temperature readings for a specific towable, including
+        data from thermometers that have been archived
       security:
         - BearerAuth:
             - manager
       tags:
-        - Temperature Readings
+        - Towables
       parameters:
         - name: towableId
           required: true
@@ -758,12 +760,13 @@ paths:
     get:
       operationId: listThermometers
       summary: List thermometers
-      description: Retrieve a list of all thermometers, optionally filtered by vehicle association or archived status
+      description: Retrieve a list of all thermometers, optionally filtered by vehicle
+        association or archived status
       security:
         - BearerAuth:
             - manager
       tags:
-        - Thermometers
+        - Trucks
       parameters:
         - name: entityId
           in: query
@@ -773,7 +776,8 @@ paths:
             format: uuid
         - name: entityType
           in: query
-          description: Filter thermometers by associated entity type (e.g., "truck", "towable")
+          description: Filter thermometers by associated entity type (e.g., "truck",
+            "towable")
           schema:
             type: string
             enum:
@@ -819,7 +823,7 @@ paths:
         - BearerAuth:
             - manager
       tags:
-        - Thermometers
+        - Trucks
       parameters:
         - name: thermometerId
           required: true
@@ -2950,7 +2954,8 @@ components:
           type: string
         imei:
           type: string
-          description: The unique IMEI of the truck, used to identify it when associating with a thermometer.
+          description: The unique IMEI of the truck, used to identify it when associating
+            with a thermometer.
         plateNumber:
           type: string
         type:
@@ -3108,6 +3113,32 @@ components:
           description: Odometer reading in meters. See [Teltonika FMC650 Data Sending
             Parameters ID - Tachograph Data
             Elements](https://wiki.teltonika-gps.com/view/FMC650_Teltonika_Data_Sending_Parameters_ID#Tachograph_data_elements)
+    TemperatureValue:
+      type: object
+      description: Represents a temperature reading from a thermometer
+      required:
+        - thermometerId
+        - temperature
+        - timestamp
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the temperature record
+        thermometerId:
+          type: string
+          format: uuid
+          description: The ID of the thermometer from which the reading was taken
+        temperature:
+          type: number
+          format: float
+          description: The temperature reading in Celsius or Fahrenheit (based on your
+            requirement)
+        timestamp:
+          type: string
+          format: date-time
+          description: The timestamp when the temperature was recorded
     Towable:
       type: object
       description: Represent single towable
@@ -3125,7 +3156,8 @@ components:
           type: string
         imei:
           type: string
-          description: The unique IMEI of the towable, used to identify it when associating with a thermometer.
+          description: The unique IMEI of the towable, used to identify it when
+            associating with a thermometer.
         plateNumber:
           type: string
         type:
@@ -3211,6 +3243,58 @@ components:
             marked as archived will not appear in list requests unless archived
             filter is set to true. Archived vehicle cannot be updated, unless
             archivedAt is first set to null.
+    Thermometer:
+      type: object
+      description: Represents a thermometer attached to a truck or towable
+      required:
+        - macAddress
+        - entityId
+        - entityType
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the thermometer
+        macAddress:
+          type: string
+          description: MAC address of the thermometer. It is unique and stays with the
+            device.
+        entityId:
+          type: string
+          format: uuid
+          description: The ID of the entity currently associated with the thermometer.
+        entityType:
+          type: string
+          description: The type of the entity to which the thermometer is attached (e.g.,
+            "towable", "truck", etc.)
+          enum:
+            - truck
+            - towable
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
+        archivedAt:
+          type: string
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the thermometer as archived.
+            Thermometers marked as archived will not appear in list requests
+            unless archived filter is set to true. Archived thermometer cannot
+            be updated, unless archivedAt is first set to null.
     Route:
       type: object
       description: Represent single planned route for single truck driver
@@ -4219,79 +4303,3 @@ components:
         - TODO
         - IN_PROGRESS
         - DONE
-        
-    Thermometer:
-      type: object
-      description: Represents a thermometer attached to a truck or towable
-      required:
-        - macAddress
-        - entityId
-        - entityType
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          description: Unique identifier for the thermometer
-        macAddress:
-          type: string
-          description: MAC address of the thermometer. It is unique and stays with the device.
-        entityId:
-          type: string
-          format: uuid
-          description: The ID of the entity currently associated with the thermometer.
-        entityType:
-          type: string
-          description: The type of the entity to which the thermometer is attached (e.g., "towable", "truck", etc.)
-          enum:
-            - truck
-            - towable
-        creatorId:
-          type: string
-          readOnly: true
-          format: uuid
-        createdAt:
-          format: date-time
-          type: string
-          readOnly: true
-        lastModifierId:
-          type: string
-          readOnly: true
-          format: uuid
-        modifiedAt:
-          format: date-time
-          type: string
-          readOnly: true
-        archivedAt:
-          type: string
-          format: date-time
-          description: >
-            Setting the archivedAt time marks the thermometer as archived. Thermometers
-            marked as archived will not appear in list requests unless archived filter is set to true.
-            Archived thermometer cannot be updated, unless archivedAt is first set to null.
-
-    TemperatureValue:
-      type: object
-      description: Represents a temperature reading from a thermometer
-      required:
-        - thermometerId
-        - temperature
-        - timestamp
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          description: Unique identifier for the temperature record
-        thermometerId:
-          type: string
-          format: uuid
-          description: The ID of the thermometer from which the reading was taken
-        temperature:
-          type: number
-          format: float
-          description: The temperature reading in Celsius or Fahrenheit (based on your requirement)
-        timestamp:
-          type: string
-          format: date-time
-          description: The timestamp when the temperature was recorded
