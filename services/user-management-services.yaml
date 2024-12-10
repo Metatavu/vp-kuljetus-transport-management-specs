@@ -7,8 +7,9 @@ security:
       - driver
       - manager
       - integrations
-  - ApiKeyAuth: []
+  - DriverAppApiKeyAuth: []
   - CronKeyAuth: []
+  - KeycloakApiKeyAuth: []
 paths:
   /v1/system/ping:
     get:
@@ -1139,7 +1140,7 @@ paths:
 
         the existing client app is returned with OK response.
       security:
-        - ApiKeyAuth: []
+        - DriverAppApiKeyAuth: []
       tags:
         - ClientApps
       requestBody:
@@ -1184,7 +1185,6 @@ paths:
       security:
         - BearerAuth:
             - manager
-        - ApiKeyAuth: []
       tags:
         - ClientApps
       parameters:
@@ -1276,7 +1276,7 @@ paths:
       summary: Verifies that the client app has been approved.
       description: Verifies that the client app has been approved.
       security:
-        - ApiKeyAuth: []
+        - KeycloakApiKeyAuth: []
       tags:
         - ClientApps
       requestBody:
@@ -1304,14 +1304,18 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-    ApiKeyAuth:
+    DriverAppApiKeyAuth:
       type: apiKey
       in: header
-      name: X-API-Key
+      name: X-DriverApp-API-Key
     CronKeyAuth:
       type: apiKey
       in: header
       name: X-CRON-Key
+    KeycloakApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Keycloak-API-Key
   schemas:
     Error:
       type: object

@@ -4,7 +4,7 @@ info:
   description: Vehicle Management Services (auth)
   version: 1.0.0
 security:
-  - ApiKeyAuth: []
+  - KeycloakApiKeyAuth: []
 paths:
   /v1/trucks/{truckId}/driverCards:
     get:
@@ -13,7 +13,7 @@ paths:
       description: Lists truck driver cards. Used to check if a truck has a driver
         card inserted.
       security:
-        - ApiKeyAuth: []
+        - KeycloakApiKeyAuth: []
       tags:
         - Trucks
       parameters:
@@ -44,8 +44,7 @@ paths:
       operationId: findClientApp
       summary: Find a client app.
       description: Finds a client app by ID.
-      security:
-        - ApiKeyAuth: []
+      security: []
       tags:
         - ClientApps
       parameters:
@@ -109,7 +108,7 @@ paths:
       summary: Verifies that the client app has been approved.
       description: Verifies that the client app has been approved.
       security:
-        - ApiKeyAuth: []
+        - KeycloakApiKeyAuth: []
       tags:
         - ClientApps
       requestBody:
@@ -133,10 +132,10 @@ paths:
                 $ref: "#/components/schemas/Error"
 components:
   securitySchemes:
-    ApiKeyAuth:
+    KeycloakApiKeyAuth:
       type: apiKey
       in: header
-      name: X-API-Key
+      name: X-Keycloak-API-Key
   schemas:
     TruckDriverCard:
       type: object

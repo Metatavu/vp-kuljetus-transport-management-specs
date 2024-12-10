@@ -13,10 +13,13 @@
       ]
     },
     {
-      "ApiKeyAuth": []
+      "DriverAppApiKeyAuth": []
     },
     {
       "CronKeyAuth": []
+    },
+    {
+      "KeycloakApiKeyAuth": []
     }
   ],
   "x-tyk-api-gateway": {
@@ -1836,7 +1839,7 @@
         "description": "Creates a client app.\n\nClient app can only be created in the status 'WAITING_FOR_APPROVAL'. If the client app with the same deviceId\nalready exists with status other than 'WAITING_FOR_APPROVAL', the creation fails with conflict. Otherwise,\nthe existing client app is returned with OK response.\n",
         "security": [
           {
-            "ApiKeyAuth": []
+            "DriverAppApiKeyAuth": []
           }
         ],
         "tags": [
@@ -1908,9 +1911,6 @@
             "BearerAuth": [
               "manager"
             ]
-          },
-          {
-            "ApiKeyAuth": []
           }
         ],
         "tags": [
@@ -2065,7 +2065,7 @@
         "description": "Verifies that the client app has been approved.",
         "security": [
           {
-            "ApiKeyAuth": []
+            "KeycloakApiKeyAuth": []
           }
         ],
         "tags": [
@@ -2114,15 +2114,20 @@
         "scheme": "bearer",
         "bearerFormat": "JWT"
       },
-      "ApiKeyAuth": {
+      "DriverAppApiKeyAuth": {
         "type": "apiKey",
         "in": "header",
-        "name": "X-API-Key"
+        "name": "X-DriverApp-API-Key"
       },
       "CronKeyAuth": {
         "type": "apiKey",
         "in": "header",
         "name": "X-CRON-Key"
+      },
+      "KeycloakApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Keycloak-API-Key"
       }
     },
     "schemas": {

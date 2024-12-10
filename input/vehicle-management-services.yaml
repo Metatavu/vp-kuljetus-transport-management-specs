@@ -5,7 +5,8 @@ info:
 
 security:
   - BearerAuth: [driver, manager]
-  - ApiKeyAuth: []
+  - DataReceiverApiKeyAuth: []
+  - KeycloakApiKeyAuth: []
 
 x-tyk-api-gateway:
   info:
@@ -45,7 +46,6 @@ paths:
       summary: List PublicTrucks.
       description: Lists public info about each truck.
       security:
-        - ApiKeyAuth: []
         - BearerAuth: [driver, manager]
       tags:
         - PublicTrucks
@@ -272,8 +272,8 @@ paths:
       summary: Lists truck driver cards
       description: Lists truck driver cards. Used to check if a truck has a driver card inserted.
       security:
-        - ApiKeyAuth: []
         - BearerAuth: [driver]
+        - KeycloakApiKeyAuth: []
       tags:
         - Trucks
         - SpecAuth
@@ -313,7 +313,7 @@ paths:
         immediately deleted and the new card is created. If a card with the same truck ID and card ID is found with
         removedAt not set, the request is rejected with a 409 Conflict response.
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
         - SpecVehicleDataReceiver
@@ -357,7 +357,7 @@ paths:
         then checks frequently for driver cards removed over a configurable grace period ago and deletes them
         permanently. This is done to prevent false positive driver card states coming in from telematics device.
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
         - SpecVehicleDataReceiver
@@ -398,7 +398,7 @@ paths:
       summary: Create truck location
       description: Create new truck location. Used by vehicle data receiver to send truck location data.
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
         - SpecVehicleDataReceiver
@@ -487,7 +487,7 @@ paths:
       summary: Create truck speed
       description: Create new truck speed. Used by vehicle data receiver to send truck speed data.
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
         - SpecVehicleDataReceiver
@@ -644,7 +644,7 @@ paths:
       summary: Create drive state
       description: Create new drive state for truck
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
         - SpecVehicleDataReceiver
@@ -732,7 +732,7 @@ paths:
       summary: Create truck odometer reading
       description: Create new truck odometer reading. Used by vehicle data receiver to send truck odometer reading data.
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
         - SpecVehicleDataReceiver
@@ -1081,10 +1081,15 @@ components:
       scheme: bearer
       bearerFormat: JWT
 
-    ApiKeyAuth:
+    DataReceiverApiKeyAuth:
       type: apiKey
       in: header
-      name: X-API-Key
+      name: X-DataReceiver-API-Key
+
+    KeycloakApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Keycloak-API-Key
 
   schemas:
     Error:

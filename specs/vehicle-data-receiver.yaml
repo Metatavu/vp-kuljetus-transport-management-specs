@@ -4,15 +4,14 @@ info:
   description: Vehicle Management Services (vehicle-data-receiver)
   version: 1.0.0
 security:
-  - ApiKeyAuth: []
+  - DataReceiverApiKeyAuth: []
 paths:
   /vehicle-management/v1/publicTrucks:
     get:
       operationId: listPublicTrucks
       summary: List PublicTrucks.
       description: Lists public info about each truck.
-      security:
-        - ApiKeyAuth: []
+      security: []
       tags:
         - PublicTrucks
       parameters:
@@ -52,8 +51,7 @@ paths:
       summary: Lists truck driver cards
       description: Lists truck driver cards. Used to check if a truck has a driver
         card inserted.
-      security:
-        - ApiKeyAuth: []
+      security: []
       tags:
         - Trucks
       parameters:
@@ -94,7 +92,7 @@ paths:
 
         removedAt not set, the request is rejected with a 409 Conflict response.
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       requestBody:
@@ -140,7 +138,7 @@ paths:
 
         permanently. This is done to prevent false positive driver card states coming in from telematics device.
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       parameters:
@@ -180,7 +178,7 @@ paths:
       description: Create new truck location. Used by vehicle data receiver to send
         truck location data.
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       parameters:
@@ -214,7 +212,7 @@ paths:
       description: Create new truck speed. Used by vehicle data receiver to send truck
         speed data.
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       parameters:
@@ -247,7 +245,7 @@ paths:
       summary: Create drive state
       description: Create new drive state for truck
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       requestBody:
@@ -281,7 +279,7 @@ paths:
       description: Create new truck odometer reading. Used by vehicle data receiver to
         send truck odometer reading data.
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       parameters:
@@ -310,10 +308,10 @@ paths:
                 $ref: "#/components/schemas/Error"
 components:
   securitySchemes:
-    ApiKeyAuth:
+    DataReceiverApiKeyAuth:
       type: apiKey
       in: header
-      name: X-API-Key
+      name: X-DataReceiver-API-Key
   schemas:
     PublicTruck:
       type: object

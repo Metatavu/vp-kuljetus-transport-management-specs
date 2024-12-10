@@ -4,10 +4,14 @@ info:
   description: Vehicle Management Services (full)
   version: 1.0.0
 security:
-  - ApiKeyAuth: []
+  - DriverAppApiKeyAuth: []
+  - DataReceiverApiKeyAuth: []
+  - KeycloakApiKeyAuth: []
+  - CronKeyAuth: []
   - BearerAuth:
       - driver
       - manager
+      - integrations
 paths:
   /vehicle-management/v1/publicTrucks:
     get:
@@ -15,7 +19,6 @@ paths:
       summary: List PublicTrucks.
       description: Lists public info about each truck.
       security:
-        - ApiKeyAuth: []
         - BearerAuth:
             - driver
             - manager
@@ -214,9 +217,9 @@ paths:
       description: Lists truck driver cards. Used to check if a truck has a driver
         card inserted.
       security:
-        - ApiKeyAuth: []
         - BearerAuth:
             - driver
+        - KeycloakApiKeyAuth: []
       tags:
         - Trucks
       parameters:
@@ -257,7 +260,7 @@ paths:
 
         removedAt not set, the request is rejected with a 409 Conflict response.
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       requestBody:
@@ -303,7 +306,7 @@ paths:
 
         permanently. This is done to prevent false positive driver card states coming in from telematics device.
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       parameters:
@@ -343,7 +346,7 @@ paths:
       description: Create new truck location. Used by vehicle data receiver to send
         truck location data.
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       parameters:
@@ -431,7 +434,7 @@ paths:
       description: Create new truck speed. Used by vehicle data receiver to send truck
         speed data.
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       parameters:
@@ -586,7 +589,7 @@ paths:
       summary: Create drive state
       description: Create new drive state for truck
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       requestBody:
@@ -674,7 +677,7 @@ paths:
       description: Create new truck odometer reading. Used by vehicle data receiver to
         send truck odometer reading data.
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       parameters:
@@ -2245,7 +2248,7 @@ paths:
 
         the existing client app is returned with OK response.
       security:
-        - ApiKeyAuth: []
+        - DriverAppApiKeyAuth: []
       tags:
         - ClientApps
       requestBody:
@@ -2290,7 +2293,6 @@ paths:
       security:
         - BearerAuth:
             - manager
-        - ApiKeyAuth: []
       tags:
         - ClientApps
       parameters:
@@ -2382,7 +2384,7 @@ paths:
       summary: Verifies that the client app has been approved.
       description: Verifies that the client app has been approved.
       security:
-        - ApiKeyAuth: []
+        - KeycloakApiKeyAuth: []
       tags:
         - ClientApps
       requestBody:
@@ -3067,10 +3069,22 @@ paths:
                 $ref: "#/components/schemas/Error"
 components:
   securitySchemes:
-    ApiKeyAuth:
+    DriverAppApiKeyAuth:
       type: apiKey
       in: header
-      name: X-API-Key
+      name: X-DriverApp-API-Key
+    DataReceiverApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-DataReceiver-API-Key
+    KeycloakApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Keycloak-API-Key
+    CronKeyAuth:
+      type: apiKey
+      in: header
+      name: X-CRON-Key
     BearerAuth:
       type: http
       scheme: bearer

@@ -7,6 +7,7 @@ security:
   - BearerAuth:
       - driver
       - manager
+      - integrations
 paths:
   /vehicle-management/v1/trucks:
     get:

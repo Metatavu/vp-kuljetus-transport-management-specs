@@ -65,8 +65,44 @@ const addSecuritySchemesToSpecVersionFileContent = (specVersionFileContent: any,
     }
   }
 
+  if (securitySchemes.includes("DriverAppApiKeyAuth")) {
+    specVersionFileContent.security.push({ DriverAppApiKeyAuth: [] });
+    specVersionFileContent.components.securitySchemes.DriverAppApiKeyAuth = {
+      type: "apiKey",
+      in: "header",
+      name: "X-DriverApp-API-Key"
+    }
+  }
+
+  if (securitySchemes.includes("DataReceiverApiKeyAuth")) {
+    specVersionFileContent.security.push({ DataReceiverApiKeyAuth: [] });
+    specVersionFileContent.components.securitySchemes.DataReceiverApiKeyAuth = {
+      type: "apiKey",
+      in: "header",
+      name: "X-DataReceiver-API-Key"
+    }
+  }
+
+  if (securitySchemes.includes("KeycloakApiKeyAuth")) {
+    specVersionFileContent.security.push({ KeycloakApiKeyAuth: [] });
+    specVersionFileContent.components.securitySchemes.KeycloakApiKeyAuth = {
+      type: "apiKey",
+      in: "header",
+      name: "X-Keycloak-API-Key"
+    }
+  }
+
+  if (securitySchemes.includes("CronKeyAuth")) {
+    specVersionFileContent.security.push({ CronKeyAuth: [] });
+    specVersionFileContent.components.securitySchemes.CronKeyAuth = {
+      type: "apiKey",
+      in: "header",
+      name: "X-CRON-Key"
+    }
+  }
+
   if (securitySchemes.includes("BearerAuth")) {
-    specVersionFileContent.security.push({ BearerAuth: ["driver", "manager"] });
+    specVersionFileContent.security.push({ BearerAuth: ["driver", "manager", "integrations"] });
     specVersionFileContent.components.securitySchemes.BearerAuth = {
       type: "http",
       scheme: "bearer",
