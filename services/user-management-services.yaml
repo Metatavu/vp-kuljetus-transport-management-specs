@@ -1298,6 +1298,134 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /v1/payrollExports:
+    get:
+      operationId: listPayrollExports
+      summary: List Payroll Exports.
+      description: Lists payroll exports.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - PayrollExports
+      parameters:
+        - name: employeeId
+          in: query
+          description: Filter payroll exports by employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: exportedAfter
+          in: query
+          description: Filter payroll exports exported after specified date.
+          schema:
+            type: string
+            format: date-time
+        - name: exportedBefore
+          in: query
+          description: Filter payroll exports exported before specified date.
+          schema:
+            type: string
+            format: date-time
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+            default: 0
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: List of payroll exports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PayrollExport"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createPayrollExport
+      summary: Create Payroll Export.
+      description: >
+        Creates Payroll Export.
+
+
+        When payroll export is created, its ID is added to all included work shifts.
+
+
+        The payroll export can only be created if the work shifts included
+
+        - are approved
+
+        - are not included in another payroll export
+
+        - are for the same employee as the payroll export
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - PayrollExports
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PayrollExport"
+      responses:
+        "201":
+          description: Created Payroll Export
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PayrollExport"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/payrollExports/{payrollExportId}:
+    get:
+      operationId: findPayrollExport
+      summary: Find Payroll Export.
+      description: Finds Payroll Export by ID.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - PayrollExports
+      parameters:
+        - name: payrollExportId
+          required: true
+          in: path
+          description: Payroll export's ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found Payroll Export
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PayrollExport"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   securitySchemes:
     BearerAuth:
@@ -1568,6 +1696,15 @@ components:
           type: string
           description: Additional notes for the work shift. For example, if the employee
             was sick during the shift.
+        payrollExportId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: >
+            Payroll export ID. This is filled when work shift is linked to a
+            payroll export. Work shift cannot be
+
+            included in another payroll export if it is already linked to one.
     WorkEvent:
       type: object
       description: >
@@ -2043,3 +2180,46 @@ components:
         deviceId:
           type: string
           description: device ID
+    PayrollExport:
+      description: >
+        Represents a single payroll export.
+
+
+        A payroll export is created when a list of work shifts of a single employee is sent to payroll management.
+
+        The export is created by a manager and contains a list of work shift IDs that are sent to payroll. All of
+
+        the included work shifts must be approved before the export can be created. The total work hours are then
+
+        calculated from the work shifts and sent to payroll management in a CSV file.
+      type: object
+      required:
+        - employeeId
+        - workShiftIds
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        employeeId:
+          type: string
+          format: uuid
+          description: Employee's ID
+        workShiftIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: List of work shift IDs included in the payroll export
+        csvFileName:
+          type: string
+          readOnly: true
+          description: Name of CSV file sent to payroll management.
+        creatorId:
+          type: string
+          format: uuid
+          description: Creator's ID
+        exportedAt:
+          type: string
+          format: date-time
+          description: Export time
