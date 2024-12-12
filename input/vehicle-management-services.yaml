@@ -1725,7 +1725,7 @@ components:
         value:
           type: number
           format: float
-          description: The temperature reading in Celsius or Fahrenheit (based on your requirement)
+          description: The temperature value in Celsius
         timestamp:
           type: string
           format: date-time
