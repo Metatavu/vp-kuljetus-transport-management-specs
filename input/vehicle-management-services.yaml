@@ -761,11 +761,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/trucks/{truckId}/temperature-readings:
+  /v1/trucks/{truckId}/temperatures:
     get:
-      operationId: listTemperatureReadingsByTruck
-      summary: List temperature readings by truck, including archived thermometers
-      description: Retrieve all temperature readings for a specific truck, including data from thermometers that have been archived
+      operationId: listTruckTemperatures
+      summary: List truck temperatures.
+      description: Retrieve all temperatures from all thermometers related to a specific truck, possibly including data from archived thermometers.
       security:
         - BearerAuth:
             - manager
@@ -798,13 +798,13 @@ paths:
             type: integer
       responses:
         "200":
-          description: List of temperature readings, including archived data if requested
+          description: List of temperatures, including archived data if requested
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/TemperatureValue"
+                  $ref: "#/components/schemas/Temperature"
         default:
           description: Invalid request was sent to the server
           content:
@@ -1191,7 +1191,7 @@ paths:
       parameters:
         - name: entityId
           in: query
-          description: Filter thermometers by associated truck or towable ID
+          description: Filter thermometers by associated truck or towable ID. Should be used with entityType filter.
           schema:
             type: string
             format: uuid
@@ -1657,15 +1657,15 @@ components:
           format: date-time
           description: >
             Setting the archivedAt time marks the thermometer as archived. Thermometers
-            marked as archived will not appear in list requests unless archived filter is set to true.
+            marked as archived will not appear in list requests unless includeArchived filter is set to true.
             Archived thermometer cannot be updated, unless archivedAt is first set to null.
 
-    TemperatureValue:
+    Temperature:
       type: object
-      description: Represents a temperature reading from a thermometer
+      description: Represents a single temperature reading from a thermometer
       required:
         - thermometerId
-        - temperature
+        - value
         - timestamp
       properties:
         id:
@@ -1677,7 +1677,7 @@ components:
           type: string
           format: uuid
           description: The ID of the thermometer from which the reading was taken
-        temperature:
+        value:
           type: number
           format: float
           description: The temperature reading in Celsius or Fahrenheit (based on your requirement)
