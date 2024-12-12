@@ -985,11 +985,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/towables/{towableId}/temperature-readings:
+  /v1/towables/{towableId}/temperatures:
     get:
-      operationId: listTemperatureReadingsByTowable
+      operationId: listTowableTemperatures
       summary: List temperature readings by towable, including archived thermometers
-      description: Retrieve all temperature readings for a specific towable, including data from thermometers that have been archived
+      description: Retrieve all temperatures from all thermometers related to a specific towable, possibly including data from thermometers that have been archived.
       security:
         - BearerAuth:
             - manager
@@ -1028,8 +1028,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/TemperatureValue"
-        default:
+                  $ref: "#/components/schemas/Temperature"
+        "default":
           description: Invalid request was sent to the server
           content:
             application/json:
@@ -1267,6 +1267,48 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateThermometer
+      summary: Update thermometer
+      description: Update the details of a specific thermometer. Currently only the name can be updated.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - Trucks
+        - SpecManagementUI
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+        description: Payload
+        required: true
+      parameters:
+        - name: thermometerId
+          required: true
+          in: path
+          description: The unique ID of the thermometer
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated thermometer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Thermometer"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  
+  
 
 components:
   securitySchemes:
@@ -1623,6 +1665,9 @@ components:
           format: uuid
           readOnly: true
           description: Unique identifier for the thermometer
+        name:
+          type: string
+          description: Name of the thermometer
         macAddress:
           type: string
           description: MAC address of the thermometer. It is unique and stays with the device.
