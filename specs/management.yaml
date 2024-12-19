@@ -3287,7 +3287,7 @@ components:
             Elements](https://wiki.teltonika-gps.com/view/FMC650_Teltonika_Data_Sending_Parameters_ID#Tachograph_data_elements)
     Temperature:
       type: object
-      description: Represents a single temperature reading from a thermometer
+      description: Represents a single temperature reading record
       required:
         - thermometerId
         - value
@@ -3305,8 +3305,7 @@ components:
         value:
           type: number
           format: float
-          description: The temperature reading in Celsius or Fahrenheit (based on your
-            requirement)
+          description: The temperature value in Celsius
         timestamp:
           type: string
           format: date-time

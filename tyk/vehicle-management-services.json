@@ -149,6 +149,20 @@
             },
             {
               "disabled": false,
+              "path": "/v1/temperatureReadings",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "POST": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
               "path": "/v1/thermometers",
               "method": "",
               "ignore_case": false,
@@ -464,6 +478,10 @@
             {
               "path": "/v1/system/ping",
               "method": "GET"
+            },
+            {
+              "path": "/v1/temperatureReadings",
+              "method": "POST"
             },
             {
               "path": "/v1/thermometers",
