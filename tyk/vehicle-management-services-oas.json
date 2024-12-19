@@ -2640,10 +2640,15 @@
         "description": "Represents a single temperature reading being received from a thermometer",
         "required": [
           "macAddress",
+          "imei",
           "value",
           "timestamp"
         ],
         "properties": {
+          "imei": {
+            "type": "string",
+            "description": "The IMEI of the truck/towable that is sending this temperature reading"
+          },
           "macAddress": {
             "type": "string",
             "description": "Unique mac address of the thermometer that is sending this temperature reading"
