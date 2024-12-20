@@ -2194,8 +2194,7 @@
         "required": [
           "plateNumber",
           "type",
-          "vin",
-          "imei"
+          "vin"
         ],
         "properties": {
           "id": {
@@ -2263,8 +2262,7 @@
         "required": [
           "plateNumber",
           "type",
-          "vin",
-          "imei"
+          "vin"
         ],
         "properties": {
           "id": {
