@@ -761,7 +761,8 @@ paths:
       description: Create temperature reading
       security:
         - DataReceiverApiKeyAuth: []
-      tags: []
+      tags:
+        - TemperatureReadings
       requestBody:
         content:
           application/json:

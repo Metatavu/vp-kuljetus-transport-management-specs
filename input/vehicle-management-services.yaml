@@ -820,6 +820,7 @@ paths:
       security:
         - DataReceiverApiKeyAuth: [ ]
       tags:
+        - TemperatureReadings
         - SpecVehicleDataReceiver
       requestBody:
         content:
