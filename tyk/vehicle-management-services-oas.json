@@ -1294,7 +1294,6 @@
           }
         ],
         "tags": [
-          "Trucks",
           "SpecVehicleDataReceiver"
         ],
         "requestBody": {
@@ -2638,14 +2637,14 @@
         "description": "Represents a single temperature reading being received from a thermometer",
         "required": [
           "macAddress",
-          "imei",
+          "deviceIdentifier",
           "value",
           "timestamp"
         ],
         "properties": {
-          "imei": {
+          "deviceIdentifier": {
             "type": "string",
-            "description": "The IMEI of the truck/towable that is sending this temperature reading"
+            "description": "unique ID of the device the sensor is connected to.\nID is an IMEI when value is received from truck or towable and MAC address when received from terminal.\n"
           },
           "macAddress": {
             "type": "string",
