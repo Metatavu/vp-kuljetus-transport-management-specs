@@ -1756,6 +1756,7 @@ components:
           format: float
           description: The temperature value in Celsius
         timestamp:
-          type: string
-          format: date-time
-          description: The timestamp when the temperature was recorded
+          type: integer
+          format: int64
+          description: Timestamp for when the temperature was read. Unix timestamp in
+            milliseconds.
