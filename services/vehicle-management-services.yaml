@@ -792,6 +792,31 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /v1/temperatureReadings:
+    post:
+      operationId: createTemperatureReading
+      summary: Create temperature reading
+      description: Create temperature reading
+      security:
+        - DataReceiverApiKeyAuth: []
+      tags:
+        - TemperatureReadings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TemperatureReading"
+        description: Payload
+        required: true
+      responses:
+        "204":
+          description: Created temperature reading
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /v1/towables:
     get:
       operationId: listTowables
@@ -1341,7 +1366,6 @@ components:
         - plateNumber
         - type
         - vin
-        - imei
       properties:
         id:
           type: string
@@ -1403,7 +1427,6 @@ components:
         - plateNumber
         - type
         - vin
-        - imei
       properties:
         id:
           type: string
@@ -1686,7 +1709,7 @@ components:
             cannot be updated, unless archivedAt is first set to null.
     Temperature:
       type: object
-      description: Represents a single temperature reading from a thermometer
+      description: Represents a single temperature reading record
       required:
         - thermometerId
         - value
@@ -1704,8 +1727,34 @@ components:
         value:
           type: number
           format: float
-          description: The temperature reading in Celsius or Fahrenheit (based on your
-            requirement)
+          description: The temperature value in Celsius
+        timestamp:
+          type: string
+          format: date-time
+          description: The timestamp when the temperature was recorded
+    TemperatureReading:
+      type: object
+      description: Represents a single temperature reading being received from a thermometer
+      required:
+        - macAddress
+        - deviceIdentifier
+        - value
+        - timestamp
+      properties:
+        deviceIdentifier:
+          type: string
+          description: >
+            unique ID of the device the sensor is connected to.
+
+            ID is an IMEI when value is received from truck or towable and MAC address when received from terminal.
+        macAddress:
+          type: string
+          description: Unique mac address of the thermometer that is sending this
+            temperature reading
+        value:
+          type: number
+          format: float
+          description: The temperature value in Celsius
         timestamp:
           type: string
           format: date-time

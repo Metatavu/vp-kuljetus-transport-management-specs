@@ -1392,7 +1392,6 @@ components:
         - plateNumber
         - type
         - vin
-        - imei
       properties:
         id:
           type: string
@@ -1506,7 +1505,6 @@ components:
         - plateNumber
         - type
         - vin
-        - imei
       properties:
         id:
           type: string
