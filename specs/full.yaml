@@ -3726,10 +3726,11 @@ components:
       type: object
       description: Represents a single temperature reading being received from a thermometer
       required:
-        - macAddress
+        - hardwareSensorId
         - deviceIdentifier
         - value
         - timestamp
+        - sourceType
       properties:
         deviceIdentifier:
           type: string
@@ -3737,19 +3738,29 @@ components:
             unique ID of the device the sensor is connected to.
 
             ID is an IMEI when value is received from truck or towable and MAC address when received from terminal.
-        macAddress:
+        hardwareSensorId:
           type: string
-          description: Unique mac address of the thermometer that is sending this
-            temperature reading
+          description: Unique hardware sensor ID that is sending this temperature reading
         value:
           type: number
           format: float
-          description: The temperature value in Celsius
+          description: >
+            The temperature value in Celsius. In case of a truck or towable, a
+            valid value is within the range of -55.0 to 115.0.
+
+            Invalid/error values as mapped from [Teltonika documentation](https://wiki.teltonika-gps.com/view/FMC650_Teltonika_Data_Sending_Parameters_ID#Permanent_I/O_elements) :
+              - 850.0 - Sensor not ready
+              - 2000.0 - Value read error
+              - 3000.0 - Not connected
+              - 4000.0 - ID Failed
+              - 5000.0 - Same as 850.0
         timestamp:
           type: integer
           format: int64
           description: Timestamp for when the temperature was read. Unix timestamp in
             milliseconds.
+        sourceType:
+          $ref: "#/components/schemas/TemperatureReadingSourceType"
     Towable:
       type: object
       description: Represent single towable
@@ -3908,6 +3919,12 @@ components:
             Thermometers marked as archived will not appear in list requests
             unless includeArchived filter is set to true. Archived thermometer
             cannot be updated, unless archivedAt is first set to null.
+    TemperatureReadingSourceType:
+      type: string
+      enum:
+        - TRUCK
+        - TOWABLE
+        - TERMINAL
     Route:
       type: object
       description: Represent single planned route for single truck driver
