@@ -1238,7 +1238,9 @@
           "location",
           "address",
           "postalCode",
-          "locality"
+          "locality",
+          "siteType",
+          "deviceIds"
         ],
         "properties": {
           "id": {
@@ -1266,6 +1268,15 @@
           "locality": {
             "type": "string",
             "description": "Locality of the site"
+          },
+          "deviceIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "siteType": {
+            "$ref": "#/components/schemas/SiteType"
           },
           "additionalInfo": {
             "type": "string",
@@ -1387,6 +1398,14 @@
         "enum": [
           "UNLOAD",
           "LOAD"
+        ]
+      },
+      "SiteType": {
+        "type": "string",
+        "description": "Type of the site",
+        "enum": [
+          "CUSTOMER_SITE",
+          "TERMINAL"
         ]
       },
       "TaskStatus": {

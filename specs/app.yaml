@@ -2021,6 +2021,8 @@ components:
         - address
         - postalCode
         - locality
+        - siteType
+        - deviceIds
       properties:
         id:
           type: string
@@ -2042,6 +2044,12 @@ components:
         locality:
           type: string
           description: Locality of the site
+        deviceIds:
+          type: array
+          items:
+            type: string
+        siteType:
+          $ref: "#/components/schemas/SiteType"
         additionalInfo:
           type: string
           description: >
@@ -2263,6 +2271,12 @@ components:
           format: date-time
           type: string
           readOnly: true
+    SiteType:
+      type: string
+      description: Type of the site
+      enum:
+        - CUSTOMER_SITE
+        - TERMINAL
     TaskStatus:
       type: string
       description: Status of the task
