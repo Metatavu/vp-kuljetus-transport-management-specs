@@ -2022,7 +2022,7 @@ components:
         - postalCode
         - locality
         - siteType
-        - devices
+        - deviceIds
       properties:
         id:
           type: string
@@ -2044,7 +2044,7 @@ components:
         locality:
           type: string
           description: Locality of the site
-        devices:
+        deviceIds:
           type: array
           items:
             type: string
