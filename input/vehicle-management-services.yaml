@@ -1794,3 +1794,12 @@ components:
           type: integer
           format: int64
           description: Timestamp for when the temperature was read. Unix timestamp in milliseconds.
+        sourceType:
+          $ref: "#/components/schemas/TemperatureReadingSourceType"
+
+    TemperatureReadingSourceType:
+      type: string
+      enum:
+        - TRUCK
+        - TOWABLE
+        - TERMINAL
