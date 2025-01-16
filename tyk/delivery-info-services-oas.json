@@ -1267,6 +1267,15 @@
             "type": "string",
             "description": "Locality of the site"
           },
+          "devices": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "siteType": {
+            "$ref": "#/components/schemas/SiteType"
+          },
           "additionalInfo": {
             "type": "string",
             "description": "additional information about the site, e.g. delivery instructions. This is shown in the task for the driver.\n"
@@ -1387,6 +1396,14 @@
         "enum": [
           "UNLOAD",
           "LOAD"
+        ]
+      },
+      "SiteType": {
+        "type": "string",
+        "description": "Type of the site",
+        "enum": [
+          "CUSTOMER_SITE",
+          "TERMINAL"
         ]
       },
       "TaskStatus": {

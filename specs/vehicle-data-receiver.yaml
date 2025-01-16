@@ -517,8 +517,6 @@ components:
           format: int64
           description: Timestamp for when the temperature was read. Unix timestamp in
             milliseconds.
-        sourceType:
-          $ref: "#/components/schemas/TemperatureReadingSourceType"
     TruckDriveStateEnum:
       type: string
       enum:
@@ -528,9 +526,3 @@ components:
         - DRIVE
         - ERROR
         - NOT_AVAILABLE
-    TemperatureReadingSourceType:
-      type: string
-      enum:
-        - TRUCK
-        - TOWABLE
-        - TERMINAL

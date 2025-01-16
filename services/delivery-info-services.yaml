@@ -759,6 +759,12 @@ components:
         locality:
           type: string
           description: Locality of the site
+        devices:
+          type: array
+          items:
+            type: string
+        siteType:
+          $ref: "#/components/schemas/SiteType"
         additionalInfo:
           type: string
           description: >
@@ -887,6 +893,12 @@ components:
       enum:
         - UNLOAD
         - LOAD
+    SiteType:
+      type: string
+      description: Type of the site
+      enum:
+        - CUSTOMER_SITE
+        - TERMINAL
     TaskStatus:
       type: string
       description: Status of the task
