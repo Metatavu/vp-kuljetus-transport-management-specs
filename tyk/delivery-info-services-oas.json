@@ -1238,7 +1238,8 @@
           "location",
           "address",
           "postalCode",
-          "locality"
+          "locality",
+          "siteType"
         ],
         "properties": {
           "id": {

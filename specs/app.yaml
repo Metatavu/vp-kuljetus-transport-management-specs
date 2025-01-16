@@ -2021,6 +2021,7 @@ components:
         - address
         - postalCode
         - locality
+        - siteType
       properties:
         id:
           type: string
