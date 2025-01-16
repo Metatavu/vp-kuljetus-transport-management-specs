@@ -3306,8 +3306,8 @@ components:
           format: float
           description: The temperature value in Celsius
         timestamp:
-          type: string
-          format: date-time
+          type: integer
+          format: int64
           description: The timestamp when the temperature was recorded
     Towable:
       type: object
