@@ -4743,6 +4743,7 @@ components:
         - postalCode
         - locality
         - siteType
+        - devices
       properties:
         id:
           type: string
