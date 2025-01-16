@@ -2627,8 +2627,8 @@
             "description": "The temperature value in Celsius"
           },
           "timestamp": {
-            "type": "integer",
-            "format": "int64",
+            "type": "string",
+            "format": "date-time",
             "description": "The timestamp when the temperature was recorded"
           }
         }
