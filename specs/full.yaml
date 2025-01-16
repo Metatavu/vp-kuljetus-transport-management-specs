@@ -3759,6 +3759,8 @@ components:
           format: int64
           description: Timestamp for when the temperature was read. Unix timestamp in
             milliseconds.
+        sourceType:
+          $ref: "#/components/schemas/TemperatureReadingSourceType"
     Towable:
       type: object
       description: Represent single towable
@@ -3917,6 +3919,12 @@ components:
             Thermometers marked as archived will not appear in list requests
             unless includeArchived filter is set to true. Archived thermometer
             cannot be updated, unless archivedAt is first set to null.
+    TemperatureReadingSourceType:
+      type: string
+      enum:
+        - TRUCK
+        - TOWABLE
+        - TERMINAL
     Route:
       type: object
       description: Represent single planned route for single truck driver
