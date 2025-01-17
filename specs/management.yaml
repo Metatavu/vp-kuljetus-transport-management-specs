@@ -4661,6 +4661,22 @@ components:
           format: int64
           description: Timestamp for when the temperature was read. Unix timestamp in
             milliseconds.
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
     SiteType:
       type: string
       description: Type of the site
