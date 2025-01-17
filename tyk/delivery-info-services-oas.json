@@ -1258,7 +1258,7 @@
         ],
         "responses": {
           "200": {
-            "description": "List of freight units",
+            "description": "List of temperature records",
             "content": {
               "application/json": {
                 "schema": {
