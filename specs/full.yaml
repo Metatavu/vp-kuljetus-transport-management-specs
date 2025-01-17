@@ -3474,7 +3474,6 @@ paths:
           description: Device id
           schema:
             type: string
-            format: uuid
         - name: first
           in: query
           description: First result.

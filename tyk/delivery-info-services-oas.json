@@ -1235,8 +1235,7 @@
             "in": "query",
             "description": "Device id",
             "schema": {
-              "type": "string",
-              "format": "uuid"
+              "type": "string"
             }
           },
           {
