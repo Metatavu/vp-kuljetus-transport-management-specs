@@ -3452,6 +3452,110 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /delivery-info/v1/temperatureRecords:
+    get:
+      operationId: listTemperatureRecords
+      summary: Lists temperature records
+      description: Lists temperature records
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - TemperatureRecords
+      parameters:
+        - name: terminalId
+          in: query
+          description: Terminal id
+          schema:
+            type: string
+            format: uuid
+        - name: deviceId
+          in: query
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of freight units
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TemperatureRecord"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createTemperatureRecord
+      summary: Create a temperature record
+      description: Create a temperature record
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - TemperatureRecords
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TemperatureRecord"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created temperature record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TemperatureRecord"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /delivery-info/v1/temperatureRecords/{temperatureRecordId}:
+    delete:
+      operationId: deleteTemperatureRecord
+      summary: Deletes a temperature record
+      description: Deletes a temperature record
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - TemperatureRecords
+      parameters:
+        - name: temperatureRecordId
+          required: true
+          in: path
+          description: temperature record id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   securitySchemes:
     DriverAppApiKeyAuth:
@@ -4992,6 +5096,36 @@ components:
           format: date-time
           type: string
           readOnly: true
+    TemperatureRecord:
+      type: object
+      description: Temperature record
+      required:
+        - hardwareSensorId
+        - deviceIdentifier
+        - value
+        - timestamp
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        deviceIdentifier:
+          type: string
+          description: |
+            ESP device address
+        hardwareSensorId:
+          type: string
+          description: Unique hardware sensor ID that is sending this temperature reading
+        value:
+          type: number
+          format: float
+          description: |
+            The temperature value in Celsius.
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp for when the temperature was read. Unix timestamp in
+            milliseconds.
     SiteType:
       type: string
       description: Type of the site

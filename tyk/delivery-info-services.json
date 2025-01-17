@@ -316,6 +316,40 @@
                   "headers": null
                 }
               }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/temperatureRecords",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "POST": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/temperatureRecords/{temperatureRecordId}",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "DELETE": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
             }
           ],
           "track_endpoints": [
@@ -402,6 +436,18 @@
             {
               "path": "/v1/tasks/{taskId}",
               "method": "PUT"
+            },
+            {
+              "path": "/v1/temperatureRecords",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/temperatureRecords",
+              "method": "POST"
+            },
+            {
+              "path": "/v1/temperatureRecords/{temperatureRecordId}",
+              "method": "DELETE"
             }
           ],
           "persist_graphql": null
