@@ -715,7 +715,7 @@ paths:
     get:
       operationId: listThermometers
       summary: List thermometers
-      description: Retrieve a list of all thermometers, optionally filtered by vehicle association or archived status
+      description: Retrieve a list of all thermometers, optionally filtered by site association or archived status
       security:
         - BearerAuth:
             - manager
