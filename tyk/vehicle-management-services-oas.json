@@ -1216,7 +1216,7 @@
           }
         ],
         "tags": [
-          "Temperatures",
+          "Thermometers",
           "SpecManagementUI"
         ],
         "parameters": [
@@ -1930,7 +1930,7 @@
           }
         ],
         "tags": [
-          "Temperatures",
+          "Thermometers",
           "SpecManagementUI"
         ],
         "parameters": [
@@ -2021,7 +2021,7 @@
           }
         ],
         "tags": [
-          "Temperatures",
+          "Thermometers",
           "SpecManagementUI"
         ],
         "parameters": [
@@ -2071,7 +2071,7 @@
           }
         ],
         "tags": [
-          "Temperatures",
+          "Thermometers",
           "SpecManagementUI"
         ],
         "requestBody": {
