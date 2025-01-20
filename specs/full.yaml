@@ -4296,6 +4296,14 @@ components:
         | JOB_SPECIFIC_ALLOWANCE | Työkohtaisuuslisä    |
 
         | FROZEN_ALLOWANCE       | Pakastelisä          |
+
+        | OFFICIAL_DUTIES        | Virkatehtävät        |
+
+        | SICK_LEAVE             | Sairasloma           |
+
+        | TRAINING               | Koulutus työajalla   |
+
+        | UNPAID                 | Palkaton             |
       enum:
         - PAID_WORK
         - BREAK
@@ -4305,6 +4313,10 @@ components:
         - HOLIDAY_ALLOWANCE
         - JOB_SPECIFIC_ALLOWANCE
         - FROZEN_ALLOWANCE
+        - OFFICIAL_DUTIES
+        - SICK_LEAVE
+        - TRAINING
+        - UNPAID
     WorkShiftHours:
       type: object
       description: >
@@ -4404,6 +4416,26 @@ components:
         ###### FROZEN_ALLOWANCE
 
         All hours from the PAID_WORK that are recorded from the frozen section.
+
+
+        ###### OFFICIAL_DUTIES
+
+        Not calculated at all. It can only be added manually from the management.
+
+
+        ###### SICK_LEAVE
+
+        Not calculated at all. It can only be added manually from the management.
+
+
+        ###### TRAINING
+
+        Not calculated at all. It can only be added manually from the management.
+
+
+        ###### UNPAID
+
+        Not calculated at all. It can only be added manually from the management.
       required:
         - employeeId
         - employeeWorkShiftId
@@ -4688,11 +4720,8 @@ components:
     AbsenceType:
       type: string
       enum:
-        - TRAINING
         - VACATION
-        - OFFICIAL_DUTIES
         - COMPENSATORY_LEAVE
-        - SICK_LEAVE
       description: >
         Absence types are used to mark the absence type of the employee work
         shift. Absences are taken into account when
@@ -4709,15 +4738,9 @@ components:
 
         | ------------------ | ------------ | ------------------ | ---------- | --------------------- | ----------------------- |
 
-        | TRAINING           | KO           | Koulutus työajalla | 8h         | 8h                    | no                      |
-
         | VACATION           | LO           | Loma               | 6.67h      | 0h                    | yes                     |
 
-        | OFFICIAL_DUTIES    | LT           | Luottamustoimet    | 8h         | 8h                    | yes                     |
-
         | COMPENSATORY_LEAVE | PP           | Pekkanen           | 8h         | 8h                    | yes                     |
-
-        | SICK_LEAVE         | SL           | Sairausloma        | 8h         | 8h                    | yes                     |
     ClientAppMetadata:
       type: object
       description: Client app metadata
