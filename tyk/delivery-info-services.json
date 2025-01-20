@@ -259,6 +259,20 @@
             },
             {
               "disabled": false,
+              "path": "/v1/sites/{siteId}/temperatures",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
               "path": "/v1/system/ping",
               "method": "",
               "ignore_case": false,
@@ -319,16 +333,10 @@
             },
             {
               "disabled": false,
-              "path": "/v1/temperatureRecords",
+              "path": "/v1/temperatureReadings",
               "method": "",
               "ignore_case": false,
               "method_actions": {
-                "GET": {
-                  "action": "no_action",
-                  "code": 200,
-                  "data": "",
-                  "headers": null
-                },
                 "POST": {
                   "action": "no_action",
                   "code": 200,
@@ -339,11 +347,31 @@
             },
             {
               "disabled": false,
-              "path": "/v1/temperatureRecords/{temperatureRecordId}",
+              "path": "/v1/thermometers",
               "method": "",
               "ignore_case": false,
               "method_actions": {
-                "DELETE": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/thermometers/{thermometerId}",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "PUT": {
                   "action": "no_action",
                   "code": 200,
                   "data": "",
@@ -414,6 +442,10 @@
               "method": "PUT"
             },
             {
+              "path": "/v1/sites/{siteId}/temperatures",
+              "method": "GET"
+            },
+            {
               "path": "/v1/system/ping",
               "method": "GET"
             },
@@ -438,16 +470,20 @@
               "method": "PUT"
             },
             {
-              "path": "/v1/temperatureRecords",
-              "method": "GET"
-            },
-            {
-              "path": "/v1/temperatureRecords",
+              "path": "/v1/temperatureReadings",
               "method": "POST"
             },
             {
-              "path": "/v1/temperatureRecords/{temperatureRecordId}",
-              "method": "DELETE"
+              "path": "/v1/thermometers",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/thermometers/{thermometerId}",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/thermometers/{thermometerId}",
+              "method": "PUT"
             }
           ],
           "persist_graphql": null

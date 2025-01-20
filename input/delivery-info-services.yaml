@@ -5,6 +5,7 @@ info:
 
 security:
   - BearerAuth: [driver, manager]
+  - TerminalDeviceApiKeyAuth: []
 
 x-tyk-api-gateway:
   info:
@@ -197,6 +198,57 @@ paths:
       responses:
         "204":
           description: Empty response indicating successful removal
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+                
+  /v1/sites/{siteId}/temperatures:
+    get:
+      operationId: listSiteTemperatures
+      summary: List temperature readings by site, including archived thermometers
+      description: Retrieve all temperatures from all thermometers related to a specific site, possibly including data from thermometers that have been archived.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Sites
+        - SpecManagementUI
+      parameters:
+        - name: siteId
+          required: true
+          in: path
+          description: The unique ID of the site
+          schema:
+            type: string
+            format: uuid
+        - name: includeArchived
+          in: query
+          description: Include archived thermometers' data in the results
+          schema:
+            type: boolean
+            default: false
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of temperature readings, including archived data if requested
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Temperature"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -632,6 +684,155 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  
+  /v1/temperatureReadings:
+    post:
+      operationId: createTemperatureReading
+      summary: Create temperature reading
+      description: Create temperature reading
+      security:
+        - TerminalDeviceApiKeyAuth: [ ]
+      tags:
+        - TemperatureReadings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TemperatureReading"
+        description: Payload
+        required: true
+      responses:
+        "204":
+          description: Created temperature reading
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  
+  /v1/thermometers:
+    get:
+      operationId: listThermometers
+      summary: List thermometers
+      description: Retrieve a list of all thermometers, optionally filtered by vehicle association or archived status
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Thermometers
+        - SpecManagementUI
+      parameters:
+        - name: siteId
+          in: query
+          description: Filter thermometers by associated site (terminal) id.
+          schema:
+            type: string
+            format: uuid
+        - name: includeArchived
+          in: query
+          description: Include archived thermometers in the results
+          schema:
+            type: boolean
+            default: false
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of thermometers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Thermometer"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/thermometers/{thermometerId}:
+    get:
+      operationId: findThermometer
+      summary: Find a thermometer by ID
+      description: Retrieve the details of a specific thermometer
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - Thermometers
+        - SpecManagementUI
+      parameters:
+        - name: thermometerId
+          required: true
+          in: path
+          description: The unique ID of the thermometer
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found thermometer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Thermometer"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateThermometer
+      summary: Update thermometer
+      description: Update the details of a specific thermometer. Currently only the name can be updated.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - Thermometers
+        - SpecManagementUI
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+        description: Payload
+        required: true
+      parameters:
+        - name: thermometerId
+          required: true
+          in: path
+          description: The unique ID of the thermometer
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated thermometer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Thermometer"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   "/v1/freightUnits/{freightUnitId}":
     get:
@@ -730,116 +931,17 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
                 
-  /v1/temperatureReadings:
-    get:
-      operationId: listTemperatureReadings
-      summary: Lists temperature readings
-      description: Lists temperature readings
-      security:
-        - BearerAuth: [manager]
-      tags:
-        - TemperatureReadings
-        - SpecManagementUI
-        - SpecApp
-      parameters:
-        - name: terminalId
-          in: query
-          description: Terminal id
-          schema:
-            type: string
-            format: uuid
-        - name: deviceId
-          in: query
-          description: Device id
-          schema:
-            type: string
-        - name: first
-          in: query
-          description: First result.
-          schema:
-            type: integer
-        - name: max
-          in: query
-          description: Max results.
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: List of temperature records
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/TemperatureRecord"
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    post:
-      operationId: createTemperatureRecord
-      summary: Create a temperature record
-      description: Create a temperature record
-      security:
-        - TerminalDeviceApiKeyAuth: []
-      tags:
-        - TemperatureRecords
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/TemperatureRecord"
-        description: Payload
-        required: true
-      responses:
-        "200":
-          description: Created temperature record
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/TemperatureRecord"
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-                
-  "/v1/temperatureRecords/{temperatureRecordId}":
-    delete:
-      operationId: deleteTemperatureRecord
-      summary: Deletes a temperature record
-      description: Deletes a temperature record
-      security:
-        - BearerAuth: [manager]
-      tags:
-        - TemperatureRecords
-        - SpecManagementUI
-      parameters:
-        - name: temperatureRecordId
-          required: true
-          in: path
-          description: temperature record id
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "204":
-          description: Empty response indicating successful removal
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
 components:
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+    
+    TerminalDeviceApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-DataReceiver-API-Key
 
   schemas:
     Error:
@@ -1013,13 +1115,12 @@ components:
       enum:
         - UNLOAD
         - LOAD
-          
-    TemperatureRecord:
+        
+    Temperature:
       type: object
-      description: Temperature record
+      description: Represents a single temperature reading record
       required:
-        - hardwareSensorId
-        - deviceIdentifier
+        - thermometerId
         - value
         - timestamp
       properties:
@@ -1027,22 +1128,46 @@ components:
           type: string
           format: uuid
           readOnly: true
-        deviceIdentifier:
+          description: Unique identifier for the temperature record
+        thermometerId:
           type: string
-          description: |
-            ESP device address
-        hardwareSensorId:
-          type: string
-          description: Unique hardware sensor ID that is sending this temperature reading
+          format: uuid
+          description: The ID of the thermometer from which the reading was taken
         value:
           type: number
           format: float
-          description: |
-            The temperature value in Celsius.
+          description: The temperature value in Celsius
         timestamp:
           type: integer
           format: int64
-          description: Timestamp for when the temperature was read. Unix timestamp in milliseconds.
+          description: The timestamp when the temperature was recorded
+          
+    Thermometer:
+      type: object
+      description: Represents a thermometer attached to a truck or towable
+      required:
+        - espMacAddress
+        - hardwareSensorId
+        - siteId
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the thermometer
+        name:
+          type: string
+          description: Name of the thermometer
+        hardwareSensorId:
+          type: string
+          description: Hardware address of the thermometer. It is unique and stays with the device.
+        espMacAddress:
+          type: string
+          description: MAC address of the ESP. It is unique and stays with the device.
+        siteId:
+          type: string
+          format: uuid
+          description: The ID of the site (terminal) currently associated with the thermometer.
         creatorId:
           type: string
           readOnly: true
@@ -1059,6 +1184,37 @@ components:
           format: date-time
           type: string
           readOnly: true
+        archivedAt:
+          type: string
+          format: date-time
+          description: >
+            Setting the archivedAt time marks the thermometer as archived. Thermometers
+            marked as archived will not appear in list requests unless includeArchived filter is set to true.
+            Archived thermometer cannot be updated, unless archivedAt is first set to null.
+    TemperatureReading:
+      type: object
+      description: Represents a single temperature reading being received from a thermometer
+      required:
+        - hardwareSensorId
+        - espMacAddress
+        - value
+        - timestamp
+      properties:
+        espMacAddress:
+          type: string
+          description: ESP MAC address
+        hardwareSensorId:
+          type: string
+          description: Unique hardware sensor ID that is sending this temperature reading
+        value:
+          type: number
+          format: float
+          description: The temperature value in Celsius. 
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp for when the temperature was read. Unix timestamp in milliseconds.
+          
           
     SiteType:
       type: string
