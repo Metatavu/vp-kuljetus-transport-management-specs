@@ -730,15 +730,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
                 
-  /v1/temperatureRecords:
+  /v1/temperatureReadings:
     get:
-      operationId: listTemperatureRecords
-      summary: Lists temperature records
-      description: Lists temperature records
+      operationId: listTemperatureReadings
+      summary: Lists temperature readings
+      description: Lists temperature readings
       security:
         - BearerAuth: [manager]
       tags:
-        - TemperatureRecords
+        - TemperatureReadings
         - SpecManagementUI
         - SpecApp
       parameters:
