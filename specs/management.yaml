@@ -408,7 +408,7 @@ paths:
         - BearerAuth:
             - manager
       tags:
-        - Trucks
+        - Temperatures
       parameters:
         - name: truckId
           required: true
@@ -768,7 +768,7 @@ paths:
         - BearerAuth:
             - manager
       tags:
-        - Trucks
+        - Temperatures
       parameters:
         - name: entityId
           in: query
@@ -826,7 +826,7 @@ paths:
         - BearerAuth:
             - manager
       tags:
-        - Trucks
+        - Temperatures
       parameters:
         - name: thermometerId
           required: true
@@ -857,7 +857,7 @@ paths:
         - BearerAuth:
             - manager
       tags:
-        - Trucks
+        - Temperatures
       requestBody:
         content:
           application/json:

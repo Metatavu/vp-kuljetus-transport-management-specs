@@ -770,7 +770,7 @@ paths:
         - BearerAuth:
             - manager
       tags:
-        - Trucks
+        - Temperatures
         - SpecManagementUI
       parameters:
         - name: truckId
@@ -1213,7 +1213,7 @@ paths:
         - BearerAuth:
             - manager
       tags:
-        - Trucks
+        - Temperatures
         - SpecManagementUI
       parameters:
         - name: entityId
@@ -1271,7 +1271,7 @@ paths:
         - BearerAuth:
             - manager
       tags:
-        - Trucks
+        - Temperatures
         - SpecManagementUI
       parameters:
         - name: thermometerId
@@ -1301,7 +1301,7 @@ paths:
       security:
         - BearerAuth: [manager]
       tags:
-        - Trucks
+        - Temperatures
         - SpecManagementUI
       requestBody:
         content:
