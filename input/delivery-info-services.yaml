@@ -786,8 +786,6 @@ paths:
         - BearerAuth: [manager]
       tags:
         - TemperatureRecords
-        - SpecManagementUI
-        - SpecApp
       requestBody:
         content:
           application/json:
