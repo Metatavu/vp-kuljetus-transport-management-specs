@@ -783,7 +783,7 @@ paths:
       summary: Create a temperature record
       description: Create a temperature record
       security:
-        - BearerAuth: [manager]
+        - TerminalDeviceApiKeyAuth: []
       tags:
         - TemperatureRecords
       requestBody:
