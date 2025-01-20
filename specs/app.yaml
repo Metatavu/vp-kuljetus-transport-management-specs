@@ -1961,11 +1961,8 @@ components:
     AbsenceType:
       type: string
       enum:
-        - TRAINING
         - VACATION
-        - OFFICIAL_DUTIES
         - COMPENSATORY_LEAVE
-        - SICK_LEAVE
       description: >
         Absence types are used to mark the absence type of the employee work
         shift. Absences are taken into account when
@@ -1982,15 +1979,9 @@ components:
 
         | ------------------ | ------------ | ------------------ | ---------- | --------------------- | ----------------------- |
 
-        | TRAINING           | KO           | Koulutus työajalla | 8h         | 8h                    | no                      |
-
         | VACATION           | LO           | Loma               | 6.67h      | 0h                    | yes                     |
 
-        | OFFICIAL_DUTIES    | LT           | Luottamustoimet    | 8h         | 8h                    | yes                     |
-
         | COMPENSATORY_LEAVE | PP           | Pekkanen           | 8h         | 8h                    | yes                     |
-
-        | SICK_LEAVE         | SL           | Sairausloma        | 8h         | 8h                    | yes                     |
     ClientAppStatus:
       type: string
       description: Client app status
