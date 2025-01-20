@@ -408,7 +408,7 @@ paths:
         - BearerAuth:
             - manager
       tags:
-        - Thermometers
+        - Trucks
       parameters:
         - name: truckId
           required: true

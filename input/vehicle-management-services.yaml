@@ -770,7 +770,7 @@ paths:
         - BearerAuth:
             - manager
       tags:
-        - Thermometers
+        - Trucks
         - SpecManagementUI
       parameters:
         - name: truckId
