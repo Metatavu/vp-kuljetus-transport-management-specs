@@ -694,6 +694,7 @@ paths:
         - TerminalDeviceApiKeyAuth: [ ]
       tags:
         - TemperatureReadings
+        - SpecTerminalDevice
       requestBody:
         content:
           application/json:
