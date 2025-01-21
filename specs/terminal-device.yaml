@@ -1,0 +1,71 @@
+openapi: 3.0.3
+info:
+  title: Vehicle Management Services (terminal-device)
+  description: Vehicle Management Services (terminal-device)
+  version: 1.0.0
+security: []
+paths:
+  /delivery-info/v1/temperatureReadings:
+    post:
+      operationId: createTemperatureReading
+      summary: Create temperature reading
+      description: Create temperature reading
+      security:
+        - TerminalDeviceApiKeyAuth: []
+      tags:
+        - TemperatureReadings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TemperatureReading"
+        description: Payload
+        required: true
+      responses:
+        "204":
+          description: Created temperature reading
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  securitySchemes: {}
+  schemas:
+    Error:
+      type: object
+      description: Error object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    TemperatureReading:
+      type: object
+      description: Represents a single temperature reading being received from a thermometer
+      required:
+        - hardwareSensorId
+        - espMacAddress
+        - value
+        - timestamp
+      properties:
+        espMacAddress:
+          type: string
+          description: ESP MAC address
+        hardwareSensorId:
+          type: string
+          description: Unique hardware sensor ID that is sending this temperature reading
+        value:
+          type: number
+          format: float
+          description: The temperature value in Celsius.
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp for when the temperature was read. Unix timestamp in
+            milliseconds.
