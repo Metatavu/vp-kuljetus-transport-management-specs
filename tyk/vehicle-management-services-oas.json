@@ -87,15 +87,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "includeArchived",
-            "in": "query",
-            "description": "Include archived trackables in the results",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
           }
         ],
         "responses": {

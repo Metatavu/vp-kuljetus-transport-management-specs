@@ -40,12 +40,6 @@ paths:
           description: IMEI of the trackable
           schema:
             type: string
-        - name: includeArchived
-          in: query
-          description: Include archived trackables in the results
-          schema:
-            type: boolean
-            default: false
       responses:
         "200":
           description: Found trackable
