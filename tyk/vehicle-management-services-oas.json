@@ -64,6 +64,55 @@
         }
       }
     },
+    "/v1/trackables/{imei}": {
+      "get": {
+        "operationId": "getTrackableByImei",
+        "summary": "Get trackable by IMEI",
+        "description": "Finds a trackable e.g. a truck or a towable by its IMEI.",
+        "security": [
+          {
+            "DataReceiverApiKeyAuth": []
+          }
+        ],
+        "tags": [
+          "Trackables",
+          "SpecVehicleDataReceiver"
+        ],
+        "parameters": [
+          {
+            "name": "imei",
+            "required": true,
+            "in": "path",
+            "description": "IMEI of the trackable",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found trackable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Trackable"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Invalid request was sent to the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/publicTrucks": {
       "get": {
         "operationId": "listPublicTrucks",
@@ -2673,6 +2722,36 @@
           "TRUCK",
           "TOWABLE",
           "TERMINAL"
+        ]
+      },
+      "Trackable": {
+        "type": "object",
+        "description": "Represents a trackable entity e.g. truck or towable",
+        "required": [
+          "id",
+          "imei",
+          "trackableType"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier for the trackable entity e.g. truck or towable"
+          },
+          "imei": {
+            "type": "string",
+            "description": "IMEI of the trackable entity"
+          },
+          "trackableType": {
+            "$ref": "#/components/schemas/TrackableType"
+          }
+        }
+      },
+      "TrackableType": {
+        "type": "string",
+        "enum": [
+          "TRUCK",
+          "TOWABLE"
         ]
       }
     }

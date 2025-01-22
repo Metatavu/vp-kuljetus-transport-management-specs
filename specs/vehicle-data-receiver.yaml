@@ -6,6 +6,35 @@ info:
 security:
   - DataReceiverApiKeyAuth: []
 paths:
+  /vehicle-management/v1/trackables/{imei}:
+    get:
+      operationId: getTrackableByImei
+      summary: Get trackable by IMEI
+      description: Finds a trackable e.g. a truck or a towable by its IMEI.
+      security:
+        - DataReceiverApiKeyAuth: []
+      tags:
+        - Trackables
+      parameters:
+        - name: imei
+          required: true
+          in: path
+          description: IMEI of the trackable
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Found trackable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Trackable"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /vehicle-management/v1/publicTrucks:
     get:
       operationId: listPublicTrucks
@@ -338,6 +367,35 @@ components:
       in: header
       name: X-DataReceiver-API-Key
   schemas:
+    Trackable:
+      type: object
+      description: Represents a trackable entity e.g. truck or towable
+      required:
+        - id
+        - imei
+        - trackableType
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the trackable entity e.g. truck or towable
+        imei:
+          type: string
+          description: IMEI of the trackable entity
+        trackableType:
+          $ref: "#/components/schemas/TrackableType"
+    Error:
+      type: object
+      description: Error object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
     PublicTruck:
       type: object
       description: Represent public info of single truck
@@ -358,18 +416,6 @@ components:
           description: >
             Truck identification number. This is unique for each truck and
             should be used as a hardware identifier for this specific truck.
-    Error:
-      type: object
-      description: Error object
-      required:
-        - status
-        - message
-      properties:
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
     TruckDriverCard:
       type: object
       required:
@@ -519,3 +565,8 @@ components:
         - TRUCK
         - TOWABLE
         - TERMINAL
+    TrackableType:
+      type: string
+      enum:
+        - TRUCK
+        - TOWABLE
