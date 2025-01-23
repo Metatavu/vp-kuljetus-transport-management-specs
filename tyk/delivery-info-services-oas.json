@@ -1763,7 +1763,7 @@
         "type": "object",
         "description": "Represents a thermometer attached to a truck or towable",
         "required": [
-          "espMacAddress",
+          "deviceIdentifier",
           "hardwareSensorId",
           "siteId"
         ],
@@ -1782,9 +1782,9 @@
             "type": "string",
             "description": "Hardware address of the thermometer. It is unique and stays with the device."
           },
-          "espMacAddress": {
+          "deviceIdentifier": {
             "type": "string",
-            "description": "MAC address of the ESP. It is unique and stays with the device."
+            "description": "Identifier of the device. It is unique and stays with the device."
           },
           "siteId": {
             "type": "string",
@@ -1823,14 +1823,14 @@
         "description": "Represents a single temperature reading being received from a thermometer",
         "required": [
           "hardwareSensorId",
-          "espMacAddress",
+          "deviceIdentifier",
           "value",
           "timestamp"
         ],
         "properties": {
-          "espMacAddress": {
+          "deviceIdentifier": {
             "type": "string",
-            "description": "ESP MAC address"
+            "description": "Device identifier"
           },
           "hardwareSensorId": {
             "type": "string",

@@ -3588,7 +3588,7 @@ components:
       type: object
       description: Represents a thermometer attached to a truck or towable
       required:
-        - espMacAddress
+        - deviceIdentifier
         - hardwareSensorId
         - siteId
       properties:
@@ -3604,9 +3604,9 @@ components:
           type: string
           description: Hardware address of the thermometer. It is unique and stays with
             the device.
-        espMacAddress:
+        deviceIdentifier:
           type: string
-          description: MAC address of the ESP. It is unique and stays with the device.
+          description: Identifier of the device. It is unique and stays with the device.
         siteId:
           type: string
           format: uuid
