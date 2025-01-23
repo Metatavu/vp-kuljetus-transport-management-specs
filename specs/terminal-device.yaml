@@ -50,13 +50,13 @@ components:
       description: Represents a single temperature reading being received from a thermometer
       required:
         - hardwareSensorId
-        - espMacAddress
+        - deviceIdentifier
         - value
         - timestamp
       properties:
-        espMacAddress:
+        deviceIdentifier:
           type: string
-          description: ESP MAC address
+          description: Device identifier
         hardwareSensorId:
           type: string
           description: Unique hardware sensor ID that is sending this temperature reading
