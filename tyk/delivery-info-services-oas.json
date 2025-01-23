@@ -1536,7 +1536,7 @@
       "TerminalDeviceApiKeyAuth": {
         "type": "apiKey",
         "in": "header",
-        "name": "X-DataReceiver-API-Key"
+        "name": "X-TerminalDevice-API-Key"
       }
     },
     "schemas": {
