@@ -38,32 +38,39 @@ export const SPEC_VERSIONS = [
   {
     name: "full",
     description: "Full",
-    tags: ["App", "ManagementUI", "VehicleDataReceiver", "Auth"],
-    securitySchemes: ["bearerAuth", "apiKeyAuth"]
+    tags: ["App", "ManagementUI", "VehicleDataReceiver", "Auth", "TerminalDevice"],
+    securitySchemes: ["BearerAuth", "DataReceiverApiKeyAuth", "DriverAppApiKeyAuth", "CronKeyAuth", "KeycloakApiKeyAuth", "TerminalDeviceApiKeyAuth"]
   },
   {
     name: "app",
     description: "App",
     tags: ["App"],
-    securitySchemes: ["bearerAuth"]
+    securitySchemes: ["BearerAuth"]
   },
   {
     name: "management",
     description: "Management",
     tags: ["ManagementUI"],
-    securitySchemes: ["bearerAuth"]
+    securitySchemes: ["BearerAuth"]
+  },
+  {
+    name: "terminal-device",
+    description: "Terminal device",
+    tags: ["TerminalDevice"],
+    securitySchemes: ["TerminalDeviceApiKeyAuth"]
   },
   {
     name: "vehicle-data-receiver",
     description: "Vehicle data receiver",
     tags: ["VehicleDataReceiver"],
-    securitySchemes: ["apiKeyAuth"]
+    securitySchemes: ["DataReceiverApiKeyAuth"]
   },
   {
     name: "auth",
     description: "Auth",
     tags: ["Auth"],
-    securitySchemes: ["apiKeyAuth"]
+    securitySchemes: ["KeycloakApiKeyAuth"],
+    internal: true
   }
 ];
 

@@ -149,6 +149,54 @@
             },
             {
               "disabled": false,
+              "path": "/v1/temperatureReadings",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "POST": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/thermometers",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/thermometers/{thermometerId}",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "PUT": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
               "path": "/v1/towables",
               "method": "",
               "ignore_case": false,
@@ -186,6 +234,34 @@
                   "headers": null
                 },
                 "PUT": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/towables/{towableId}/temperatures",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/trackables/{imei}",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
                   "action": "no_action",
                   "code": 200,
                   "data": "",
@@ -315,6 +391,26 @@
             },
             {
               "disabled": false,
+              "path": "/v1/trucks/{truckId}/odometerReadings",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                },
+                "POST": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
               "path": "/v1/trucks/{truckId}/speeds",
               "method": "",
               "ignore_case": false,
@@ -326,6 +422,20 @@
                   "headers": null
                 },
                 "POST": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
+              "path": "/v1/trucks/{truckId}/temperatures",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
                   "action": "no_action",
                   "code": 200,
                   "data": "",
@@ -384,6 +494,22 @@
               "method": "GET"
             },
             {
+              "path": "/v1/temperatureReadings",
+              "method": "POST"
+            },
+            {
+              "path": "/v1/thermometers",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/thermometers/{thermometerId}",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/thermometers/{thermometerId}",
+              "method": "PUT"
+            },
+            {
               "path": "/v1/towables",
               "method": "GET"
             },
@@ -402,6 +528,14 @@
             {
               "path": "/v1/towables/{towableId}",
               "method": "PUT"
+            },
+            {
+              "path": "/v1/towables/{towableId}/temperatures",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/trackables/{imei}",
+              "method": "GET"
             },
             {
               "path": "/v1/trucks",
@@ -452,12 +586,24 @@
               "method": "POST"
             },
             {
+              "path": "/v1/trucks/{truckId}/odometerReadings",
+              "method": "GET"
+            },
+            {
+              "path": "/v1/trucks/{truckId}/odometerReadings",
+              "method": "POST"
+            },
+            {
               "path": "/v1/trucks/{truckId}/speeds",
               "method": "GET"
             },
             {
               "path": "/v1/trucks/{truckId}/speeds",
               "method": "POST"
+            },
+            {
+              "path": "/v1/trucks/{truckId}/temperatures",
+              "method": "GET"
             },
             {
               "path": "/v1/vehicles",

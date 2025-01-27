@@ -47,6 +47,13 @@ export interface OpenAPISpec {
         security?: {
           [scheme: string]: string[]
         }[];
+        parameters?: {
+            name: string;
+            in: "query" | "path";
+            schema:
+              | { $ref?: string; }
+              | { items?: { $ref?: string; }; };
+        }[];
         requestBody?: {
           content?: {
             [contentType: string]: {
@@ -78,7 +85,9 @@ export interface OpenAPISpec {
     schemas: {
       [schemaName: string]: {
         properties?: {
-          [propertyName: string]: Record<string, any>;
+          [propertyName: string]: {
+            $ref?: string;
+          }
         };
       };
     };

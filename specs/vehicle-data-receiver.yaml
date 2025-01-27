@@ -4,18 +4,43 @@ info:
   description: Vehicle Management Services (vehicle-data-receiver)
   version: 1.0.0
 security:
-  - ApiKeyAuth: []
+  - DataReceiverApiKeyAuth: []
 paths:
+  /vehicle-management/v1/trackables/{imei}:
+    get:
+      operationId: getTrackableByImei
+      summary: Get trackable by IMEI
+      description: Finds a trackable e.g. a truck or a towable by its IMEI.
+      security:
+        - DataReceiverApiKeyAuth: []
+      tags:
+        - Trackables
+      parameters:
+        - name: imei
+          required: true
+          in: path
+          description: IMEI of the trackable
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Found trackable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Trackable"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /vehicle-management/v1/publicTrucks:
     get:
       operationId: listPublicTrucks
       summary: List PublicTrucks.
       description: Lists public info about each truck.
-      security:
-        - ApiKeyAuth: []
-        - BearerAuth:
-            - driver
-            - manager
+      security: []
       tags:
         - PublicTrucks
       parameters:
@@ -50,12 +75,53 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   /vehicle-management/v1/trucks/{truckId}/driverCards:
+    get:
+      operationId: listTruckDriverCards
+      summary: Lists truck driver cards
+      description: Lists truck driver cards. Used to check if a truck has a driver
+        card inserted.
+      security: []
+      tags:
+        - Trucks
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of truck driver cards. Contains either 0 or 1 cards.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TruckDriverCard"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     post:
       operationId: createTruckDriverCard
       summary: Create truck driver card
-      description: Create new truck driver card
+      description: >
+        Create new truck driver card.
+
+
+        If a card with same truck ID and card ID is already found with removedAt set, the existing card is restored.
+
+        If a card with different truck ID and card ID is already found with removedAt set, the previous card is
+
+        immediately deleted and the new card is created. If a card with the same truck ID and card ID is found with
+
+        removedAt not set, the request is rejected with a 409 Conflict response.
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       requestBody:
@@ -90,10 +156,18 @@ paths:
     delete:
       operationId: deleteTruckDriverCard
       summary: Deletes truck driver card
-      description: Deletes single truck driver card. Cards are deleted when they are
+      description: >
+        Deletes single truck driver card. Driver cards are deleted when they are
         removed from the truck.
+
+
+        The card is first soft-deleted by setting removedAt to value sent in X-Removed-At header. A background process
+
+        then checks frequently for driver cards removed over a configurable grace period ago and deletes them
+
+        permanently. This is done to prevent false positive driver card states coming in from telematics device.
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       parameters:
@@ -110,6 +184,13 @@ paths:
           description: driver card ID
           schema:
             type: string
+        - name: X-Removed-At
+          required: true
+          in: header
+          description: Timestamp when the driver card was removed from the truck
+          schema:
+            type: string
+            format: date-time
       responses:
         "204":
           description: Empty response indicating successful removal
@@ -126,7 +207,7 @@ paths:
       description: Create new truck location. Used by vehicle data receiver to send
         truck location data.
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       parameters:
@@ -160,7 +241,7 @@ paths:
       description: Create new truck speed. Used by vehicle data receiver to send truck
         speed data.
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       parameters:
@@ -193,7 +274,7 @@ paths:
       summary: Create drive state
       description: Create new drive state for truck
       security:
-        - ApiKeyAuth: []
+        - DataReceiverApiKeyAuth: []
       tags:
         - Trucks
       requestBody:
@@ -220,13 +301,101 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/trucks/{truckId}/odometerReadings:
+    post:
+      operationId: createTruckOdometerReading
+      summary: Create truck odometer reading
+      description: Create new truck odometer reading. Used by vehicle data receiver to
+        send truck odometer reading data.
+      security:
+        - DataReceiverApiKeyAuth: []
+      tags:
+        - Trucks
+      parameters:
+        - name: truckId
+          required: true
+          in: path
+          description: truck id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TruckOdometerReading"
+        description: Payload
+        required: true
+      responses:
+        "201":
+          description: Received data
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vehicle-management/v1/temperatureReadings:
+    post:
+      operationId: createTemperatureReading
+      summary: Create temperature reading
+      description: Create temperature reading
+      security:
+        - DataReceiverApiKeyAuth: []
+      tags:
+        - TemperatureReadings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TemperatureReading"
+        description: Payload
+        required: true
+      responses:
+        "204":
+          description: Created temperature reading
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   securitySchemes:
-    ApiKeyAuth:
+    DataReceiverApiKeyAuth:
       type: apiKey
       in: header
-      name: X-API-Key
+      name: X-DataReceiver-API-Key
   schemas:
+    Trackable:
+      type: object
+      description: Represents a trackable entity e.g. truck or towable
+      required:
+        - id
+        - imei
+        - trackableType
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the trackable entity e.g. truck or towable
+        imei:
+          type: string
+          description: IMEI of the trackable entity
+        trackableType:
+          $ref: "#/components/schemas/TrackableType"
+    Error:
+      type: object
+      description: Error object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
     PublicTruck:
       type: object
       description: Represent public info of single truck
@@ -247,26 +416,23 @@ components:
           description: >
             Truck identification number. This is unique for each truck and
             should be used as a hardware identifier for this specific truck.
-    Error:
-      type: object
-      description: Error object
-      required:
-        - status
-        - message
-      properties:
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
     TruckDriverCard:
       type: object
       required:
         - id
+        - timestamp
       properties:
         id:
           type: string
           description: Driver card ID
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp for driver card insertion. Unix timestamp in milliseconds.
+        removedAt:
+          type: string
+          format: date-time
+          description: Removed at. Used to check for grace period for driver card removal.
     TruckLocation:
       type: object
       required:
@@ -339,6 +505,51 @@ components:
           type: string
           description: Driver card ID. This is used to identify the driver when creating a
             new drive state.
+    TruckOdometerReading:
+      type: object
+      required:
+        - timestamp
+        - odometerReading
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Truck odometer ID
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp for truck odometer.
+        odometerReading:
+          type: integer
+          format: int32
+          description: Odometer reading in meters. See [Teltonika FMC650 Data Sending
+            Parameters ID - Tachograph Data
+            Elements](https://wiki.teltonika-gps.com/view/FMC650_Teltonika_Data_Sending_Parameters_ID#Tachograph_data_elements)
+    TemperatureReading:
+      type: object
+      description: Represents a single temperature reading being received from a thermometer
+      required:
+        - hardwareSensorId
+        - deviceIdentifier
+        - value
+        - timestamp
+      properties:
+        deviceIdentifier:
+          type: string
+          description: Device identifier
+        hardwareSensorId:
+          type: string
+          description: Unique hardware sensor ID that is sending this temperature reading
+        value:
+          type: number
+          format: float
+          description: The temperature value in Celsius.
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp for when the temperature was read. Unix timestamp in
+            milliseconds.
     TruckDriveStateEnum:
       type: string
       enum:
@@ -348,3 +559,14 @@ components:
         - DRIVE
         - ERROR
         - NOT_AVAILABLE
+    TemperatureReadingSourceType:
+      type: string
+      enum:
+        - TRUCK
+        - TOWABLE
+        - TERMINAL
+    TrackableType:
+      type: string
+      enum:
+        - TRUCK
+        - TOWABLE
