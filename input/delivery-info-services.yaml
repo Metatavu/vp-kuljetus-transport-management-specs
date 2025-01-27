@@ -248,7 +248,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Temperature"
+                  $ref: "#/components/schemas/TerminalTemperature"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -699,7 +699,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TemperatureReading"
+              $ref: "#/components/schemas/TerminalTemperatureReading"
         description: Payload
         required: true
       responses:
@@ -757,7 +757,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Thermometer"
+                  $ref: "#/components/schemas/TerminalThermometer"
         default:
           description: Invalid request was sent to the server
           content:
@@ -790,7 +790,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Thermometer"
+                $ref: "#/components/schemas/TerminalThermometer"
         default:
           description: Invalid request was sent to the server
           content:
@@ -830,7 +830,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Thermometer"
+                $ref: "#/components/schemas/TerminalThermometer"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -1119,10 +1119,10 @@ components:
       enum:
         - UNLOAD
         - LOAD
-        
-    Temperature:
+
+    TerminalTemperature:
       type: object
-      description: Represents a single temperature reading record
+      description: Represents a single terminal temperature reading record
       required:
         - thermometerId
         - value
@@ -1145,10 +1145,10 @@ components:
           type: integer
           format: int64
           description: The timestamp when the temperature was recorded
-          
-    Thermometer:
+
+    TerminalThermometer:
       type: object
-      description: Represents a thermometer attached to a truck or towable
+      description: Represents a thermometer attached to a terminal
       required:
         - deviceIdentifier
         - hardwareSensorId
@@ -1195,9 +1195,10 @@ components:
             Setting the archivedAt time marks the thermometer as archived. Thermometers
             marked as archived will not appear in list requests unless includeArchived filter is set to true.
             Archived thermometer cannot be updated, unless archivedAt is first set to null.
-    TemperatureReading:
+
+    TerminalTemperatureReading:
       type: object
-      description: Represents a single temperature reading being received from a thermometer
+      description: Represents a single terminal temperature reading being received from a thermometer
       required:
         - hardwareSensorId
         - deviceIdentifier
@@ -1213,13 +1214,12 @@ components:
         value:
           type: number
           format: float
-          description: The temperature value in Celsius. 
+          description: The temperature value in Celsius.
         timestamp:
           type: integer
           format: int64
           description: Timestamp for when the temperature was read. Unix timestamp in milliseconds.
-          
-          
+
     SiteType:
       type: string
       description: Type of the site

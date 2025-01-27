@@ -1313,7 +1313,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Temperature"
+                    "$ref": "#/components/schemas/TruckOrTowableTemperature"
                   }
                 }
               }
@@ -1350,7 +1350,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TemperatureReading"
+                "$ref": "#/components/schemas/TruckOrTowableTemperatureReading"
               }
             }
           },
@@ -1720,7 +1720,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Temperature"
+                    "$ref": "#/components/schemas/TruckOrTowableTemperature"
                   }
                 }
               }
@@ -2038,7 +2038,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Thermometer"
+                    "$ref": "#/components/schemas/TruckOrTowableThermometer"
                   }
                 }
               }
@@ -2091,7 +2091,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Thermometer"
+                  "$ref": "#/components/schemas/TruckOrTowableThermometer"
                 }
               }
             }
@@ -2157,7 +2157,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Thermometer"
+                  "$ref": "#/components/schemas/TruckOrTowableThermometer"
                 }
               }
             }
@@ -2587,7 +2587,7 @@
           }
         }
       },
-      "Thermometer": {
+      "TruckOrTowableThermometer": {
         "type": "object",
         "description": "Represents a thermometer attached to a truck or towable",
         "required": [
@@ -2650,9 +2650,9 @@
           }
         }
       },
-      "Temperature": {
+      "TruckOrTowableTemperature": {
         "type": "object",
-        "description": "Represents a single temperature reading record",
+        "description": "Represents a single truck or towable temperature reading record",
         "required": [
           "thermometerId",
           "value",
@@ -2682,9 +2682,9 @@
           }
         }
       },
-      "TemperatureReading": {
+      "TruckOrTowableTemperatureReading": {
         "type": "object",
-        "description": "Represents a single temperature reading being received from a thermometer",
+        "description": "Represents a single truck or towable temperature reading being received from a thermometer",
         "required": [
           "hardwareSensorId",
           "deviceIdentifier",
@@ -2720,8 +2720,7 @@
         "type": "string",
         "enum": [
           "TRUCK",
-          "TOWABLE",
-          "TERMINAL"
+          "TOWABLE"
         ]
       },
       "Trackable": {

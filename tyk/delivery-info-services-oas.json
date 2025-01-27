@@ -399,7 +399,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Temperature"
+                    "$ref": "#/components/schemas/TerminalTemperature"
                   }
                 }
               }
@@ -1144,7 +1144,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TemperatureReading"
+                "$ref": "#/components/schemas/TerminalTemperatureReading"
               }
             }
           },
@@ -1228,7 +1228,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Thermometer"
+                    "$ref": "#/components/schemas/TerminalThermometer"
                   }
                 }
               }
@@ -1281,7 +1281,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Thermometer"
+                  "$ref": "#/components/schemas/TerminalThermometer"
                 }
               }
             }
@@ -1347,7 +1347,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Thermometer"
+                  "$ref": "#/components/schemas/TerminalThermometer"
                 }
               }
             }
@@ -1727,9 +1727,9 @@
           "LOAD"
         ]
       },
-      "Temperature": {
+      "TerminalTemperature": {
         "type": "object",
-        "description": "Represents a single temperature reading record",
+        "description": "Represents a single terminal temperature reading record",
         "required": [
           "thermometerId",
           "value",
@@ -1759,9 +1759,9 @@
           }
         }
       },
-      "Thermometer": {
+      "TerminalThermometer": {
         "type": "object",
-        "description": "Represents a thermometer attached to a truck or towable",
+        "description": "Represents a thermometer attached to a terminal",
         "required": [
           "deviceIdentifier",
           "hardwareSensorId",
@@ -1818,9 +1818,9 @@
           }
         }
       },
-      "TemperatureReading": {
+      "TerminalTemperatureReading": {
         "type": "object",
-        "description": "Represents a single temperature reading being received from a thermometer",
+        "description": "Represents a single terminal temperature reading being received from a thermometer",
         "required": [
           "hardwareSensorId",
           "deviceIdentifier",
