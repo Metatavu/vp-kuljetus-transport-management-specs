@@ -693,10 +693,13 @@ paths:
                 $ref: "#/components/schemas/Error"
   /v1/thermometers:
     get:
-      operationId: listThermometers
-      summary: List thermometers
-      description: Retrieve a list of all thermometers, optionally filtered by site
-        (terminal) association or archived status
+      operationId: listTerminalThermometers
+      summary: List terminal thermometers
+      description: >
+        Retrieve a list of all terminal thermometers.
+
+
+        Can optionally be filtered by site (terminal) association or archived status.
       security:
         - BearerAuth:
             - manager
@@ -742,9 +745,9 @@ paths:
                 $ref: "#/components/schemas/Error"
   /v1/thermometers/{thermometerId}:
     get:
-      operationId: findThermometer
-      summary: Find a thermometer by ID
-      description: Retrieve the details of a specific thermometer
+      operationId: findTerminalThermometer
+      summary: Find a terminal thermometer by ID
+      description: Retrieve the details of a specific terminal thermometer
       security:
         - BearerAuth:
             - manager
@@ -772,10 +775,10 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     put:
-      operationId: updateThermometer
-      summary: Update thermometer
-      description: Update the details of a specific thermometer. Currently only the
-        name can be updated.
+      operationId: updateTerminalThermometer
+      summary: Update terminal thermometer
+      description: Update the details of a specific terminal thermometer. Currently
+        only the name can be updated.
       security:
         - BearerAuth:
             - manager

@@ -1212,10 +1212,12 @@ paths:
                 $ref: "#/components/schemas/Error"
   /v1/thermometers:
     get:
-      operationId: listThermometers
-      summary: List thermometers
-      description: Retrieve a list of all thermometers, optionally filtered by vehicle
-        association or archived status
+      operationId: listTruckOrTowableThermometers
+      summary: List truck or towable thermometers
+      description: |
+        Retrieve a list of all truck or towable thermometers.
+
+        Can optionally be filtered by vehicle association or archived status.
       security:
         - BearerAuth:
             - manager
@@ -1271,9 +1273,9 @@ paths:
                 $ref: "#/components/schemas/Error"
   /v1/thermometers/{thermometerId}:
     get:
-      operationId: findThermometer
-      summary: Find a thermometer by ID
-      description: Retrieve the details of a specific thermometer
+      operationId: findTruckOrTowableThermometer
+      summary: Find truck or towable thermometer by ID
+      description: Retrieve the details of a specific truck or towable thermometer
       security:
         - BearerAuth:
             - manager
@@ -1301,10 +1303,10 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     put:
-      operationId: updateThermometer
-      summary: Update thermometer
-      description: Update the details of a specific thermometer. Currently only the
-        name can be updated.
+      operationId: updateTruckOrTowableThermometer
+      summary: Update truck or towable thermometer
+      description: Update the details of specific truck or towable thermometer.
+        Currently only the name can be updated.
       security:
         - BearerAuth:
             - manager
