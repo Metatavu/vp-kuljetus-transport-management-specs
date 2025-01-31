@@ -4083,12 +4083,12 @@ components:
 
         ###### PAID_WORK
 
-        Everything else apart from work event type BREAK.
+        Everything else, except the additional time over 30 minutes of work event type BREAK.
 
 
         ###### BREAK
 
-        Only work event type BREAK.
+        Only work event type BREAK. The first 30 minutes of the break are also included in the PAID_WORK.
 
 
         ###### STANDBY
