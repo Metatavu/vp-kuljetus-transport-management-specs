@@ -1383,13 +1383,13 @@ paths:
           description: Filter work shifts which date is after specified date.
           schema:
             type: string
-            format: date-time
+            format: date
         - name: dateBefore
           in: query
-          description: Filter work shifts date date is before specified date.
+          description: Filter work shifts which date is before specified date.
           schema:
             type: string
-            format: date-time
+            format: date
         - name: first
           in: query
           description: First result.
