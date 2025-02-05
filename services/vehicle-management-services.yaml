@@ -814,7 +814,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Temperature"
+                  $ref: "#/components/schemas/TruckOrTowableTemperature"
         default:
           description: Invalid request was sent to the server
           content:
@@ -834,7 +834,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TemperatureReading"
+              $ref: "#/components/schemas/TruckOrTowableTemperatureReading"
         description: Payload
         required: true
       responses:
@@ -1062,7 +1062,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Temperature"
+                  $ref: "#/components/schemas/TruckOrTowableTemperature"
         default:
           description: Invalid request was sent to the server
           content:
@@ -1212,10 +1212,12 @@ paths:
                 $ref: "#/components/schemas/Error"
   /v1/thermometers:
     get:
-      operationId: listThermometers
-      summary: List thermometers
-      description: Retrieve a list of all thermometers, optionally filtered by vehicle
-        association or archived status
+      operationId: listTruckOrTowableThermometers
+      summary: List truck or towable thermometers
+      description: |
+        Retrieve a list of all truck or towable thermometers.
+
+        Can optionally be filtered by vehicle association or archived status.
       security:
         - BearerAuth:
             - manager
@@ -1262,7 +1264,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Thermometer"
+                  $ref: "#/components/schemas/TruckOrTowableThermometer"
         default:
           description: Invalid request was sent to the server
           content:
@@ -1271,9 +1273,9 @@ paths:
                 $ref: "#/components/schemas/Error"
   /v1/thermometers/{thermometerId}:
     get:
-      operationId: findThermometer
-      summary: Find a thermometer by ID
-      description: Retrieve the details of a specific thermometer
+      operationId: findTruckOrTowableThermometer
+      summary: Find truck or towable thermometer by ID
+      description: Retrieve the details of a specific truck or towable thermometer
       security:
         - BearerAuth:
             - manager
@@ -1293,7 +1295,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Thermometer"
+                $ref: "#/components/schemas/TruckOrTowableThermometer"
         default:
           description: Invalid request was sent to the server
           content:
@@ -1301,10 +1303,10 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     put:
-      operationId: updateThermometer
-      summary: Update thermometer
-      description: Update the details of a specific thermometer. Currently only the
-        name can be updated.
+      operationId: updateTruckOrTowableThermometer
+      summary: Update truck or towable thermometer
+      description: Update the details of specific truck or towable thermometer.
+        Currently only the name can be updated.
       security:
         - BearerAuth:
             - manager
@@ -1334,7 +1336,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Thermometer"
+                $ref: "#/components/schemas/TruckOrTowableThermometer"
         default:
           description: Invalid request was sent to the server
           content:
@@ -1681,7 +1683,7 @@ components:
           description: Odometer reading in meters. See [Teltonika FMC650 Data Sending
             Parameters ID - Tachograph Data
             Elements](https://wiki.teltonika-gps.com/view/FMC650_Teltonika_Data_Sending_Parameters_ID#Tachograph_data_elements)
-    Thermometer:
+    TruckOrTowableThermometer:
       type: object
       description: Represents a thermometer attached to a truck or towable
       required:
@@ -1736,9 +1738,9 @@ components:
             Thermometers marked as archived will not appear in list requests
             unless includeArchived filter is set to true. Archived thermometer
             cannot be updated, unless archivedAt is first set to null.
-    Temperature:
+    TruckOrTowableTemperature:
       type: object
-      description: Represents a single temperature reading record
+      description: Represents a single truck or towable temperature reading record
       required:
         - thermometerId
         - value
@@ -1761,9 +1763,10 @@ components:
           type: integer
           format: int64
           description: The timestamp when the temperature was recorded
-    TemperatureReading:
+    TruckOrTowableTemperatureReading:
       type: object
-      description: Represents a single temperature reading being received from a thermometer
+      description: Represents a single truck or towable temperature reading being
+        received from a thermometer
       required:
         - hardwareSensorId
         - deviceIdentifier
@@ -1805,7 +1808,6 @@ components:
       enum:
         - TRUCK
         - TOWABLE
-        - TERMINAL
     Trackable:
       type: object
       description: Represents a trackable entity e.g. truck or towable

@@ -234,7 +234,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Temperature"
+                  $ref: "#/components/schemas/TerminalTemperature"
         default:
           description: Invalid request was sent to the server
           content:
@@ -679,7 +679,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TemperatureReading"
+              $ref: "#/components/schemas/TerminalTemperatureReading"
         description: Payload
         required: true
       responses:
@@ -693,10 +693,13 @@ paths:
                 $ref: "#/components/schemas/Error"
   /v1/thermometers:
     get:
-      operationId: listThermometers
-      summary: List thermometers
-      description: Retrieve a list of all thermometers, optionally filtered by site
-        (terminal) association or archived status
+      operationId: listTerminalThermometers
+      summary: List terminal thermometers
+      description: >
+        Retrieve a list of all terminal thermometers.
+
+
+        Can optionally be filtered by site (terminal) association or archived status.
       security:
         - BearerAuth:
             - manager
@@ -733,7 +736,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Thermometer"
+                  $ref: "#/components/schemas/TerminalThermometer"
         default:
           description: Invalid request was sent to the server
           content:
@@ -742,9 +745,9 @@ paths:
                 $ref: "#/components/schemas/Error"
   /v1/thermometers/{thermometerId}:
     get:
-      operationId: findThermometer
-      summary: Find a thermometer by ID
-      description: Retrieve the details of a specific thermometer
+      operationId: findTerminalThermometer
+      summary: Find a terminal thermometer by ID
+      description: Retrieve the details of a specific terminal thermometer
       security:
         - BearerAuth:
             - manager
@@ -764,7 +767,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Thermometer"
+                $ref: "#/components/schemas/TerminalThermometer"
         default:
           description: Invalid request was sent to the server
           content:
@@ -772,10 +775,10 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     put:
-      operationId: updateThermometer
-      summary: Update thermometer
-      description: Update the details of a specific thermometer. Currently only the
-        name can be updated.
+      operationId: updateTerminalThermometer
+      summary: Update terminal thermometer
+      description: Update the details of a specific terminal thermometer. Currently
+        only the name can be updated.
       security:
         - BearerAuth:
             - manager
@@ -805,7 +808,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Thermometer"
+                $ref: "#/components/schemas/TerminalThermometer"
         default:
           description: Invalid request was sent to the server
           content:
@@ -1097,9 +1100,9 @@ components:
       enum:
         - UNLOAD
         - LOAD
-    Temperature:
+    TerminalTemperature:
       type: object
-      description: Represents a single temperature reading record
+      description: Represents a single terminal temperature reading record
       required:
         - thermometerId
         - value
@@ -1122,9 +1125,9 @@ components:
           type: integer
           format: int64
           description: The timestamp when the temperature was recorded
-    Thermometer:
+    TerminalThermometer:
       type: object
-      description: Represents a thermometer attached to a truck or towable
+      description: Represents a thermometer attached to a terminal
       required:
         - deviceIdentifier
         - hardwareSensorId
@@ -1174,9 +1177,10 @@ components:
             Thermometers marked as archived will not appear in list requests
             unless includeArchived filter is set to true. Archived thermometer
             cannot be updated, unless archivedAt is first set to null.
-    TemperatureReading:
+    TerminalTemperatureReading:
       type: object
-      description: Represents a single temperature reading being received from a thermometer
+      description: Represents a single terminal temperature reading being received
+        from a thermometer
       required:
         - hardwareSensorId
         - deviceIdentifier

@@ -18,7 +18,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TemperatureReading"
+              $ref: "#/components/schemas/TerminalTemperatureReading"
         description: Payload
         required: true
       responses:
@@ -45,9 +45,10 @@ components:
           format: int32
         message:
           type: string
-    TemperatureReading:
+    TerminalTemperatureReading:
       type: object
-      description: Represents a single temperature reading being received from a thermometer
+      description: Represents a single terminal temperature reading being received
+        from a thermometer
       required:
         - hardwareSensorId
         - deviceIdentifier
