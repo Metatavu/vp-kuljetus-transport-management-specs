@@ -2534,6 +2534,10 @@
             "format": "uuid",
             "readOnly": true,
             "description": "Payroll export ID. This is filled when work shift is linked to a payroll export. Work shift cannot be\nincluded in another payroll export if it is already linked to one.\n"
+          },
+          "defaultTruckId": {
+            "type": "string",
+            "format": "uuid"
           }
         }
       },
