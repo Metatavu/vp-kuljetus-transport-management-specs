@@ -2502,7 +2502,7 @@
             "format": "uuid",
             "description": "Employee's ID"
           },
-          "truckIds": {
+          "truckIdsFromEvents": {
             "readOnly": true,
             "type": "array",
             "items": {
