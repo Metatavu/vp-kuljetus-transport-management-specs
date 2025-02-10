@@ -3779,6 +3779,8 @@ components:
           readOnly: true
         name:
           type: string
+        costCenter:
+          type: string
         imei:
           type: string
           description: The unique IMEI of the truck, used to identify it when associating
