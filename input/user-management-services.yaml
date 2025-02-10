@@ -1708,6 +1708,8 @@ components:
           type: string
           format: date-time
           description: Work event time
+        costCenter:
+          type: string
         truckId:
           type: string
           format: uuid

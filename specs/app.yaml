@@ -1399,6 +1399,8 @@ components:
           readOnly: true
         name:
           type: string
+        costCenter:
+          type: string
         imei:
           type: string
           description: The unique IMEI of the truck, used to identify it when associating
@@ -1807,6 +1809,8 @@ components:
           type: string
           format: date-time
           description: Work event time
+        costCenter:
+          type: string
         truckId:
           type: string
           format: uuid
