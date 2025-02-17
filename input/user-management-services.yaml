@@ -1666,6 +1666,10 @@ components:
           description: |
             Payroll export ID. This is filled when work shift is linked to a payroll export. Work shift cannot be
             included in another payroll export if it is already linked to one.
+        costCentersFromEvents:
+          type: array
+          items:
+            type: string
 
     WorkEvent:
       type: object
