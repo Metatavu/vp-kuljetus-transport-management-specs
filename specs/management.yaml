@@ -4035,6 +4035,7 @@ components:
             payroll export. Work shift cannot be
 
             included in another payroll export if it is already linked to one.
+<<<<<<< HEAD
         defaultTruckId:
           type: string
           format: uuid
@@ -4069,6 +4070,8 @@ components:
           items:
             $ref: "#/components/schemas/WorkShiftChange"
           readOnly: true
+=======
+>>>>>>> f1f6cde06b5566b8c5c9c90b91151cf8b1dfcd1f
     WorkEvent:
       type: object
       description: >
