@@ -4406,6 +4406,7 @@ components:
         - date
         - employeeId
         - approved
+        - costCentersFromEvents
       properties:
         id:
           type: string

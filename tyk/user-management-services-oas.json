@@ -2472,7 +2472,8 @@
         "required": [
           "date",
           "employeeId",
-          "approved"
+          "approved",
+          "costCentersFromEvents"
         ],
         "properties": {
           "id": {
