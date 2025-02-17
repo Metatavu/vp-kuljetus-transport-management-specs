@@ -301,6 +301,20 @@
             },
             {
               "disabled": false,
+              "path": "/v1/employees/{employeeId}/workShiftChangeSets",
+              "method": "",
+              "ignore_case": false,
+              "method_actions": {
+                "GET": {
+                  "action": "no_action",
+                  "code": 200,
+                  "data": "",
+                  "headers": null
+                }
+              }
+            },
+            {
+              "disabled": false,
               "path": "/v1/employees/{employeeId}/workShifts",
               "method": "",
               "ignore_case": false,
@@ -566,6 +580,10 @@
             {
               "path": "/v1/employees/{employeeId}/workEvents/{workEventId}",
               "method": "PUT"
+            },
+            {
+              "path": "/v1/employees/{employeeId}/workShiftChangeSets",
+              "method": "GET"
             },
             {
               "path": "/v1/employees/{employeeId}/workShifts",

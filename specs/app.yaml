@@ -845,6 +845,19 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: WorkShiftChangeSetId
+          in: header
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: >
+            Work shift change set ID. This should be unique between all changes
+            done to a single work shift at once.
+
+            When work event is updated, WORKEVENT_UPDATE_[field] changes will be created to the work shift change set
+
+            for each field changed.
       requestBody:
         required: true
         content:
