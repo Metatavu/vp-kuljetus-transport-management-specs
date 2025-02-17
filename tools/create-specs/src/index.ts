@@ -272,8 +272,9 @@ const main = async () => {
         for (const [method, methodContent] of Object.entries(pathContent)) {
           if (methodContent.tags && methodContent.tags.some(tag => specVersionTags.includes(tag))) {
             for (const parameterContent of methodContent.parameters ?? []) {
-              if ("$ref" in parameterContent.schema) {
-                const schemaName = parameterContent.schema.$ref.split("/").pop();
+              const { schema } = parameterContent;
+              if ("$ref" in schema) {
+                const schemaName = schema.$ref.split("/").pop();
 
                 if (!includedSchemas.includes(schemaName)) {
                   includedSchemas.push(schemaName);
@@ -281,8 +282,8 @@ const main = async () => {
                 }
               }
 
-              if ("items" in parameterContent.schema && parameterContent.schema.items.$ref) {
-                const schemaName = parameterContent.schema.items.$ref.split("/").pop();
+              if ("items" in schema && schema.items.$ref) {
+                const schemaName = schema.items.$ref.split("/").pop();
 
                 if (!includedSchemas.includes(schemaName)) {
                   includedSchemas.push(schemaName);
@@ -319,8 +320,16 @@ const main = async () => {
             });
 
             methodContent.requestBody?.content && Object.entries(methodContent.requestBody.content).forEach(([_contentType, contentTypeContent]) => {
-              if (contentTypeContent.schema && "$ref" in contentTypeContent.schema) {
-                const schemaName = contentTypeContent.schema.$ref.split("/").pop();
+              const { schema } = contentTypeContent;
+
+              if (schema && "$ref" in schema) {
+                const schemaName = schema.$ref.split("/").pop();
+                if (!includedSchemas.includes(schemaName)) {
+                  includedSchemas.push(schemaName);
+                  specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(spec.components.schemas[schemaName]));
+                }
+              } else if ("items" in schema && schema.items?.$ref) {
+                const schemaName = schema.items.$ref.split("/").pop();
                 if (!includedSchemas.includes(schemaName)) {
                   includedSchemas.push(schemaName);
                   specVersionFileContent.components.schemas[schemaName] = JSON.parse(JSON.stringify(spec.components.schemas[schemaName]));
@@ -339,8 +348,15 @@ const main = async () => {
 
         if (includedSchemas.includes(schemaName) && properties) {
           for (const property of Object.values(properties)) {
-            if (property.$ref) {
+            if ("$ref" in property && property.$ref) {
               const schemaName = property.$ref.split("/").pop();
+              includedSchemas.push(schemaName);
+
+              Object.entries(spec.components.schemas)
+                .filter(schemaEntry => schemaEntry[0] === schemaName)
+                .forEach(schemaEntry => relatedSchemas.push(schemaEntry));
+            } else if ("items" in property && property.items?.$ref) {
+              const schemaName = property.items.$ref.split("/").pop();
               includedSchemas.push(schemaName);
 
               Object.entries(spec.components.schemas)
