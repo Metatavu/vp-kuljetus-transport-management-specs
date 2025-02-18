@@ -4620,6 +4620,11 @@ components:
           format: uuid
           readOnly: true
           description: Possible work shift hour ID
+        workEventId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Possible work event ID
         oldValue:
           type: string
           readOnly: true
