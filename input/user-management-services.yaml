@@ -412,6 +412,16 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: WorkShiftChangeSetId
+          in: header
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: |
+            Work shift change set ID. This should be unique between all changes done to a single work shift at once.
+            When a new employee work shift is created, a WORKSHIFT_CREATED change will be created to the work shift
+            change set.
       requestBody:
         required: true
         content:
@@ -494,6 +504,16 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: WorkShiftChangeSetId
+          in: header
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: |
+            Work shift change set ID. This should be unique between all changes done to a single work shift at once.
+            When employee work shift is updated, WORKSHIFT_UPDATE_[field] change will be created to the work shift
+            change set for every field changed.
       requestBody:
         required: true
         content:
@@ -547,6 +567,51 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  "/v1/employees/{employeeId}/workShiftChangeSets":
+    get:
+      operationId: listWorkShiftChangeSets
+      summary: List Employees work shift change sets.
+      description: List Employees work shift change sets.
+      security:
+        - BearerAuth: [manager]
+      tags:
+        - WorkShiftChangeSets
+        - SpecManagementUI
+      parameters:
+        - name: employeeId
+          required: true
+          in: path
+          description: employee's ID
+          schema:
+            type: string
+            format: uuid
+        - name: workShiftDateAfter
+          in: query
+          description: Filter work shift change sets where work shift's date is after specified date.
+          schema:
+            type: string
+            format: date
+        - name: workShiftDateBefore
+          in: query
+          description: Filter work shift change sets where work shift's date is before specified date.
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: List of work shift change sets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WorkShiftChangeSet"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   "/v1/employees/{employeeId}/workEvents":
     get:
@@ -719,6 +784,16 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: WorkShiftChangeSetId
+          in: header
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: |
+            Work shift change set ID. This should be unique between all changes done to a single work shift at once.
+            When work event is updated, WORKEVENT_UPDATE_[field] changes will be created to the work shift change set
+            for each field changed.
       requestBody:
         required: true
         content:
@@ -885,6 +960,16 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: WorkShiftChangeSetId
+          in: header
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: |
+            Work shift change set ID. This should be unique between all changes done to a single work shift at once.
+            When work shift hours is updated, WORKSHIFTHOURS_UPDATE_[field] change will be created to the work shift
+            change set for each field changed.
       requestBody:
         required: true
         content:
@@ -2062,6 +2147,86 @@ components:
         deviceId:
           type: string
           description: device ID
+
+    WorkShiftChangeSet:
+      type: object
+      description: |
+        Represents a single set of changes happened withing single work shift.
+
+        When a manager creates or updates a work shift or its work shift hours, a client-generated WORKSHIFT_CHANGE_ID
+        will always be sent with the API requests. The ID is used to link the changes to correct change set. The change
+        set contains a list of changes that describe the changes made to the work shift.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation time
+          readOnly: true
+        creatorId:
+          type: string
+          format: uuid
+          description: Creator's ID
+          readOnly: true
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/WorkShiftChange"
+          readOnly: true
+
+    WorkShiftChange:
+      type: object
+      description: Represents a single change entry within a work shift change set.
+      properties:
+        reason:
+          $ref: "#/components/schemas/WorkShiftChangeReason"
+          readOnly: true
+        workShiftId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Work shift ID
+        workShiftHourId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Possible work shift hour ID
+        workEventId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Possible work event ID
+        oldValue:
+          type: string
+          readOnly: true
+          description: Possible old value. When reason is 'create', this is null.
+        newValue:
+          type: string
+          readOnly: true
+          description: New value.
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Creation time
+
+    WorkShiftChangeReason:
+      type: string
+      enum:
+        - WORKSHIFT_CREATED
+        - WORKSHIFT_UPDATED_APPROVED
+        - WORKSHIFT_UPDATED_DAYOFFWORKALLOWANCE
+        - WORKSHIFT_UPDATED_ABSENCE
+        - WORKSHIFT_UPDATED_PERDIEMALLOWANCE
+        - WORKSHIFT_UPDATED_NOTES
+        - WORKSHIFTHOURS_UPDATED_ACTUALHOURS
+        - WORKEVENT_UPDATED_COSTCENTER
+        - WORKEVENT_UPDATED_TYPE
+        - WORKEVENT_UPDATED_TIMESTAMP
+      description: The reason why the change entry has been added to the change set.
 
     PayrollExport:
       description: |
