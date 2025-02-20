@@ -2472,7 +2472,8 @@
         "required": [
           "date",
           "employeeId",
-          "approved"
+          "approved",
+          "costCentersFromEvents"
         ],
         "properties": {
           "id": {
@@ -2534,6 +2535,12 @@
             "format": "uuid",
             "readOnly": true,
             "description": "Payroll export ID. This is filled when work shift is linked to a payroll export. Work shift cannot be\nincluded in another payroll export if it is already linked to one.\n"
+          },
+          "costCentersFromEvents": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },

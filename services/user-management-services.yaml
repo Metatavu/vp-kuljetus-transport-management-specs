@@ -1641,6 +1641,7 @@ components:
         - date
         - employeeId
         - approved
+        - costCentersFromEvents
       properties:
         id:
           type: string
@@ -1705,6 +1706,10 @@ components:
             payroll export. Work shift cannot be
 
             included in another payroll export if it is already linked to one.
+        costCentersFromEvents:
+          type: array
+          items:
+            type: string
     WorkEvent:
       type: object
       description: >
