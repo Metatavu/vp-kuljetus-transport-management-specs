@@ -79,5 +79,6 @@ export const SPEC_FILES = [
   "vehicle-management-services.yaml",
   "work-planning-services.yaml",
   "user-management-services.yaml",
-  "delivery-info-services.yaml"
+  "delivery-info-services.yaml",
+  "monitoring-services.yaml"
 ];

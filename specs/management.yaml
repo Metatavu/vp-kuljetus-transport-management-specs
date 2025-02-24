@@ -3269,6 +3269,598 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /monitoring/v1/thermalMonitors:
+    post:
+      operationId: createThermalMonitor
+      summary: Create thermal monitor
+      description: Create new thermal monitor
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - ThermalMonitors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ThermalMonitor"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created thermal monitor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ThermalMonitor"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    get:
+      operationId: listThermalMonitors
+      summary: List thermal monitors
+      description: |
+        Retrieve a list of all thermal monitors.
+
+        Can optionally be filtered by status.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - ThermalMonitors
+      parameters:
+        - name: status
+          in: query
+          description: Filter monitors by status
+          schema:
+            $ref: "#/components/schemas/ThermalMonitorStatus"
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of thermal monitors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ThermalMonitor"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /monitoring/v1/thermalMonitors/{thermalMonitorId}:
+    get:
+      operationId: findThermalMonitor
+      summary: Find a thermal monitor by ID
+      description: Retrieve the details of a specific thermal monitor
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - ThermalMonitors
+      parameters:
+        - name: thermalMonitorId
+          required: true
+          in: path
+          description: The unique ID of the monitor
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found monitor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ThermalMonitor"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateThermalMonitor
+      summary: Update thermal monitor
+      description: Update the details of a specific thermal monitor
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - ThermalMonitors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ThermalMonitor"
+        description: Payload
+        required: true
+      parameters:
+        - name: thermalMonitorId
+          required: true
+          in: path
+          description: The unique ID of the monitor
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated monitor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ThermalMonitor"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteThermalMonitor
+      summary: Deletes thermal monitor
+      description: Deletes thermal monitor
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - ThermalMonitors
+      parameters:
+        - name: thermalMonitorId
+          required: true
+          in: path
+          description: The unique ID of the monitor
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /monitoring/v1/thermalMonitors/{thermalMonitorId}/pagingPolicies:
+    post:
+      operationId: createPagingPolicy
+      summary: Create paging policy
+      description: Create new paging policy for a thermal monitor
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - ThermalMonitorPagingPolicies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ThermalMonitorPagingPolicy"
+        description: Payload
+        required: true
+      parameters:
+        - name: thermalMonitorId
+          required: true
+          in: path
+          description: The unique ID of the monitor
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Created paging policy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ThermalMonitorPagingPolicy"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    get:
+      operationId: listPagingPolicies
+      summary: List paging policies
+      description: |
+        Retrieve a list of all paging policies for a specific thermal monitor.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - ThermalMonitorPagingPolicies
+      parameters:
+        - name: thermalMonitorId
+          required: true
+          in: path
+          description: The unique ID of the monitor
+          schema:
+            type: string
+            format: uuid
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of paging policies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ThermalMonitorPagingPolicy"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /monitoring/v1/thermalMonitors/{thermalMonitorId}/pagingPolicies/{pagingPolicyId}:
+    get:
+      operationId: findPagingPolicy
+      summary: Find a paging policy by ID
+      description: Retrieve the details of a specific paging policy
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - ThermalMonitorPagingPolicies
+      parameters:
+        - name: thermalMonitorId
+          required: true
+          in: path
+          description: The unique ID of the monitor
+          schema:
+            type: string
+            format: uuid
+        - name: pagingPolicyId
+          required: true
+          in: path
+          description: The unique ID of the paging policy
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found paging policy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ThermalMonitorPagingPolicy"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updatePagingPolicy
+      summary: Update paging policy
+      description: Update the details of a specific paging policy
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - ThermalMonitorPagingPolicies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ThermalMonitorPagingPolicy"
+        description: Payload
+        required: true
+      parameters:
+        - name: thermalMonitorId
+          required: true
+          in: path
+          description: The unique ID of the monitor
+          schema:
+            type: string
+            format: uuid
+        - name: pagingPolicyId
+          required: true
+          in: path
+          description: The unique ID of the paging policy
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated paging policy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ThermalMonitorPagingPolicy"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deletePagingPolicy
+      summary: Deletes
+      description: Deletes paging policy
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - ThermalMonitorPagingPolicies
+      parameters:
+        - name: thermalMonitorId
+          required: true
+          in: path
+          description: The unique ID of the monitor
+          schema:
+            type: string
+            format: uuid
+        - name: pagingPolicyId
+          required: true
+          in: path
+          description: The unique ID of the paging policy
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /monitoring/v1/pagingPolicyContacts:
+    post:
+      operationId: createPagingPolicyContact
+      summary: Create paging policy contact
+      description: Create new paging policy contact
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - PagingPolicyContacts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PagingPolicyContact"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created paging policy contact
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagingPolicyContact"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    get:
+      operationId: listPagingPolicyContacts
+      summary: List paging policy contacts
+      description: |
+        Retrieve a list of all paging policy contacts.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - PagingPolicyContacts
+      parameters:
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of paging policy contacts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PagingPolicyContact"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /monitoring/v1/pagingPolicyContacts/{pagingPolicyContactId}:
+    get:
+      operationId: findPagingPolicyContact
+      summary: Find a paging policy contact by ID
+      description: Retrieve the details of a specific paging policy contact
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - PagingPolicyContacts
+      parameters:
+        - name: pagingPolicyContactId
+          required: true
+          in: path
+          description: The unique ID of the paging policy contact
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Found paging policy contact
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagingPolicyContact"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updatePagingPolicyContact
+      summary: Update paging policy contact
+      description: Update the details of a specific paging policy contact
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - PagingPolicyContacts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PagingPolicyContact"
+        description: Payload
+        required: true
+      parameters:
+        - name: pagingPolicyContactId
+          required: true
+          in: path
+          description: The unique ID of the paging policy contact
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated paging policy contact
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagingPolicyContact"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deletePagingPolicyContact
+      summary: Deletes paging policy contact
+      description: Deletes paging policy contact
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - PagingPolicyContacts
+      parameters:
+        - name: pagingPolicyContactId
+          required: true
+          in: path
+          description: The unique ID of the paging policy contact
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Empty response indicating successful removal
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /monitoring/v1/thermalMonitorIncidents:
+    get:
+      operationId: listThermalMonitorIncidents
+      summary: List thermal monitor incidents
+      description: >
+        Retrieve a list of all thermal monitor incidents.
+
+
+        Can optionally be filtered by monitor ID, thermometer ID, status, or time range.
+      security:
+        - BearerAuth:
+            - manager
+      tags:
+        - ThermalMonitorIncidents
+      parameters:
+        - name: monitorId
+          in: query
+          description: Filter incidents by monitor ID
+          schema:
+            type: string
+            format: uuid
+        - name: thermometerId
+          in: query
+          description: Filter incidents by thermometer ID
+          schema:
+            type: string
+            format: uuid
+        - name: incidentStatus
+          in: query
+          description: Filter incidents by incident status
+          schema:
+            $ref: "#/components/schemas/ThermalMonitorIncidentStatus"
+        - name: from
+          in: query
+          description: Filter incidents by time range start
+          schema:
+            format: date-time
+            type: string
+        - name: to
+          in: query
+          description: Filter incidents by time range end
+          schema:
+            format: date-time
+            type: string
+        - name: first
+          in: query
+          description: First result.
+          schema:
+            type: integer
+        - name: max
+          in: query
+          description: Max results.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of thermal monitor incidents
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ThermalMonitorIncident"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   securitySchemes:
     BearerAuth:
@@ -4827,3 +5419,190 @@ components:
         - TODO
         - IN_PROGRESS
         - DONE
+    ThermalMonitor:
+      type: object
+      description: Represents a single monitor
+      required:
+        - name
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          description: a human-readable name for the monitor
+        status:
+          $ref: "#/components/schemas/ThermalMonitorStatus"
+        thermometerIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+            description: List of thermometer IDs monitored by this monitor
+        lowerThresholdTemperature:
+          type: number
+          format: float
+          description: The lowest allowed temperature before triggering an incident. If
+            this field is not set, the monitor will not trigger an incident
+            based on the lower threshold.
+        upperThresholdTemperature:
+          type: number
+          format: float
+          description: The highest allowed temperature before triggering an incident. If
+            this field is not set, the monitor will not trigger an incident
+            based on the upper threshold.
+        activeFrom:
+          format: date-time
+          type: string
+          description: The time when the monitor starts monitoring
+        activeTo:
+          format: date-time
+          type: string
+          description: The time when the monitor stops monitoring
+        creatorId:
+          type: string
+          readOnly: true
+          format: uuid
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        lastModifierId:
+          type: string
+          readOnly: true
+          format: uuid
+        modifiedAt:
+          format: date-time
+          type: string
+          readOnly: true
+    ThermalMonitorStatus:
+      type: string
+      description: >
+        The status of a thermal monitor. New monitors are created with the
+        PENDING status.
+
+
+        Active monitors are actively monitoring the temperatures of the thermometers they are associated with. Monitors can be paused if they are active and changed back to active if paused but otherwise this field is controlled automatically by the server.
+      enum:
+        - PENDING
+        - ACTIVE
+        - PAUSED
+        - FINISHED
+        - ERROR
+    ThermalMonitorPagingPolicy:
+      type: object
+      description: Represents a paging policy for thermal monitor actions
+      required:
+        - contactId
+      properties:
+        type:
+          $ref: "#/components/schemas/PagingPolicyType"
+        contactId:
+          type: string
+          format: uuid
+        priority:
+          type: integer
+          format: int32
+          description: Priority of the paging policy. Paging policies with lower index
+            values are evaluated first.
+        escalationDelaySeconds:
+          type: integer
+          format: int32
+          description: The time in seconds after in which next paging policy is triggered
+            if the incident is not resolved.
+    PagingPolicyContact:
+      type: object
+      description: Represents contact for a paging policy
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          description: Human-readable name for the paging policy contact.
+        email:
+          type: string
+          format: email
+    ThermalMonitorIncidentStatus:
+      description: Read-only status of the incident based on acknowledgeAt and
+        resolvedAt timestamps. If the incident is acknowledged, the status is
+        ACKNOWLEDGED. If the incident is resolved, the status is RESOLVED.
+        Otherwise, the status is TRIGGERED.
+      type: string
+      enum:
+        - TRIGGERED
+        - ACKNOWLEDGED
+        - RESOLVED
+    ThermalMonitorIncident:
+      type: object
+      description: Represents an incident triggered by a thermal monitor
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        monitorId:
+          type: string
+          format: uuid
+          description: The ID of the monitor that triggered the incident
+        thermometerId:
+          type: string
+          format: uuid
+          description: The ID of the thermometer that triggered the incident
+        temperature:
+          type: number
+          format: float
+          description: The temperature that triggered the incident
+        timestamp:
+          format: date-time
+          type: string
+          description: The time when the incident was triggered
+        acknowledgeAt:
+          format: date-time
+          type: string
+          description: The time when the incident was acknowledged
+        resolvedAt:
+          format: date-time
+          type: string
+          description: The time when the incident was resolved
+        pagedPolicies:
+          type: array
+          items:
+            $ref: "#/components/schemas/ThermalMonitorIncidentPagedPolicy"
+        status:
+          $ref: "#/components/schemas/ThermalMonitorIncidentStatus"
+    PagingPolicyType:
+      type: string
+      enum:
+        - EMAIL
+    ThermalMonitorIncidentPagedPolicy:
+      description: List of paging policies that have been triggered for this incident
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identified for the paged policy
+          readOnly: true
+        incidentId:
+          type: string
+          format: uuid
+          description: The ID of the incident that was triggered
+          readOnly: true
+        policyId:
+          type: string
+          format: uuid
+          description: The ID of the policy that was triggered
+          readOnly: true
+        contactId:
+          type: string
+          format: uuid
+          description: The ID of the contact that was paged
+          readOnly: true
+        time:
+          format: date-time
+          type: string
+          description: The time when the policy was triggered
+          readOnly: true
