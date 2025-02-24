@@ -346,10 +346,13 @@ const main = async () => {
               Object.entries(spec.components.schemas)
                 .filter(schemaEntry => schemaEntry[0] === schemaName)
                 .forEach(schemaEntry => relatedSchemas.push(schemaEntry));
+            } else if (property.items && property.items.$ref) {
+              const schemaName = property.items.$ref.split("/").pop();
+              includedSchemas.push(schemaName);
             }
           }
         }
-      }
+      };
 
       for (const [schemaName, schemaContent] of Object.entries(spec.components.schemas)) {
         if (includedSchemas.includes(schemaName)) {

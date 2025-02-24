@@ -86,6 +86,9 @@ export interface OpenAPISpec {
       [schemaName: string]: {
         properties?: {
           [propertyName: string]: {
+            items?: {
+              $ref?: string;
+            },
             $ref?: string;
           }
         };
